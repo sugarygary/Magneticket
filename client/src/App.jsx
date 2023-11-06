@@ -5,7 +5,8 @@ import UserLoginForm from "./components/UserLoginForm";
 import UserRegisterForm from "./components/UserRegisterForm";
 import CardHome from "./components/CardHome";
 import CardTicketByMovie from "./components/CardTicketByMovie";
-
+import CardHistoryTransaksi from "./components/CardHistoryTransaksi";
+import CardMakanan from "./components/CardMakanan";
 function App() {
   return (
     <div className="" style={{ overflowX: 'hidden' }}>
@@ -14,7 +15,9 @@ function App() {
        */}
       {/* <UserRegisterForm></UserRegisterForm> */}
       {/* <CardHome></CardHome> */}
-      <CardTicketByMovie></CardTicketByMovie>
+      {/* <CardTicketByMovie></CardTicketByMovie> */}
+      {/* <CardHistoryTransaksi></CardHistoryTransaksi> */}
+      {/* <CardMakanan></CardMakanan> */}
       <Footer></Footer>
     </div>
   );
