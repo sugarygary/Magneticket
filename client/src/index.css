@@ -16,8 +16,16 @@
   background-color: #1F2A37;
 }
 
+.biruTuaText {
+  color: #1F2A37;
+}
+
 .biruMuda {
   background-color: #1C64F2;
+}
+
+.biruCariTiket {
+  background-color: #1A56DB;
 }
 
 .biruDaftarSekarang {

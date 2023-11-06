@@ -66,8 +66,9 @@ const Footer = (props) => {
             <div className="text-white mx-10">
                 <hr className="w-full border-white" />
                 <p className="pb-10  pt-2">Magneticket, LLC © 2023 | All rights reserved.</p>
+                
             </div>
-
+            
         </div>
 
     )
