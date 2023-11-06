@@ -6,7 +6,28 @@
   html {
     font-family: "Plus Jakarta Sans";
   }
+
   .font-magneticket {
     font-family: "VT323";
   }
+}
+
+.biruTua {
+  background-color: #1F2A37;
+}
+
+.biruMuda {
+  background-color: #1C64F2;
+}
+
+.biruDaftarSekarang {
+  color: #3F83F8;
+}
+
+.abuInput {
+  background-color: #4B5563;
+}
+
+.abu9CA3AF {
+  color: #9CA3AF;
 }
