@@ -21,7 +21,7 @@ const CardTicketByMovie = (props) => {
                 </div>
                 <div className="flex">
                     <p className="abu9CA3AF">Durasi : </p>
-                    <p className="biruTuaText ml-12">1Jam 58 menit</p>
+                    <p className="biruTuaText ml-12">1 Jam 58 menit</p>
                 </div>
 
 

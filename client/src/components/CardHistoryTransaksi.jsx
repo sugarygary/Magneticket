@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import openheimer from "../assets/openheimer.jpg"
 const CardHistoryTransaksi = (props) => {
     return (
-        <div className="my-5 rounded flex shadow-lg p-10 bgCardHistory border border-black">
+        <div className="my-5 mx-12 rounded flex shadow-lg p-10 bgCardHistory border border-black">
             <img src={openheimer} alt="" className="w-48 rounded" />
             <div className="text-black  ml-5 w-full">
                 <p className="font-bold text-lg text-right text-green-700 text-xl font-bold">Sukses</p>

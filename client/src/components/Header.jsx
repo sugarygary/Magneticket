@@ -16,15 +16,16 @@ const Header = (props) => {
                 <button className="ml-5 text-xl">Event </button>
                 <button className="ml-5 text-xl">Bioskop</button>
             </div>
-            <div className="kanan flex ">
+            <div className="kanan flex w-5/12">
                 {/* <p className="font-magneticket">zzzzzzzz</p> */}
                 {/* kanan */}
-                <div className="abuInput rounded flex">
-                    <img src={search} alt="" className="w-7 h-7 mt-3 ml-1 mr-1" />
-                    <input type="text" className="abuInput w-full rounded w-80" placeholder="Search" />
+                <div className="abuInput rounded flex ml-24">
+                    <img src={search} alt="" className="w-7 h-7 mt-3 ml-1 mr-1"/>
+                    <input type="text" className="abuInput w-96 rounded border-transparent" placeholder="Search" />
                 </div>
+
                 <div className="p-1 biruMuda rounded ml-1">
-                    <img src={search} alt="" className="w-12 " />
+                    <img src={search} alt="" className="w-8 mx-2 my-2" />
                 </div>
                 <button className="ml-5 text-xl">Masuk </button>
                 <button className="ml-5 text-xl biruMuda p-3 rounded">Register</button>

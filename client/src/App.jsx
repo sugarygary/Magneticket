@@ -8,6 +8,7 @@ import CardTicketByMovie from "./components/CardTicketByMovie";
 import CardHistoryTransaksi from "./components/CardHistoryTransaksi";
 import CardMakanan from "./components/CardMakanan";
 import DetailPesanan from "./components/DetailPesanan";
+import CardViewTicket from "./components/CardViewTicket";
 
 function App() {
   return (
@@ -20,7 +21,9 @@ function App() {
       {/* <CardTicketByMovie></CardTicketByMovie> */}
       {/* <CardHistoryTransaksi></CardHistoryTransaksi> */}
       {/* <CardMakanan></CardMakanan> */}
-      <DetailPesanan></DetailPesanan>
+      {/* <DetailPesanan></DetailPesanan> */}
+      {/* <CardViewTicket></CardViewTicket> */}
+      
       <Footer></Footer>
     </div>
   );
