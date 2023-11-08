@@ -10,13 +10,13 @@ import CardMakanan from "./components/CardMakanan";
 import DetailPesanan from "./components/DetailPesanan";
 import CardViewTicket from "./components/CardViewTicket";
 import CardCineplexStudio from "./components/CardCineplexStudio";
+import CardInfoFilm from "./components/CardInfoFilm";
 
 function App() {
   return (
     <div className="" style={{ overflowX: 'hidden' }}>
       <Header></Header>
       {/* <UserLoginForm></UserLoginForm> */}
-
       {/* <UserRegisterForm></UserRegisterForm> */}
       {/* <CardHome></CardHome> */}
       {/* <CardTicketByMovie></CardTicketByMovie> */}
@@ -24,7 +24,8 @@ function App() {
       {/* <CardMakanan></CardMakanan> */}
       {/* <DetailPesanan></DetailPesanan> */}
       {/* <CardViewTicket></CardViewTicket> */}
-      <CardCineplexStudio></CardCineplexStudio>
+      {/* <CardCineplexStudio></CardCineplexStudio> */}
+      <CardInfoFilm></CardInfoFilm>
       <Footer></Footer>
     </div>
   );
