@@ -16,6 +16,7 @@ import CineplexRegisterForm from "./components/CineplexRegisterForm";
 import CineplexCreatePromo from "./components/CineplexCreatePromo";
 import CineplexConcessionCard from "./components/CineplexConcessionCard";
 import CineplexTiketDetail from "./components/CineplexTiketDetail";
+import EventRegisterForm from "./components/EventRegisterForm";
 
 
 function App() {
@@ -36,7 +37,8 @@ function App() {
       {/* <CineplexTiketDetail></CineplexTiketDetail> */}
       {/* <CineplexConcessionCard></CineplexConcessionCard> */}
       {/* <CineplexRegisterForm></CineplexRegisterForm> */}
-      <CardInfoFilm></CardInfoFilm>
+      {/* <CardInfoFilm></CardInfoFilm> */}
+      <EventRegisterForm></EventRegisterForm>
       <Footer></Footer>
     </div>
   );
