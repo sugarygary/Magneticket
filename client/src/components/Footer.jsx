@@ -15,7 +15,7 @@ const Footer = (props) => {
                 <div className="w-1/5  text-center">
                     {/* logo */}
                     <div className="">
-                        <img src={logo1} alt="" className="w-96" />
+                        <img src={logo1} alt="" className="w-96 filter-grayscale-50" />
                         <p className="font-magneticket text-7xl">MAGNETICKET</p>
                     </div>
                 </div>
@@ -53,10 +53,10 @@ const Footer = (props) => {
                     <div className="ml-10 font-bold text-xl  mt-12">
                         <p className="">Ikuti Kami</p>
                         <div className="flex mt-3">
-                            <img src={ig} alt="" className="w-10 mr-5 text-white" />
-                            <img src={twitter} alt="" className="w-10 mr-5" />
-                            <img src={facebook} alt="" className="w-10 mr-5" />
-                            <img src={utube} alt="" className="w-10 mr-5" />
+                            <img src={ig} alt="" className="w-10 mr-5 text-white invert" />
+                            <img src={twitter} alt="" className="w-10 mr-5 invert" />
+                            <img src={facebook} alt="" className="w-10 mr-5 invert" />
+                            <img src={utube} alt="" className="w-10 mr-5 invert" />
                         </div>
                     </div>
 

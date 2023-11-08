@@ -9,6 +9,7 @@ import CardHistoryTransaksi from "./components/CardHistoryTransaksi";
 import CardMakanan from "./components/CardMakanan";
 import DetailPesanan from "./components/DetailPesanan";
 import CardViewTicket from "./components/CardViewTicket";
+import CardCineplexStudio from "./components/CardCineplexStudio";
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
       {/* <CardMakanan></CardMakanan> */}
       {/* <DetailPesanan></DetailPesanan> */}
       {/* <CardViewTicket></CardViewTicket> */}
-      
+      <CardCineplexStudio></CardCineplexStudio>
       <Footer></Footer>
     </div>
   );
