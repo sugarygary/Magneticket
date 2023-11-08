@@ -10,7 +10,7 @@ import utube from "../assets/youtube.png"
 import facebook from "../assets/facebook.png"
 const Footer = (props) => {
     return (
-        <div className=" biruTua">
+        <div className=" biruTua ">
             <div className="flex text-white px-12 p-5 ">
                 <div className="w-1/5  text-center">
                     {/* logo */}
@@ -53,7 +53,7 @@ const Footer = (props) => {
                     <div className="ml-10 font-bold text-xl  mt-12">
                         <p className="">Ikuti Kami</p>
                         <div className="flex mt-3">
-                            <img src={ig} alt="" className="w-10 mr-5" />
+                            <img src={ig} alt="" className="w-10 mr-5 text-white" />
                             <img src={twitter} alt="" className="w-10 mr-5" />
                             <img src={facebook} alt="" className="w-10 mr-5" />
                             <img src={utube} alt="" className="w-10 mr-5" />

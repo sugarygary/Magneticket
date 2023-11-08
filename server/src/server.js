@@ -18,7 +18,7 @@ server.use(express.urlencoded({ extended: true }));
 server.use(cookieParser());
 
 getDBStatus();
-//User.createCollection().then(() => console.log("User created succesfully")); //coba buat collection
+User.createCollection().then(() => console.log("User created succesfully")); //coba buat collection
 
 server.get("/", (req, res) => {
   return res.status(200).send({ message: "Welcome to Magneticket Server!" });
