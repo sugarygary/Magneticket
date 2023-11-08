@@ -11,6 +11,7 @@ import DetailPesanan from "./components/DetailPesanan";
 import CardViewTicket from "./components/CardViewTicket";
 import CardCineplexStudio from "./components/CardCineplexStudio";
 import CardInfoFilm from "./components/CardInfoFilm";
+import CardCineplexJadwal from "./components/CardCineplexJadwal";
 
 function App() {
   return (
@@ -25,7 +26,8 @@ function App() {
       {/* <DetailPesanan></DetailPesanan> */}
       {/* <CardViewTicket></CardViewTicket> */}
       {/* <CardCineplexStudio></CardCineplexStudio> */}
-      <CardInfoFilm></CardInfoFilm>
+      {/* <CardInfoFilm></CardInfoFilm> */}
+      <CardCineplexJadwal></CardCineplexJadwal>
       <Footer></Footer>
     </div>
   );
