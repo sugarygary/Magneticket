@@ -24,8 +24,8 @@ const Header = (props) => {
                     <input type="text" className="abuInput w-96 rounded border-transparent" placeholder="Search" />
                 </div>
 
-                <div className="p-1 biruMuda rounded ml-1">
-                    <img src={search} alt="" className="w-8 mx-2 my-2" />
+                <div className="p-1 biruMuda rounded ml-1 w-14 flex item-center">
+                    <img src={search} alt="" className="w-12 " />
                 </div>
                 <button className="ml-5 text-xl">Masuk </button>
                 <button className="ml-5 text-xl biruMuda p-3 rounded">Register</button>
