@@ -6,7 +6,7 @@ import logo1 from "../assets/logo1.png"
 
 const UserLoginForm = (props) => {
     return (
-        <div className=" w-screen h-screen flex justify-center items-center text-white">
+        <div className=" w-screen h-full flex justify-center items-center text-white">
             <div className="biruTua p-12 text-center rounded  w-1/2 mx-auto ">
                 <div className="justify-center">
                     <img src={logo1} alt="" className="w-96 mx-auto" />

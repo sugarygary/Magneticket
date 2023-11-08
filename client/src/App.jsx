@@ -12,6 +12,11 @@ import CardViewTicket from "./components/CardViewTicket";
 import CardCineplexStudio from "./components/CardCineplexStudio";
 import CardInfoFilm from "./components/CardInfoFilm";
 import CardCineplexJadwal from "./components/CardCineplexJadwal";
+import CineplexRegisterForm from "./components/CineplexRegisterForm";
+import CineplexCreatePromo from "./components/CineplexCreatePromo";
+import CineplexConcessionCard from "./components/CineplexConcessionCard";
+import CineplexTiketDetail from "./components/CineplexTiketDetail";
+
 
 function App() {
   return (
@@ -27,7 +32,11 @@ function App() {
       {/* <CardViewTicket></CardViewTicket> */}
       {/* <CardCineplexStudio></CardCineplexStudio> */}
       {/* <CardInfoFilm></CardInfoFilm> */}
-      <CardCineplexJadwal></CardCineplexJadwal>
+      {/* <CardCineplexJadwal></CardCineplexJadwal> */}
+      {/* <CineplexTiketDetail></CineplexTiketDetail> */}
+      {/* <CineplexConcessionCard></CineplexConcessionCard> */}
+      {/* <CineplexRegisterForm></CineplexRegisterForm> */}
+      <CardInfoFilm></CardInfoFilm>
       <Footer></Footer>
     </div>
   );

@@ -5,26 +5,40 @@ import { useState, useEffect } from "react"
 import logo1 from "../assets/logo1.png"
 import openheimer from "../assets/openheimer.jpg"
 import bcaVA from "../assets/bca_va.png"
-const DetailPesanan = (props) => {
+const CineplexTiketDetail = (props) => {
     return (
         <div className="my-5 rounded  shadow-lg p-10 bgCardHistory border border-black">
             <div className="flex items-center justify-between">
-                <p className="font-bold text-2xl">Ringkasan Pemesanan</p>
-                <span className="float-right">Nomor Pemesanan: INX1234567890</span>
+                <p className="font-bold text-2xl">Detail Tiket</p>
             </div>
-            <div className="w-full mt-6 flex ">
+            <p className="text-lg font-bold mt-3">OPPENHEIMER</p>
+            <div className="w-full mt-3 flex ">
                 <div>
                     <img src={openheimer} alt="" className="w-48 rounded" />
                     <p className="text-left text-xl font-bold underline underline-offset-4">Detail Transaksi</p>
                 </div>
-                <div className="p-5 flex w-full justify-between ">
+                <div className=" ml-5 flex w-full justify-between ">
                     <div>
-                        <p className="text-lg font-bold mb-5">OPPENHEIMER</p>
                         <table>
+                            <tr>
+                                <td>Customer</td>
+                                <td> : </td>
+                                <td>FELIX FELIX</td>
+                            </tr>
+                            <tr>
+                                <td>ID Jadwal</td>
+                                <td> : </td>
+                                <td>SCHXXI1710230001</td>
+                            </tr>
                             <tr>
                                 <td>Bioskop</td>
                                 <td> : </td>
                                 <td>CGV Marvell City Mall</td>
+                            </tr>
+                            <tr>
+                                <td>Studio</td>
+                                <td> : </td>
+                                <td>Studio 2</td>
                             </tr>
                             <tr>
                                 <td>Kota</td>
@@ -42,10 +56,11 @@ const DetailPesanan = (props) => {
                                 <td>A1,A2</td>
                             </tr>
                             <tr>
-                                <td>Studio</td>
+                                <td>Tipe</td>
                                 <td> : </td>
-                                <td>1</td>
+                                <td>2D Reguler</td>
                             </tr>
+
                             <tr>
                                 <td>Hari/Tanggal</td>
                                 <td> : </td>
@@ -55,6 +70,11 @@ const DetailPesanan = (props) => {
                                 <td>Waktu</td>
                                 <td> : </td>
                                 <td>10:30</td>
+                            </tr>
+                            <tr>
+                                <td>Status</td>
+                                <td> : </td>
+                                <td>Unclaimed</td>
                             </tr>
                         </table>
                     </div>
@@ -100,4 +120,4 @@ const DetailPesanan = (props) => {
     )
 }
 
-export default DetailPesanan
+export default CineplexTiketDetail
