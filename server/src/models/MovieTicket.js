@@ -5,20 +5,26 @@ const Schema = mongoose.Schema;
 
 const movieTicketSchema = new Schema(
   {
+    cineplex: { type: Schema.ObjectId, ref: "Cineplex", required: true },
     screening: { type: Schema.ObjectId, ref: "Screening", required: true },
-    seat: { type: Schema.ObjectId, ref: "Seat", required: true },
+    seats: {
+      type: [{ type: Schema.ObjectId, ref: "Seat" }],
+      validate: (seat) => Array.isArray(seat) && seat.length > 0,
+    },
+    foods: [{ type: Schema.ObjectId, ref: "Menu" }],
     transaction: {
       type: Schema.ObjectId,
       ref: "MovieTransaction",
-      required: true,
+    },
+    via: {
+      type: String,
+      default: "MAGNETICKET",
+      enum: ["MAGNETICKET", "OFFLINE"],
     },
     claimed: { type: Boolean, default: false },
-    //food
   },
   { timestamps: true }
 );
-
-movieTicketSchema.index({ seat: 1, screening: 1 }, { unique: true });
 
 const MovieTicket = mongoose.model(
   "MovieTicket",
