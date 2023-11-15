@@ -7,6 +7,7 @@ const promotionSchema = new Schema(
     promo_code: { type: String, required: true, unique: true },
     valid_until: { type: Date, required: true },
     discount_amount: { type: Number, required: true },
+    minimum_transaction: { type: Number },
   },
   { timestamps: true }
 );

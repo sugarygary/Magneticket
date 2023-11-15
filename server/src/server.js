@@ -7,10 +7,8 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const router = require("./routes/Router");
 const { db, getDBStatus } = require("./db/connection");
-const User = require("./models/User");
 const init = require("./db/init");
 const { errorHandler, notFound } = require("./middlewares/errorMiddlewares");
-const bodyParser = require("body-parser");
 
 server.use(
   cors({ origin: "http://localhost:5173", optionsSuccessStatus: 200 })

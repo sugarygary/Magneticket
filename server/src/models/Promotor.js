@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
 const SALT_WORK_FACTOR = parseInt(process.env.SALT_WORK_FACTOR) || 10;
 const { customAlphabet } = require("nanoid");
-const cineplexSchema = new Schema(
+const promotorSchema = new Schema(
   {
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
@@ -30,33 +30,33 @@ const cineplexSchema = new Schema(
   { timestamps: true }
 );
 
-cineplexSchema.pre("save", function (next) {
-  let cineplex = this;
-  if (!cineplex.isModified("password")) return next();
+promotorSchema.pre("save", function (next) {
+  let promotor = this;
+  if (!promotor.isModified("password")) return next();
   bcrypt.genSalt(SALT_WORK_FACTOR, function (err, salt) {
     if (err) return next(err);
-    bcrypt.hash(cineplex.password, salt, function (err, hash) {
+    bcrypt.hash(promotor.password, salt, function (err, hash) {
       if (err) return next(err);
-      cineplex.password = hash;
+      promotor.password = hash;
       next();
     });
   });
 });
-cineplexSchema.statics.findByEmail = function (email) {
+promotorSchema.statics.findByEmail = function (email) {
   return this.findOne({ email: email });
 };
-cineplexSchema.methods.comparePassword = async function (candidatePassword) {
+promotorSchema.methods.comparePassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
-cineplexSchema.methods.activate = async function () {
+promotorSchema.methods.activate = async function () {
   this.activated = true;
   await this.save();
 };
-cineplexSchema.methods.verify = async function () {
+promotorSchema.methods.verify = async function () {
   this.verified = true;
   await this.save();
 };
 
-const Cineplex = mongoose.model("Cineplex", cineplexSchema, "cineplexes");
+const Promotor = mongoose.model("Promotor", promotorSchema, "promotors");
 
-module.exports = Cineplex;
+module.exports = Promotor;

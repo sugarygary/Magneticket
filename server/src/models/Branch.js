@@ -12,8 +12,10 @@ const branchSchema = new Schema(
       unique: true,
       default: function () {
         let pubIDSeparate = this.branch_name.toLowerCase().split(" ");
+        pubIDSeparate.map((str) => (str = str.replace(/[^a-zA-Z ]/g, "")));
+        let identifier = customAlphabet("1234567890abcdef", 8);
         return (
-          pubIDSeparate.join("-") + "-" + customAlphabet("1234567890abcdef", 8)
+          pubIDSeparate.join("-").replace(/\s+/g, " ") + "-" + identifier()
         );
       },
     },

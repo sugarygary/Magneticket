@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const movieTransactionSchema = new Schema(
+const eventTransactionSchema = new Schema(
   {
-    cineplex_id: {
+    promotor: {
       type: Schema.ObjectId,
       required: true,
     },
-    cineplex_brand: {
+    promotor_brand: {
       type: String,
       required: true,
     },
@@ -15,11 +15,11 @@ const movieTransactionSchema = new Schema(
       type: Schema.ObjectId,
       required: true,
     },
-    branch_name: {
+    event_name: {
       type: String,
       required: true,
     },
-    studio_name: {
+    event_category_name: {
       type: String,
       required: true,
     },
@@ -31,14 +31,6 @@ const movieTransactionSchema = new Schema(
       type: String,
       required: true,
     },
-    movie_title: {
-      type: String,
-      required: true,
-    },
-    movie_id: {
-      type: String,
-      required: true,
-    },
     payment_method: {
       type: String,
       required: true,
@@ -47,27 +39,19 @@ const movieTransactionSchema = new Schema(
       type: String,
       required: true,
     },
-    promo_code: { type: String, default: null },
     status: {
       type: String,
       default: "PENDING",
       enum: ["PENDING", "FAILED", "SUCCESS"],
     },
-    seats: [{ type: String }],
-    foods: [
-      {
-        food_name: { type: String },
-        quantity: { type: String },
-      },
-    ],
   },
   { timestamps: true }
 );
 
-const MovieTransaction = mongoose.model(
-  "MovieTransaction",
-  movieTransactionSchema,
-  "movie_transactions"
+const EventTransaction = mongoose.model(
+  "EventTransaction",
+  eventTransactionSchema,
+  "event_transactions"
 );
 
-module.exports = MovieTransaction;
+module.exports = EventTransaction;

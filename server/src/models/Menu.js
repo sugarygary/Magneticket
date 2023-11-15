@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { customAlphabet } = require("nanoid");
 const Schema = mongoose.Schema;
 
 const menuSchema = new Schema(
@@ -11,8 +12,15 @@ const menuSchema = new Schema(
       type: String,
       unique: true,
       default: function () {
-        let pubIDSeparate = this.item_name.toLowerCase().split(" ");
-        return pubIDSeparate.join("-") + "-" + nanoid(8);
+        let pubIDSeparate = this.item_name
+          .replace(/[^a-zA-Z ]/g, "")
+          .replace(/\s+/g, " ")
+          .toLowerCase()
+          .split(" ");
+        let identifier = customAlphabet("1234567890abcdef", 8);
+        return (
+          pubIDSeparate.join("-").replace(/\s+/g, " ") + "-" + identifier()
+        );
       },
     },
   },

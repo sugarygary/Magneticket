@@ -13,6 +13,7 @@ const screeningSchema = new Schema(
       type: String,
       unique: true,
       default: function () {
+        let identifier = customAlphabet("1234567890abcdef", 8);
         return (
           this.movie +
           "-" +
@@ -20,7 +21,7 @@ const screeningSchema = new Schema(
           this.showtime.getMonth() +
           this.showtime.getDate() +
           "-" +
-          customAlphabet("1234567890abcdef", 8)
+          identifier()
         );
       },
     },
