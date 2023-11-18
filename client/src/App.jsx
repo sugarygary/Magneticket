@@ -23,22 +23,22 @@ function App() {
   return (
     <div className="" style={{ overflowX: 'hidden' }}>
       <Header></Header>
-      {/* <UserLoginForm></UserLoginForm> */}
-      {/* <UserRegisterForm></UserRegisterForm> */}
-      {/* <CardHome></CardHome> */}
-      {/* <CardTicketByMovie></CardTicketByMovie> */}
-      {/* <CardHistoryTransaksi></CardHistoryTransaksi> */}
-      {/* <CardMakanan></CardMakanan> */}
-      {/* <DetailPesanan></DetailPesanan> */}
-      {/* <CardViewTicket></CardViewTicket> */}
-      {/* <CardCineplexStudio></CardCineplexStudio> */}
-      {/* <CardInfoFilm></CardInfoFilm> */}
-      {/* <CardCineplexJadwal></CardCineplexJadwal> */}
-      {/* <CineplexTiketDetail></CineplexTiketDetail> */}
-      {/* <CineplexConcessionCard></CineplexConcessionCard> */}
-      {/* <CineplexRegisterForm></CineplexRegisterForm> */}
-      {/* <CardInfoFilm></CardInfoFilm> */}
-      <EventRegisterForm></EventRegisterForm>
+      <UserLoginForm></UserLoginForm> x
+      <UserRegisterForm></UserRegisterForm>
+      <CardHome></CardHome>
+      <CardTicketByMovie></CardTicketByMovie>
+      <CardHistoryTransaksi></CardHistoryTransaksi>
+      <CardMakanan></CardMakanan>
+      <DetailPesanan></DetailPesanan>
+      <CardViewTicket></CardViewTicket>
+      <CardCineplexStudio></CardCineplexStudio>
+      <CardInfoFilm></CardInfoFilm>
+      <CardCineplexJadwal></CardCineplexJadwal>
+      <CineplexTiketDetail></CineplexTiketDetail>
+      <CineplexConcessionCard></CineplexConcessionCard>
+      <CineplexRegisterForm></CineplexRegisterForm>
+      <CardInfoFilm></CardInfoFilm>
+       <EventRegisterForm></EventRegisterForm>
       <Footer></Footer>
     </div>
   );

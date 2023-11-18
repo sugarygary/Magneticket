@@ -32,12 +32,12 @@ const CineplexRegisterForm = (props) => {
                     <div className="mb-3 text-left">
                         <p>Unggah NPWP Badan</p>
                         {/* <input type="text" className="abuInput w-full rounded p-1 pl-2" placeholder="Masukkan Nama Perusahaan" /> */}
-                        <input type="file" name="" id="" className="" />
+                        <input type="file" className="block w-96 mb-5 text-md text-white border border-gray-600 bg-gray-600 rounded-lg cursor-pointer mt-2" id="" name="" />
                     </div>
                     <div className="mb-3 text-left">
                         <p>Unggah Surat Kerjasama</p>
                         {/* <input type="text" className="abuInput w-full rounded p-1 pl-2" placeholder="Masukkan Nama Perusahaan" /> */}
-                        <input type="file" name="" id="" className="" />
+                        <input type="file" className="block w-96 mb-5 text-md text-white border border-gray-600 bg-gray-600 rounded-lg cursor-pointer mt-2" id="" name="" />
                     </div>
                     <div className="mb-3 text-left">
                         <p>Password</p>
@@ -55,7 +55,7 @@ const CineplexRegisterForm = (props) => {
                     </div>
 
                     {/* checkbox */}
-                    <div className="mb-3 text-left flex">
+                    <div className="mb-3 text-left items-center flex">
                         <input type="checkbox" name="kebijakanPrivasi" id="" />
                         <p>Saya setuju dengan </p>
                         <p className="biruDaftarSekarang ml-1">kebijakan privasi Magneticket</p>
