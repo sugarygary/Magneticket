@@ -45,6 +45,9 @@ cineplexSchema.pre("save", function (next) {
 cineplexSchema.statics.findByEmail = function (email) {
   return this.findOne({ email: email });
 };
+cineplexSchema.statics.findById = function (cineplexId) {
+  return this.findOne({ _id: cineplexId });
+};
 cineplexSchema.methods.comparePassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };

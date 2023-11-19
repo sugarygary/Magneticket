@@ -22,6 +22,9 @@ const branchSchema = new Schema(
   },
   { timestamps: true }
 );
+branchSchema.statics.findByBranchName = function (branch_name) {
+  return this.findOne({ branch_name: branch_name });
+};
 const Branch = mongoose.model("Branch", branchSchema, "branches");
 
 module.exports = Branch;
