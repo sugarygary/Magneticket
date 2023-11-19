@@ -7,10 +7,16 @@ const {
   validateLogin,
   loginUser,
   logout,
+
   registerCineplex,
   validateRegisterCineplex,
   activateCineplex,
   loginCineplex,
+
+  registerPromotor,
+  validateRegisterPromotor,
+  activatePromotor,
+  loginPromotor,
 } = require("../controllers/authController");
 const authRouter = express.Router();
 
@@ -21,5 +27,11 @@ authRouter.get("/logout", logout);
 
 authRouter.post("/register-cineplex", validateRegisterCineplex, registerCineplex);
 authRouter.post("/login-cineplex", validateLogin, loginCineplex);
-authRouter.get("/activate-cineplex/:cineplex_id", activateCineplex);
-module.exports = authRouter;
+authRouter.get("/activate-cineplex/:cineplex_id",
+  activateCineplex);
+
+authRouter.post("/register-promotor", validateRegisterPromotor, registerPromotor);
+authRouter.post("/login-promotor", validateLogin, loginPromotor);
+authRouter.get("/activate-promotor/:promotor_id", activatePromotor),
+
+  module.exports = authRouter;

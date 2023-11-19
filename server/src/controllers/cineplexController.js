@@ -10,6 +10,9 @@ const Cineplex = require("../models/Cineplex");
 const jwt = require("jsonwebtoken");
 const Branch = require("../models/Branch");
 const { ObjectId } = require('mongodb');
+const Promotion = require("../models/Promotion");
+const Menu = require("../models/Menu");
+
 //verify middleware
 const verifyCineplexCookie = async (req, res, next) => {
     try {
@@ -26,12 +29,76 @@ const verifyCineplexCookie = async (req, res, next) => {
         return res.status(401).json({ message: "Unauthorized token ngawur " });
     }
 }
-const createBranch = asyncHandler(async (req, res) => {
-    // return res.status(200).json({ message: "halooooo" });
+const createPromo = asyncHandler(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).send({ errors: errors.array() });
     }
+    let { cineplex, promo_code, valid_until, discount_amount, minimum_transaction } = req.body;
+    const token = req.cookies.magneticket_token;
+    const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    if (verified.userId != cineplex) {
+        res.status(403);
+        throw new Error("You are not the owner of this company");
+    }
+    if (!minimum_transaction || minimum_transaction == "") {
+        minimum_transaction = 0;
+    }
+    let newPromotion = new Promotion({
+        cineplex: cineplex,
+        promo_code: promo_code,
+        valid_until: valid_until,
+        discount_amount: discount_amount,
+        minimum_transaction: minimum_transaction
+    });
+    await newPromotion.save();
+
+    return res.status(201).send({
+        message: "Promo has been created",
+        cineplex: cineplex,
+        promo_code: promo_code,
+        valid_until: valid_until,
+        discount_amount: discount_amount,
+        minimum_transaction: minimum_transaction
+    });
+})
+const createMenu = asyncHandler(async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).send({ errors: errors.array() });
+    }
+    let { cineplex, item_name, item_description, price, minimum_transaction } = req.body;
+    const token = req.cookies.magneticket_token;
+    const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    if (verified.userId != cineplex) {
+        res.status(403);
+        throw new Error("You are not the owner of this company");
+    }
+
+    let newMenu = new Menu({
+        cineplex: cineplex,
+        item_name: item_name,
+        item_description: item_description,
+        price: price,
+    });
+    await newMenu.save();
+
+    return res.status(201).send({
+        message: "Menu has been created",
+        cineplex: cineplex,
+        item_name: item_name,
+        item_description: item_description,
+        price: price,
+    });
+})
+const createBranch = asyncHandler(async (req, res) => {
+    // return res.status(200).json({ message: "halooooo" });
+    console.log(new Date() + 1000 * 3600 * 24 * 30)
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).send({ errors: errors.array() });
+    }
+
     let { cineplex, branch_name, address, city } = req.body;
     const token = req.cookies.magneticket_token;
     const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
@@ -68,4 +135,6 @@ const createBranch = asyncHandler(async (req, res) => {
 module.exports = {
     verifyCineplexCookie,
     createBranch,
+    createPromo,
+    createMenu,
 }

@@ -7,6 +7,7 @@ const nodemailer = require("nodemailer");
 const { body, validationResult } = require("express-validator");
 const generateToken = require("../util/generateToken");
 const Cineplex = require("../models/Cineplex");
+const Promotor = require("../models/Promotor");
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -244,8 +245,117 @@ const loginCineplex = asyncHandler(async function (req, res) {
 });
 
 
+
 //#endregion
 
+//#region promotor
+const registerPromotor = asyncHandler(async function (req, res) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array() });
+  }
+  let { email, password, company_name, brand_name } = req.body;
+  let findPromotor = await Promotor.findByEmail(email);
+  if (findPromotor !== null) {
+    res.status(409);
+    throw new Error("Email already exists");
+  }
+  let newPromotor = new Promotor({
+    email: email,
+    password: password,
+    company_name: company_name,
+    brand_name: brand_name,
+  });
+  await newPromotor.save();
+  const link = `${BACKEND_URL}/api/auth/activate-promotor/${newPromotor._id.toString()}`;
+  const result = await transporter.sendMail({
+    from: GMAIL_ACC,
+    to: email,
+    subject: "Activate Your Account",
+    html: `
+      Activate your account with the link below
+      <br>
+      <table width="100%" cellspacing="0" cellpadding="0">
+              <tr>
+                 <td>
+                  <table cellspacing="0" cellpadding="0">
+                  <tr>
+                      <td style="border-radius: 2px;" bgcolor="#1F2A37">
+                          <a href="${link}" target="_blank" style="padding: 8px 12px; border: 1px solid #1F2A37; border-radius: 2px;font-family: Helvetica, Arial, sans-serif;font-size: 14px; color: #ffffff;text-decoration: none;font-weight:bold;display: inline-block;">
+                              Activate Your Accunt
+                          </a>
+                      </td>
+                  </tr>
+              </table>
+          </td>
+      </tr>
+    </table>`,
+  });
+  return res.status(201).send({
+    message: "Promotor created, please verify email",
+    _id: newPromotor._id.toString(),
+    email: newPromotor.email,
+    company_name: newPromotor.company_name,
+    brand_name: newPromotor.brand_name,
+    activated: newPromotor.activated,
+    verified: newPromotor.verified,
+  });
+});
+const activatePromotor = asyncHandler(async function (req, res) {
+  let findPromotor = await Promotor.findById(req.params.promotor_id);
+  if (findPromotor == null) {
+    return res.status(404).send({ message: "Invalid Code" });
+  }
+  await findPromotor.activate();
+  res.status(301).redirect(FRONTEND_URL);
+});
+const loginPromotor = asyncHandler(async function (req, res) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array() });
+  }
+  const { email, password } = req.body;
+  const findPromotor = await Promotor.findByEmail(email);
+  if (findPromotor === null) {
+    res.status(401);
+    throw new Error("Invalid email or password");
+  }
+  let matchPassword = await findPromotor.comparePassword(password);
+  if (!matchPassword) {
+    res.status(401);
+    throw new Error("Invalid email or password");
+  }
+  if (!findPromotor.activated) {
+    res.status(403);
+    throw new Error("Please activate your account");
+  }
+  if (!findPromotor.verified) {
+    res.status(403);
+    throw new Error("Please wait for the verification for your account :)");
+  }
+  generateToken(res, findPromotor._id.toString(), "PROMOTOR");
+  return res.status(200).send({
+    message: "Login success",
+    _id: findPromotor._id.toString(),
+    email: findPromotor.email,
+    company_name: findPromotor.company_name,
+    brand_name: findPromotor.brand_name,
+    activated: findPromotor.activated,
+    verified: findPromotor.verified,
+  });
+});
+const validateRegisterPromotor = [
+  body("email")
+    .notEmpty()
+    .withMessage("Field cannot be empty")
+    .isEmail()
+    .withMessage("Invalid e-mail address"),
+  body("password").notEmpty().withMessage("Field cannot be empty"),
+  body("company_name").notEmpty().withMessage("Field cannot be empty"),
+  body("brand_name").notEmpty().withMessage("Field cannot be empty"),
+
+];
+//#endregion
 module.exports = {
   registerUser,
   loginUser,
@@ -258,4 +368,10 @@ module.exports = {
   loginCineplex,
   validateRegisterCineplex,
   activateCineplex,
+
+  validateRegisterPromotor,
+  registerPromotor,
+  activatePromotor,
+  loginPromotor,
+
 };
