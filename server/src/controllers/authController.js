@@ -1,6 +1,5 @@
 require("dotenv").config();
 const User = require("../models/User");
-const asyncHandler = require("express-async-handler");
 const { GMAIL_ACC, GMAIL_APP_PASSWORD, BACKEND_URL, FRONTEND_URL } =
   process.env;
 const nodemailer = require("nodemailer");
@@ -35,10 +34,9 @@ const validateRegisterCineplex = [
   body("password").notEmpty().withMessage("Field cannot be empty"),
   body("company_name").notEmpty().withMessage("Field cannot be empty"),
   body("brand_name").notEmpty().withMessage("Field cannot be empty"),
-
 ];
 
-const registerUser = asyncHandler(async function (req, res) {
+const registerUser = async function (req, res) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array() });
@@ -86,7 +84,7 @@ const registerUser = asyncHandler(async function (req, res) {
     full_name: newUser.full_name,
     activated: newUser.activated,
   });
-});
+};
 
 const validateLogin = [
   body("email")
@@ -97,7 +95,7 @@ const validateLogin = [
   body("password").notEmpty().withMessage("Field cannot be empty"),
 ];
 
-const loginUser = asyncHandler(async function (req, res) {
+const loginUser = async function (req, res) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array() });
@@ -125,9 +123,9 @@ const loginUser = asyncHandler(async function (req, res) {
     full_name: findUser.full_name,
     activated: findUser.activated,
   });
-});
+};
 
-const logout = asyncHandler(async function (req, res) {
+const logout = async function (req, res) {
   res.cookie("magneticket_token", "", {
     httpOnly: true,
     expires: new Date(0),
@@ -136,19 +134,19 @@ const logout = asyncHandler(async function (req, res) {
   });
   res.status(200);
   return res.send({ message: "Logout success" });
-});
+};
 
-const activateUser = asyncHandler(async function (req, res) {
+const activateUser = async function (req, res) {
   let findUser = await User.findById(req.params.user_id);
   if (findUser == null) {
     return res.status(404).send({ message: "Invalid Code" });
   }
   await findUser.activate();
   res.status(301).redirect(FRONTEND_URL);
-});
+};
 
-//#region bioskop 
-const registerCineplex = asyncHandler(async function (req, res) {
+//#region bioskop
+const registerCineplex = async function (req, res) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array() });
@@ -199,16 +197,16 @@ const registerCineplex = asyncHandler(async function (req, res) {
     activated: newCineplex.activated,
     verified: newCineplex.verified,
   });
-});
-const activateCineplex = asyncHandler(async function (req, res) {
+};
+const activateCineplex = async function (req, res) {
   let findCineplex = await Cineplex.findById(req.params.cineplex_id);
   if (findCineplex == null) {
     return res.status(404).send({ message: "Invalid Code" });
   }
   await findCineplex.activate();
   res.status(301).redirect(FRONTEND_URL);
-});
-const loginCineplex = asyncHandler(async function (req, res) {
+};
+const loginCineplex = async function (req, res) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array() });
@@ -242,14 +240,12 @@ const loginCineplex = asyncHandler(async function (req, res) {
     activated: findCineplex.activated,
     verified: findCineplex.verified,
   });
-});
-
-
+};
 
 //#endregion
 
 //#region promotor
-const registerPromotor = asyncHandler(async function (req, res) {
+const registerPromotor = async function (req, res) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array() });
@@ -300,16 +296,16 @@ const registerPromotor = asyncHandler(async function (req, res) {
     activated: newPromotor.activated,
     verified: newPromotor.verified,
   });
-});
-const activatePromotor = asyncHandler(async function (req, res) {
+};
+const activatePromotor = async function (req, res) {
   let findPromotor = await Promotor.findById(req.params.promotor_id);
   if (findPromotor == null) {
     return res.status(404).send({ message: "Invalid Code" });
   }
   await findPromotor.activate();
   res.status(301).redirect(FRONTEND_URL);
-});
-const loginPromotor = asyncHandler(async function (req, res) {
+};
+const loginPromotor = async function (req, res) {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array() });
@@ -343,7 +339,7 @@ const loginPromotor = asyncHandler(async function (req, res) {
     activated: findPromotor.activated,
     verified: findPromotor.verified,
   });
-});
+};
 const validateRegisterPromotor = [
   body("email")
     .notEmpty()
@@ -353,7 +349,6 @@ const validateRegisterPromotor = [
   body("password").notEmpty().withMessage("Field cannot be empty"),
   body("company_name").notEmpty().withMessage("Field cannot be empty"),
   body("brand_name").notEmpty().withMessage("Field cannot be empty"),
-
 ];
 //#endregion
 module.exports = {
@@ -363,15 +358,12 @@ module.exports = {
   activateUser,
   validateRegister,
   logout,
-
   registerCineplex,
   loginCineplex,
   validateRegisterCineplex,
   activateCineplex,
-
   validateRegisterPromotor,
   registerPromotor,
   activatePromotor,
   loginPromotor,
-
 };

@@ -1,140 +1,371 @@
 require("dotenv").config();
-const User = require("../models/User");
-const asyncHandler = require("express-async-handler");
-const { GMAIL_ACC, GMAIL_APP_PASSWORD, BACKEND_URL, FRONTEND_URL } =
-    process.env;
-const nodemailer = require("nodemailer");
 const { body, validationResult } = require("express-validator");
 const generateToken = require("../util/generateToken");
 const Cineplex = require("../models/Cineplex");
 const jwt = require("jsonwebtoken");
 const Branch = require("../models/Branch");
-const { ObjectId } = require('mongodb');
+const { ObjectId } = require("mongodb");
 const Promotion = require("../models/Promotion");
 const Menu = require("../models/Menu");
+const { db } = require("../db/connection");
+const Studio = require("../models/Studio");
+const Seat = require("../models/Seat");
+const axios = require("axios");
+const Movie = require("../models/Movie");
+const Screening = require("../models/Screening");
 
 //verify middleware
 const verifyCineplexCookie = async (req, res, next) => {
-    try {
-        const token = req.cookies.magneticket_token;
-        if (!token) return res.status(401).json({ message: "Unauthorized kalo tidak ada cookie aktif" });
-        const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        if (verified.role != "CINEPLEX") {
-            return res.status(403).json({ message: "Forbidden BUKAN AKUN AKUN CINEPLEX HEHEH" });
-        }
-        req.userId = verified.userId;
-        next();
-    } catch (err) {
-        console.log(err)
-        return res.status(401).json({ message: "Unauthorized token ngawur " });
-    }
-}
-const createPromo = asyncHandler(async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).send({ errors: errors.array() });
-    }
-    let { cineplex, promo_code, valid_until, discount_amount, minimum_transaction } = req.body;
+  try {
     const token = req.cookies.magneticket_token;
+    if (!token) return res.status(401).json({ message: "Unauthorized" });
     const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    if (verified.userId != cineplex) {
-        res.status(403);
-        throw new Error("You are not the owner of this company");
+    if (verified.role != "CINEPLEX") {
+      // res.clearCookie("magneticket_token");
+      return res.status(403).json({ message: "Forbidden" });
     }
-    if (!minimum_transaction || minimum_transaction == "") {
-        minimum_transaction = 0;
+    let findCineplex = Cineplex.findById(verified.userId);
+    if (findCineplex == null) {
+      return res.status(401).json({ message: "Unauthorized" });
     }
-    let newPromotion = new Promotion({
-        cineplex: cineplex,
-        promo_code: promo_code,
-        valid_until: valid_until,
-        discount_amount: discount_amount,
-        minimum_transaction: minimum_transaction
+    req.userId = verified.userId;
+    next();
+  } catch (err) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+};
+const createPromo = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array() });
+  }
+  let {
+    cineplex,
+    promo_code,
+    valid_until,
+    discount_amount,
+    minimum_transaction,
+  } = req.body;
+  const token = req.cookies.magneticket_token;
+  const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
+  if (verified.userId != cineplex) {
+    res.status(403);
+    throw new Error("You are not the owner of this company");
+  }
+  if (!minimum_transaction || minimum_transaction == "") {
+    minimum_transaction = 0;
+  }
+  let newPromotion = new Promotion({
+    cineplex: cineplex,
+    promo_code: promo_code,
+    valid_until: valid_until,
+    discount_amount: discount_amount,
+    minimum_transaction: minimum_transaction,
+  });
+  await newPromotion.save();
+
+  return res.status(201).send({
+    message: "Promo has been created",
+    cineplex: cineplex,
+    promo_code: promo_code,
+    valid_until: valid_until,
+    discount_amount: discount_amount,
+    minimum_transaction: minimum_transaction,
+  });
+};
+const createMenu = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array() });
+  }
+  let { cineplex, item_name, item_description, price, minimum_transaction } =
+    req.body;
+  const token = req.cookies.magneticket_token;
+  const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
+  if (verified.userId != cineplex) {
+    res.status(403);
+    throw new Error("You are not the owner of this company");
+  }
+
+  let newMenu = new Menu({
+    cineplex: cineplex,
+    item_name: item_name,
+    item_description: item_description,
+    price: price,
+  });
+  await newMenu.save();
+
+  return res.status(201).send({
+    message: "Menu has been created",
+    cineplex: cineplex,
+    item_name: item_name,
+    item_description: item_description,
+    price: price,
+  });
+};
+const createBranch = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array() });
+  }
+  let { branch_name, address, city } = req.body;
+  let findBranch = await Branch.findByBranchName(branch_name);
+  if (findBranch !== null) {
+    res.status(409);
+    throw new Error("Branch already exists");
+  }
+  let newBranch = new Branch({
+    cineplex: req.userId,
+    branch_name: branch_name,
+    address: address,
+    city: city,
+  });
+  await newBranch.save();
+
+  return res.status(201).send({
+    message: "Branch created",
+    cineplex: newBranch.cineplex,
+    branch_name: newBranch.branch_name,
+    address: newBranch.address,
+    city: newBranch.city,
+  });
+};
+
+const validateCreateStudio = [
+  body("branch_id").notEmpty().withMessage("Field cannot be empty"),
+  body("studio_name").notEmpty().withMessage("Field cannot be empty"),
+  body("type").notEmpty().withMessage("Field cannot be empty"),
+  body("row")
+    .notEmpty()
+    .withMessage("Field cannot be empty")
+    .isInt({ min: 1, max: 26 })
+    .withMessage("Row must be a number between 1 and 26"),
+  body("seating_layout")
+    .notEmpty()
+    .withMessage("Field cannot be empty")
+    .matches(/^(\d+-)+\d+$/)
+    .withMessage("Invalid seating layout input"),
+];
+const createStudio = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array() });
+  }
+  let { branch_id, studio_name, type, row, seating_layout } = req.body;
+  let findBranch = await Branch.findById(branch_id);
+  if (findBranch == null) {
+    return res.status(404).send({ message: "Branch not found" });
+  }
+  if (findBranch.cineplex != req.userId) {
+    return res.status(403).send({ message: "Forbidden" });
+  }
+  let column = seating_layout.split("-");
+  let totalColumn = column.reduce((total, col) => {
+    return parseInt(total) + parseInt(col);
+  });
+  if (totalColumn > 99 || totalColumn < 0) {
+    return res.status(400).send({ message: "Invalid column input" });
+  }
+  const alphabets = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
+  ];
+  const session = await db.startSession();
+  try {
+    session.startTransaction();
+    let newStudio = new Studio({
+      cineplex: req.userId,
+      branch: branch_id,
+      studio_name,
+      type,
+      row,
+      seating_layout,
     });
-    await newPromotion.save();
-
-    return res.status(201).send({
-        message: "Promo has been created",
-        cineplex: cineplex,
-        promo_code: promo_code,
-        valid_until: valid_until,
-        discount_amount: discount_amount,
-        minimum_transaction: minimum_transaction
-    });
-})
-const createMenu = asyncHandler(async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).send({ errors: errors.array() });
+    let seats = [];
+    for (let i = 0; i < row; i++) {
+      const rowLetter = alphabets[i];
+      for (let j = 0; j < totalColumn; j++) {
+        seats.push({
+          cineplex: req.userId,
+          studio: newStudio._id,
+          seat_number: rowLetter + (j + 1).toString().padStart(2, 0),
+        });
+      }
     }
-    let { cineplex, item_name, item_description, price, minimum_transaction } = req.body;
-    const token = req.cookies.magneticket_token;
-    const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    if (verified.userId != cineplex) {
-        res.status(403);
-        throw new Error("You are not the owner of this company");
+    await newStudio.save({ session });
+    await Seat.insertMany(seats, { session });
+    await session.commitTransaction();
+    return res.status(201).send({ message: "Studio created succesfully" });
+  } catch (error) {
+    await session.abortTransaction();
+    return res.status(500).send({ message: error.message });
+  }
+};
+
+const validateCreateScreening = [
+  body("studio_id").notEmpty().withMessage("Field cannot be empty"),
+  body("movie_id").notEmpty().withMessage("Field cannot be empty"),
+  body("price")
+    .notEmpty()
+    .withMessage("Field cannot be empty")
+    .isInt({ min: 1 })
+    .withMessage("Price cannot be less than 1"),
+  body("showtime")
+    .notEmpty()
+    .withMessage("Field cannot be empty")
+    .isDate()
+    .withMessage("Showtime must be a recognizable javascript date"),
+];
+const createScreening = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array() });
+  }
+  let { studio_id, movie_id, price, showtime } = req.body;
+  let findStudio = await Studio.findById(studio_id);
+  if (findStudio == null) {
+    return res.status(404).send({ message: "Studio not found" });
+  }
+  if (findStudio.cineplex != req.userId) {
+    return res.status(403).send({ message: "Forbidden" });
+  }
+  let showtime_date = new Date(showtime).getTime();
+  const twoDaysFromNow = new Date();
+  twoDaysFromNow.setHours(0, 0, 0, 0);
+  twoDaysFromNow.setDate(twoDaysFromNow.getDate() + 2);
+  if (showtime_date <= twoDaysFromNow.getTime()) {
+    return res
+      .status(400)
+      .send({ message: "Date must be greater than 2 days from now" });
+  }
+  const options = {
+    method: "GET",
+    url: "https://online-movie-database.p.rapidapi.com/title/get-overview-details",
+    params: {
+      tconst: movie_id,
+    },
+    headers: {
+      "X-RapidAPI-Key": process.env.RAPID_API_KEY,
+      "X-RapidAPI-Host": process.env.IMDB_API_HOST,
+    },
+  };
+  let movie;
+  try {
+    movie = await axios.request(options);
+    if (movie.data == "" || movie.status == 204) {
+      return res.status(404).send({ message: "Film not found" });
     }
-
-    let newMenu = new Menu({
-        cineplex: cineplex,
-        item_name: item_name,
-        item_description: item_description,
-        price: price,
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+  if (movie.data.title.titleType != "movie") {
+    return res.status(400).send({ message: "Title is not a movie" });
+  }
+  let findMovie = await Movie.findById("tt5537002");
+  if (findMovie != null) {
+    const newScreening = new Screening({
+      cineplex: findStudio.cineplex,
+      movie: movie_id,
+      studio: studio_id,
+      price: price,
+      showtime: showtime,
     });
-    await newMenu.save();
-
-    return res.status(201).send({
-        message: "Menu has been created",
-        cineplex: cineplex,
-        item_name: item_name,
-        item_description: item_description,
-        price: price,
-    });
-})
-const createBranch = asyncHandler(async (req, res) => {
-    // return res.status(200).json({ message: "halooooo" });
-    console.log(new Date() + 1000 * 3600 * 24 * 30)
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).send({ errors: errors.array() });
+    await newScreening.save();
+    return res.status(201).send({ message: "Screening created succesfully" });
+  }
+  const credit_options = {
+    method: "GET",
+    url: "https://online-movie-database.p.rapidapi.com/title/get-full-credits",
+    params: {
+      tconst: movie_id,
+    },
+    headers: {
+      "X-RapidAPI-Key": process.env.RAPID_API_KEY,
+      "X-RapidAPI-Host": process.env.IMDB_API_HOST,
+    },
+  };
+  let movie_credits;
+  try {
+    movie_credits = await axios.request(credit_options);
+    if (movie_credits.data == "" || movie.status == 204) {
+      return res.status(404).send({ message: "Film not found" });
     }
-
-    let { cineplex, branch_name, address, city } = req.body;
-    const token = req.cookies.magneticket_token;
-    const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
-    if (verified.userId != cineplex) {
-        res.status(403);
-        throw new Error("You are not the owner of this company");
-    }
-    // let findCineplex = await Cineplex.findById(cineplex);
-    // console.log(findCineplex);
-    let findBranch = await Branch.findByBranchName(branch_name);
-    if (findBranch !== null) {
-        res.status(409);
-        throw new Error("Branch already exists");
-    }
-    let newBranch = new Branch({
-        cineplex: cineplex,
-        branch_name: branch_name,
-        address: address,
-        city: city,
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+  const session = await db.startSession();
+  try {
+    session.startTransaction();
+    let casts = [];
+    movie_credits.data.cast.slice(0, 10).map((cast) => {
+      casts.push({
+        _id: cast.id.split("/")[2],
+        cast_name: cast.name,
+        img: cast?.image?.url,
+      });
     });
-    await newBranch.save();
-
-    return res.status(201).send({
-        message: "Branch created",
-        cineplex: newBranch.cineplex,
-        branch_name: newBranch.branch_name,
-        address: newBranch.address,
-        city: newBranch.city
+    const newMovie = new Movie({
+      _id: movie_id,
+      title: movie.data.title.title,
+      img: movie.data.title.image.url,
+      synopsis: movie.data.plotOutline.text,
+      age_rating: movie.data.certificates?.US[0].certificate,
+      runtime_minutes: movie.data.title.runningTimeInMinutes,
+      director: {
+        _id: movie_credits.data.crew.director[0].id.split("/")[2],
+        director_name: movie_credits.data.crew.director[0].name,
+        img: movie_credits.data.crew.director[0]?.image.url,
+      },
+      casts: casts,
     });
-})
-
-
+    await newMovie.save();
+    const newScreening = new Screening({
+      cineplex: findStudio.cineplex,
+      movie: movie_id,
+      studio: studio_id,
+      price: price,
+      showtime: showtime,
+    });
+    await newScreening.save();
+    await session.commitTransaction();
+    return res.status(201).send({ message: "Screening created succesfully" });
+  } catch (error) {
+    await session.abortTransaction();
+    return res.status(500).send({ message: error.message });
+  }
+};
 
 module.exports = {
-    verifyCineplexCookie,
-    createBranch,
-    createPromo,
-    createMenu,
-}
+  verifyCineplexCookie,
+  createBranch,
+  createPromo,
+  createMenu,
+  createStudio,
+  validateCreateStudio,
+  createScreening,
+  validateCreateScreening,
+};

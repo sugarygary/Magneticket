@@ -18,7 +18,7 @@ const screeningSchema = new Schema(
           this.movie +
           "-" +
           this.showtime.getFullYear() +
-          this.showtime.getMonth() +
+          (this.showtime.getMonth() + 1) +
           this.showtime.getDate() +
           "-" +
           identifier()

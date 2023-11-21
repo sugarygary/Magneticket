@@ -7,7 +7,7 @@ const movieSchema = new Schema(
     title: { type: String, required: true },
     img: { type: String },
     synopsis: { type: String },
-    rating: { type: String },
+    age_rating: { type: String },
     runtime_minutes: { type: Number },
     director: {
       _id: { type: String },

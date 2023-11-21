@@ -217,9 +217,9 @@ module.exports = async () => {
     // await newEventTrans.save().catch(function (err) {
     //   console.log(err);
     // });
-    await newEventTicket.save().catch(function (err) {
-      console.log(err);
-    });
+    // await newEventTicket.save().catch(function (err) {
+    //   console.log(err);
+    // });
     // let findCineplex = await Cineplex.findOne({ email: "cgv@gmail.com" });
     // if (findCineplex !== null) {
     //   let newBranch = new Branch({

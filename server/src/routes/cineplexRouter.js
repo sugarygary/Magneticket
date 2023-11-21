@@ -1,11 +1,28 @@
 const express = require("express");
-const { body, validationResult } = require("express-validator");
-const { verifyCineplexCookie, createBranch, createPromo, createMenu } = require("../controllers/cineplexController");
+const {
+  verifyCineplexCookie,
+  createBranch,
+  createPromo,
+  createMenu,
+  createStudio,
+  validateCreateStudio,
+  createScreening,
+  validateCreateScreening,
+} = require("../controllers/cineplexController");
+const expressAsyncHandler = require("express-async-handler");
 const cineplexRouter = express.Router();
-cineplexRouter.use(verifyCineplexCookie)
-
-cineplexRouter.post("/create-branch", createBranch);
-cineplexRouter.post("/create-promo", createPromo);
-cineplexRouter.post("/create-menu", createMenu);
-// adminRouter.post("/verify-cineplex/:email", verifyCineplex);
+cineplexRouter.use(verifyCineplexCookie);
+cineplexRouter.post("/create-branch", expressAsyncHandler(createBranch));
+cineplexRouter.post(
+  "/create-studio",
+  validateCreateStudio,
+  expressAsyncHandler(createStudio)
+);
+cineplexRouter.post(
+  "/create-screening",
+  validateCreateScreening,
+  expressAsyncHandler(createScreening)
+);
+cineplexRouter.post("/create-promo", expressAsyncHandler(createPromo));
+cineplexRouter.post("/create-menu", expressAsyncHandler(createMenu));
 module.exports = cineplexRouter;
