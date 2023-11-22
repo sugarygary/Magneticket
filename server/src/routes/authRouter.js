@@ -15,6 +15,7 @@ const {
   validateRegisterPromotor,
   activatePromotor,
   loginPromotor,
+  currentUser,
 } = require("../controllers/authController");
 const expressAsyncHandler = require("express-async-handler");
 const authRouter = express.Router();
@@ -57,4 +58,5 @@ authRouter.get(
   "/activate-promotor/:promotor_id",
   expressAsyncHandler(activatePromotor)
 );
+authRouter.get("/current-user", expressAsyncHandler(currentUser));
 module.exports = authRouter;

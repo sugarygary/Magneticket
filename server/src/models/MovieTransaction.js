@@ -39,6 +39,10 @@ const movieTransactionSchema = new Schema(
       type: String,
       required: true,
     },
+    movie_img: {
+      type: String,
+      required: true,
+    },
     payment_method: {
       type: String,
       required: true,
@@ -60,6 +64,7 @@ const movieTransactionSchema = new Schema(
         quantity: { type: String },
       },
     ],
+    midtrans_token: { type: String, required: true },
   },
   { timestamps: true }
 );

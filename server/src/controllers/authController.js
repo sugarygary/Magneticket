@@ -7,7 +7,7 @@ const { body, validationResult } = require("express-validator");
 const generateToken = require("../util/generateToken");
 const Cineplex = require("../models/Cineplex");
 const Promotor = require("../models/Promotor");
-
+const jwt = require("jsonwebtoken");
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -38,7 +38,7 @@ const validateRegisterCineplex = [
 
 const registerUser = async function (req, res) {
   const errors = validationResult(req);
-  console.log(req.body.full_name)
+  console.log(req.body.full_name);
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array() });
   }
@@ -126,13 +126,16 @@ const loginUser = async function (req, res) {
   });
 };
 
+const currentUser = async function (req, res) {
+  const token = req.cookies.magneticket_token;
+  if (!token) {
+    return res.status(204).send(null);
+  }
+  const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
+  return res.status(200).send({ userId: verified.userId, role: verified.role });
+};
+
 const logout = async function (req, res) {
-  // res.cookie("magneticket_token", "", {
-  //   httpOnly: true,
-  //   expires: new Date(0),
-  //   secure: process.env.NODE_ENV !== "development", // Use secure cookies in production
-  //   sameSite: "none",
-  // });
   res.clearCookie("magneticket_token");
   res.status(200);
   return res.send({ message: "Logout success" });
@@ -368,4 +371,5 @@ module.exports = {
   registerPromotor,
   activatePromotor,
   loginPromotor,
+  currentUser,
 };

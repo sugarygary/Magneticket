@@ -9,6 +9,8 @@ const Cineplex = require("../models/Cineplex");
 const Movie = require("../models/Movie");
 const Studio = require("../models/Studio");
 const Branch = require("../models/Branch");
+const { default: axios } = require("axios");
+const Menu = require("../models/Menu");
 
 const verifyUserCookie = async (req, res, next) => {
   try {
@@ -94,10 +96,6 @@ const createTicket = async (req, res) => {
   if (findSeats.length != seats.length) {
     return res.status(400).send({ message: "Invalid seat input" });
   }
-  let displaySeats = [];
-  findSeats.forEach((seat) => {
-    displaySeats.push(seat.seat_number);
-  });
   const findTicket = await MovieTicket.find({
     screening: screening_id,
     seats: { $in: seats },
@@ -110,12 +108,34 @@ const createTicket = async (req, res) => {
   if (findTicket.length > 0) {
     return res.status(400).send({ message: "Seats already booked" });
   }
+  let foodItems = [];
+  let foodTotal = 0;
+  for (let i = 0; i < foods.length; i++) {
+    const element = foods[i];
+    let findFood = await Menu.findOne({
+      _id: element.food_id,
+      cineplex: findScreening.cineplex,
+    });
+    if (findFood == null) {
+      return res.status(400).send({ message: "Invalid addon input" });
+    }
+    foodItems.push({
+      food_name: findFood.item_name,
+      quantity: element.quantity,
+    });
+    foodTotal += findFood.price * element.quantity;
+  }
+  console.log(foodTotal);
+  let displaySeats = [];
+  findSeats.forEach((seat) => {
+    displaySeats.push(seat.seat_number);
+  });
   let findCineplex = await Cineplex.findById(findScreening.cineplex);
   let findBranch = await Branch.findById(findScreening.branch);
   let findStudio = await Studio.findById(findScreening.studio);
   let customer = await User.findById(req.userId);
   let movie = await Movie.findById(findScreening.movie);
-  let amounts_paid = findScreening.price * seats.length;
+  let amounts_paid = findScreening.price * seats.length + foodTotal;
   let newMovieTransaction = new MovieTransaction({
     cineplex_brand: findCineplex.brand_name,
     cineplex_id: findCineplex._id,
@@ -124,24 +144,50 @@ const createTicket = async (req, res) => {
     customer_name: customer.full_name,
     movie_title: movie.title,
     movie_id: movie._id,
+    movie_img: movie.img,
     amounts_paid: amounts_paid,
     branch_name: findBranch.branch_name,
     studio_name: findStudio.studio_name,
     seats: displaySeats,
-    // foods: [{ food_name: "Popcorn Small", quantity: 2 }],
-    payment_method: "BCA",
+    foods: foodItems,
+    payment_method: "-",
   });
+  let midtrans = await axios.post(
+    "https://app.sandbox.midtrans.com/snap/v1/transactions",
+    {
+      transaction_details: {
+        order_id: newMovieTransaction._id,
+        gross_amount: newMovieTransaction.amounts_paid,
+      },
+      credit_card: {
+        secure: true,
+      },
+    },
+    {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: process.env.MIDTRANS_AUTH_STRING,
+      },
+    }
+  );
+  if (midtrans.data.token) {
+    newMovieTransaction.midtrans_token = midtrans.data.token;
+  }
   await newMovieTransaction.save();
   let newTicket = new MovieTicket({
     cineplex: findCineplex._id,
     customer: customer._id,
     screening: findScreening._id,
     seats: seats,
-    foods: [],
+    foods: foods,
     transaction: newMovieTransaction._id,
   });
   await newTicket.save();
-  return res.status(201).send({ message: "Created" });
+  return res
+    .status(201)
+    .send({ message: "Order created. Please pay.", ...midtrans.data });
 };
+const getAndUpdateTransactions = async (req, res) => {};
 
 module.exports = { verifyUserCookie, createTicket, getSeatsInfo };

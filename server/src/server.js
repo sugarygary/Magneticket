@@ -11,7 +11,11 @@ const init = require("./db/init");
 const { errorHandler, notFound } = require("./middlewares/errorMiddlewares");
 
 server.use(
-  cors({ origin: "http://localhost:5173", optionsSuccessStatus: 200 })
+  cors({
+    origin: "http://localhost:5173",
+    optionsSuccessStatus: 200,
+    credentials: true,
+  })
 );
 server.use(express.urlencoded({ extended: true }));
 server.use(express.json());
@@ -21,7 +25,6 @@ server.use("/api", router);
 getDBStatus();
 
 server.get("/", (req, res) => {
-  console.log(req.body);
   return res.status(200).send({ message: "Welcome to Magneticket Server!" });
 });
 

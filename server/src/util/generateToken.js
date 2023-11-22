@@ -7,9 +7,9 @@ const generateToken = (res, userId, role) => {
   });
   res.cookie("magneticket_token", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV !== "development", // Use secure cookies in production
-    sameSite: "none",
-    maxAge: 2 * 24 * 60 * 60 * 1000, // 30 days
+    secure: process.env.NODE_ENV == "development" ? null : true,
+    sameSite: process.env.NODE_ENV == "development" ? null : "none",
+    maxAge: 2 * 24 * 60 * 60 * 1000,
   });
 };
 

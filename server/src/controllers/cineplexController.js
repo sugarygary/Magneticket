@@ -39,13 +39,8 @@ const createPromo = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array() });
   }
-  let {
-    cineplex,
-    promo_code,
-    valid_until,
-    discount_amount,
-    minimum_transaction,
-  } = req.body;
+  let { promo_code, valid_until, discount_amount, minimum_transaction } =
+    req.body;
   if (!minimum_transaction || minimum_transaction == "") {
     minimum_transaction = 0;
   }
@@ -78,13 +73,12 @@ const createMenu = async (req, res) => {
     cineplex: req.userId,
     item_name: item_name,
     item_description: item_description,
-    price: price,
+    price: parseInt(price),
   });
   await newMenu.save();
 
   return res.status(201).send({
     message: "Menu has been created",
-    cineplex: cineplex,
     item_name: item_name,
     item_description: item_description,
     price: price,

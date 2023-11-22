@@ -125,6 +125,9 @@ const getScreeningByMovie = async (req, res) => {
 const getMovieDetails = async (req, res) => {
   let movie_id = req.params.movie_id;
   let movie_details = await Movie.findById(movie_id);
+  if (movie_details == null) {
+    return res.status(404).send({ message: "Movie not found" });
+  }
   return res.status(200).send(movie_details);
 };
 
