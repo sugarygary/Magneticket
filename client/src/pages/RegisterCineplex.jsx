@@ -1,12 +1,12 @@
 import CineplexRegisterForm from "../components/CineplexRegisterForm"
 import Footer from "../components/Footer"
-import Header from "../components/Header"
+import CineplexHeader from "../components/CineplexHeader"
 // import UserRegisterForm from "../components/UserRegisterForm"
 
 const RegisterCineplex = () => {
     return (
         <>
-            <Header></Header>
+            <CineplexHeader></CineplexHeader>
             {/* <UserRegisterForm></UserRegisterForm> */}
             <CineplexRegisterForm></CineplexRegisterForm>
             <Footer></Footer>
