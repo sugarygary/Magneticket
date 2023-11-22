@@ -1,5 +1,5 @@
 import Footer from "../components/Footer"
-import Header from "../components/Header"
+import CineplexHeader from "../components/CineplexHeader"
 import UserLoginForm from "../components/UserLoginForm"
 import { loginUser } from "../handlers/LoginHandler"
 
@@ -7,7 +7,7 @@ import { loginUser } from "../handlers/LoginHandler"
 const LoginCineplex = () => {
     return (
         <>
-            <Header></Header>
+            <CineplexHeader></CineplexHeader>
             <UserLoginForm></UserLoginForm>
             <Footer></Footer>
         </>

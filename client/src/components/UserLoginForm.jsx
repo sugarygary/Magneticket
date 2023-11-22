@@ -7,7 +7,7 @@ import { Link, useFetcher, useLoaderData, useNavigate } from "react-router-dom";
 
 
 const UserLoginForm = (props) => {
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
     return (
         <div className=" w-screen h-full flex justify-center text-white my-5">
             <div className="biruTua p-12 text-center rounded  w-1/2 mx-auto ">

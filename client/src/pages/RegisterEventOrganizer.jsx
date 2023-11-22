@@ -1,15 +1,14 @@
 import CineplexRegisterForm from "../components/CineplexRegisterForm"
 import EventRegisterForm from "../components/EventRegisterForm"
 import Footer from "../components/Footer"
-import Header from "../components/Header"
+import CineplexHeader from "../components/CineplexHeader"
 // import UserRegisterForm from "../components/UserRegisterForm"
 
 
 const RegisterEventOrganizer = () => {
     return (
         <>
-            <Header></Header>
-            {/* <UserRegisterForm></UserRegisterForm> */}
+            <CineplexHeader></CineplexHeader>
             <EventRegisterForm></EventRegisterForm>
             <Footer></Footer>
         </>

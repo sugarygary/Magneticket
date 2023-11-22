@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Header from "./components/Header";
+import CineplexHeader from "./components/CineplexHeader";
 import Footer from "./components/Footer";
 import UserLoginForm from "./components/UserLoginForm";
 import UserRegisterForm from "./components/UserRegisterForm";
