@@ -127,12 +127,13 @@ const loginUser = async function (req, res) {
 };
 
 const logout = async function (req, res) {
-  res.cookie("magneticket_token", "", {
-    httpOnly: true,
-    expires: new Date(0),
-    secure: process.env.NODE_ENV !== "development", // Use secure cookies in production
-    sameSite: "none",
-  });
+  // res.cookie("magneticket_token", "", {
+  //   httpOnly: true,
+  //   expires: new Date(0),
+  //   secure: process.env.NODE_ENV !== "development", // Use secure cookies in production
+  //   sameSite: "none",
+  // });
+  res.clearCookie("magneticket_token");
   res.status(200);
   return res.send({ message: "Logout success" });
 };

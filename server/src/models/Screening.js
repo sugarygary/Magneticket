@@ -7,6 +7,7 @@ const screeningSchema = new Schema(
     cineplex: { type: Schema.ObjectId, ref: "Cineplex", required: true },
     movie: { type: String, ref: "Movie", required: true },
     studio: { type: Schema.ObjectId, ref: "Studio", required: true },
+    branch: { type: Schema.ObjectId, ref: "Branch", required: true },
     price: { type: Number, required: true, min: 1 },
     showtime: { type: Date, required: true },
     pub_id: {

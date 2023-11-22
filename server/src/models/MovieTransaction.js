@@ -44,7 +44,7 @@ const movieTransactionSchema = new Schema(
       required: true,
     },
     amounts_paid: {
-      type: String,
+      type: Number,
       required: true,
     },
     promo_code: { type: String, default: null },

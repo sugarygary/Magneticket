@@ -30,10 +30,10 @@ cineplexRouter.post(
 );
 cineplexRouter.post("/create-promo", expressAsyncHandler(createPromo));
 cineplexRouter.post("/create-menu", expressAsyncHandler(createMenu));
-cineplexRouter.get("/branches/:cineplexId", expressAsyncHandler(getBranch));
-cineplexRouter.get("/screenings/:cineplexId", expressAsyncHandler(getScreening));
-cineplexRouter.get("/promos/:cineplexId", expressAsyncHandler(getPromo));
-cineplexRouter.get("/menus/:cineplexId", expressAsyncHandler(getMenu));
-cineplexRouter.get("/studios/:cineplexId", expressAsyncHandler(getStudio));
+cineplexRouter.get("/branches", expressAsyncHandler(getBranch));
+cineplexRouter.get("/screenings", expressAsyncHandler(getScreening));
+cineplexRouter.get("/promos", expressAsyncHandler(getPromo));
+cineplexRouter.get("/menus", expressAsyncHandler(getMenu));
+cineplexRouter.get("/studios", expressAsyncHandler(getStudio));
 
 module.exports = cineplexRouter;

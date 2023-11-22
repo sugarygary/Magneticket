@@ -13,8 +13,8 @@ const Seat = require("../models/Seat");
 const axios = require("axios");
 const Movie = require("../models/Movie");
 const Screening = require("../models/Screening");
+const moment = require("moment-timezone");
 
-//verify middleware
 const verifyCineplexCookie = async (req, res, next) => {
   try {
     const token = req.cookies.magneticket_token;
@@ -46,17 +46,11 @@ const createPromo = async (req, res) => {
     discount_amount,
     minimum_transaction,
   } = req.body;
-  const token = req.cookies.magneticket_token;
-  const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
-  if (verified.userId != cineplex) {
-    res.status(403);
-    throw new Error("You are not the owner of this company");
-  }
   if (!minimum_transaction || minimum_transaction == "") {
     minimum_transaction = 0;
   }
   let newPromotion = new Promotion({
-    cineplex: cineplex,
+    cineplex: req.userId,
     promo_code: promo_code,
     valid_until: valid_until,
     discount_amount: discount_amount,
@@ -66,7 +60,7 @@ const createPromo = async (req, res) => {
 
   return res.status(201).send({
     message: "Promo has been created",
-    cineplex: cineplex,
+    cineplex: req.userId,
     promo_code: promo_code,
     valid_until: valid_until,
     discount_amount: discount_amount,
@@ -78,17 +72,10 @@ const createMenu = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array() });
   }
-  let { cineplex, item_name, item_description, price, minimum_transaction } =
-    req.body;
-  const token = req.cookies.magneticket_token;
-  const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
-  if (verified.userId != cineplex) {
-    res.status(403);
-    throw new Error("You are not the owner of this company");
-  }
+  let { item_name, item_description, price } = req.body;
 
   let newMenu = new Menu({
-    cineplex: cineplex,
+    cineplex: req.userId,
     item_name: item_name,
     item_description: item_description,
     price: price,
@@ -254,10 +241,8 @@ const createScreening = async (req, res) => {
     return res.status(403).send({ message: "Forbidden" });
   }
   let showtime_date = new Date(showtime).getTime();
-  const twoDaysFromNow = new Date();
-  twoDaysFromNow.setHours(0, 0, 0, 0);
-  twoDaysFromNow.setDate(twoDaysFromNow.getDate() + 2);
-  if (showtime_date <= twoDaysFromNow.getTime()) {
+  let end = moment().tz("Asia/Jakarta").add(1, "days").endOf("day").toDate();
+  if (showtime_date <= end.getTime()) {
     return res
       .status(400)
       .send({ message: "Date must be greater than 2 days from now" });
@@ -285,10 +270,11 @@ const createScreening = async (req, res) => {
   if (movie.data.title.titleType != "movie") {
     return res.status(400).send({ message: "Title is not a movie" });
   }
-  let findMovie = await Movie.findById("tt5537002");
+  let findMovie = await Movie.findById(movie_id);
   if (findMovie != null) {
     const newScreening = new Screening({
       cineplex: findStudio.cineplex,
+      branch: findStudio.branch,
       movie: movie_id,
       studio: studio_id,
       price: price,
@@ -345,6 +331,7 @@ const createScreening = async (req, res) => {
     await newMovie.save();
     const newScreening = new Screening({
       cineplex: findStudio.cineplex,
+      branch: findStudio.branch,
       movie: movie_id,
       studio: studio_id,
       price: price,
@@ -359,84 +346,24 @@ const createScreening = async (req, res) => {
   }
 };
 const getBranch = async (req, res) => {
-  // Assuming req.params.cineplexId contains the id of the cineplex
-  const cineplexId = req.params.cineplexId;
-  // Use Mongoose to find all branches that belong to the specified cineplexId
-  const token = req.cookies.magneticket_token;
-  const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
-  if (verified.userId != cineplexId) {
-    res.status(403);
-    throw new Error("You are not the owner of this company");
-  }
-  const branches = await Branch.find({ cineplex: cineplexId });
-
-  // Respond with the found branches
+  const branches = await Branch.find({ cineplex: req.userId });
   res.status(200).json({ branches });
-
 };
 const getScreening = async (req, res) => {
-  // Assuming req.params.cineplexId contains the id of the cineplex
-  const cineplexId = req.params.cineplexId;
-  // Use Mongoose to find all branches that belong to the specified cineplexId
-  const token = req.cookies.magneticket_token;
-  const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
-  if (verified.userId != cineplexId) {
-    res.status(403);
-    throw new Error("You are not the owner of this company");
-  }
-  const screenings = await Screening.find({ cineplex: cineplexId });
-
-  // Respond with the found branches
+  const screenings = await Screening.find({ cineplex: req.userId });
   res.status(200).json({ screenings });
-
 };
 const getPromo = async (req, res) => {
-  // Assuming req.params.cineplexId contains the id of the cineplex
-  const cineplexId = req.params.cineplexId;
-  // Use Mongoose to find all branches that belong to the specified cineplexId
-  const token = req.cookies.magneticket_token;
-  const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
-  if (verified.userId != cineplexId) {
-    res.status(403);
-    throw new Error("You are not the owner of this company");
-  }
-  const promos = await Promotion.find({ cineplex: cineplexId });
-
-  // Respond with the found branches
+  const promos = await Promotion.find({ cineplex: req.userId });
   res.status(200).json({ promos });
-
 };
 const getMenu = async (req, res) => {
-  // Assuming req.params.cineplexId contains the id of the cineplex
-  const cineplexId = req.params.cineplexId;
-  // Use Mongoose to find all branches that belong to the specified cineplexId
-  const token = req.cookies.magneticket_token;
-  const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
-  if (verified.userId != cineplexId) {
-    res.status(403);
-    throw new Error("You are not the owner of this company");
-  }
-  const menus = await Menu.find({ cineplex: cineplexId });
-
-  // Respond with the found branches
+  const menus = await Menu.find({ cineplex: req.userId });
   res.status(200).json({ menus });
-
 };
 const getStudio = async (req, res) => {
-  // Assuming req.params.cineplexId contains the id of the cineplex
-  const cineplexId = req.params.cineplexId;
-  // Use Mongoose to find all branches that belong to the specified cineplexId
-  const token = req.cookies.magneticket_token;
-  const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
-  if (verified.userId != cineplexId) {
-    res.status(403);
-    throw new Error("You are not the owner of this company");
-  }
-  const studios = await Studio.find({ cineplex: cineplexId });
-
-  // Respond with the found branches
+  const studios = await Studio.find({ cineplex: req.userId });
   res.status(200).json({ studios });
-
 };
 module.exports = {
   verifyCineplexCookie,
@@ -451,5 +378,5 @@ module.exports = {
   getScreening,
   getPromo,
   getMenu,
-  getStudio
+  getStudio,
 };
