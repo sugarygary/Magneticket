@@ -38,6 +38,7 @@ const validateRegisterCineplex = [
 
 const registerUser = async function (req, res) {
   const errors = validationResult(req);
+  console.log(req.body.full_name)
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array() });
   }

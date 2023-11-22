@@ -23,7 +23,7 @@ function App() {
   return (
     <div className="" style={{ overflowX: 'hidden' }}>
       <Header></Header>
-      <UserLoginForm></UserLoginForm> x
+      <UserLoginForm></UserLoginForm> 
       <UserRegisterForm></UserRegisterForm>
       <CardHome></CardHome>
       <CardTicketByMovie></CardTicketByMovie>
@@ -38,7 +38,7 @@ function App() {
       <CineplexConcessionCard></CineplexConcessionCard>
       <CineplexRegisterForm></CineplexRegisterForm>
       <CardInfoFilm></CardInfoFilm>
-       <EventRegisterForm></EventRegisterForm>
+      <EventRegisterForm></EventRegisterForm>
       <Footer></Footer>
     </div>
   );
