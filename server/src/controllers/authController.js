@@ -103,13 +103,14 @@ const loginUser = async function (req, res) {
   }
   const { email, password } = req.body;
   const findUser = await User.findByEmail(email);
+  console.log(email, password)
   if (findUser === null) {
-    res.status(401);
+    res.status(400);
     throw new Error("Invalid email or password");
   }
   let matchPassword = await findUser.comparePassword(password);
   if (!matchPassword) {
-    res.status(401);
+    res.status(400);
     throw new Error("Invalid email or password");
   }
   if (!findUser.activated) {

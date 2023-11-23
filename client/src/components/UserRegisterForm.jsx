@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom"
 
 const UserRegisterForm = (props) => {
     const navigate = useNavigate()
+    const [errorMessage, setErrorMessage] = useState(null);
     const schema = Joi.object({
         fullname: Joi.string().required(),
         email: Joi.string().email({ tlds: { allow: false } }).required(),
@@ -35,17 +36,22 @@ const UserRegisterForm = (props) => {
             full_name: data.fullname
         }
         let retu = await registerUser(akunBaru)
-        if (retu == "Request failed with status code 409") {
-            alert("email sudah terdaftar")
-        } else {
-            navigate("/");
+        console.log(retu);
+        if (retu.response) {
+            setErrorMessage("Email already exists")
+        } else if (retu.request) {
+            navigate("/error-page")
         }
-
+        // if (retu == "Request failed with status code 409") {
+        // }
+        // else {
+        //     navigate("/");
+        // }
     }
     return (
         <>
 
-            <div className=" w-screen h-full flex justify-center items-center text-white my-10">
+            <div className="w-screen h-full flex justify-center items-center text-white my-10">
                 <div className="biruTua p-12 text-center rounded  w-1/2 mx-auto ">
                     <div className="justify-center">
                         <img src={logo1} alt="" className="w-96 mx-auto" />
@@ -60,6 +66,7 @@ const UserRegisterForm = (props) => {
                         <div className="mb-3 text-left">
                             <p>Email</p>
                             <input type="text" className="abuInput w-full rounded p-1 pl-2" placeholder="Enter your email" {...register("email")} />
+                            <span className="text-red-500">{errorMessage != null && errorMessage}</span>
                             <span className="text-red-500">{errors.email?.message}</span>
                         </div>
                         <div className="mb-3 text-left">

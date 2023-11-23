@@ -1,19 +1,15 @@
-import CineplexRegisterForm from "../components/CineplexRegisterForm"
-import EventRegisterForm from "../components/EventRegisterForm"
-import Footer from "../components/Footer"
-import CineplexHeader from "../components/CineplexHeader"
+import CineplexRegisterForm from "../components/CineplexRegisterForm";
+import EventRegisterForm from "../components/EventRegisterForm";
+import Footer from "../components/Footer";
+import CineplexHeader from "../components/CineplexHeader";
 // import UserRegisterForm from "../components/UserRegisterForm"
 
-
 const RegisterEventOrganizer = () => {
-    return (
-        <>
-            <CineplexHeader></CineplexHeader>
-            <EventRegisterForm></EventRegisterForm>
-            <Footer></Footer>
-        </>
-    )
+  return (
+    <>
+      <EventRegisterForm></EventRegisterForm>
+    </>
+  );
+};
 
-}
-
-export default RegisterEventOrganizer
+export default RegisterEventOrganizer;

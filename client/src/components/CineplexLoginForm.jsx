@@ -4,9 +4,9 @@ import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
 import { Link, useFetcher, useLoaderData, useNavigate } from "react-router-dom";
-import { loginUser } from "../handlers/LoginHandler";
+import { loginCineplex, loginUser } from "../handlers/LoginHandler";
 
-const UserLoginForm = (props) => {
+const CineplexLoginForm = (props) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,7 +28,7 @@ const UserLoginForm = (props) => {
       return;
     }
 
-    let retu = await loginUser(data);
+    let retu = await loginCineplex(data);
     console.log(retu);
     if (retu.response) {
       if (retu.response.status == 400) {
@@ -38,7 +38,7 @@ const UserLoginForm = (props) => {
       }
       if (retu.response.status == 403) {
         //navigate ke email belum aktif
-        navigate("/user/pending-email", {
+        navigate("/cineplex/pending-email", {
           state: { pending_email: data.email },
         });
         return;
@@ -94,4 +94,4 @@ const UserLoginForm = (props) => {
   );
 };
 
-export default UserLoginForm;
+export default CineplexLoginForm;

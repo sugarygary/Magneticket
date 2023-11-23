@@ -21,6 +21,7 @@
     "express-async-handler": "^1.2.0",
     "express-validator": "^7.0.1",
     "jsonwebtoken": "^9.0.2",
+    "moment": "^2.29.4",
     "moment-timezone": "^0.5.43",
     "mongodb": "^6.2.0",
     "mongoose": "^8.0.0",

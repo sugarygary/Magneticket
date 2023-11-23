@@ -6,10 +6,13 @@ import client from "../util/client";
 export const loginUser = async (data) => {
   console.log(data);
   try {
-    const response = await client.post("api/auth/login-user");
-
-    return response.data;
+    const response = await client.post("api/auth/login-user", {
+      email: data.email,
+      password: data.password
+    });
+    return response;
   } catch (error) {
+    return error;
     console.error("Error fetching data:", error);
   }
 };
@@ -25,7 +28,20 @@ export const registerUser = async (data) => {
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
-    return error.message;
+    return error;
+  }
+};
+export const loginCineplex= async (data) => {
+  console.log(data);
+  try {
+    const response = await client.post("api/auth/login-cineplex", {
+      email: data.email,
+      password: data.password
+    });
+    return response;
+  } catch (error) {
+    return error;
+    console.error("Error fetching data:", error);
   }
 };
 export const registerCineplex = async (data) => {
