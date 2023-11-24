@@ -25,6 +25,7 @@ import CardHome from "./components/CardHome.jsx";
 import Homepage from "./pages/Homepage.jsx";
 import {
   loadInTheater,
+  loadMenu,
   loadScreenByMovie,
   loadSeatInfo,
 } from "./handlers/LoadHandler.jsx";
@@ -34,6 +35,9 @@ import { LayoutCineplex } from "./pages/LayoutCineplex.jsx";
 import { LayoutEventOrganizer } from "./pages/LayoutEventOrganizer.jsx";
 import ScreeningByMovie from "./pages/ScreeningByMovie.jsx";
 import SeatingPage from "./pages/SeatingPage.jsx";
+import CineplexConcession from "./pages/CineplexConcession.jsx";
+import { createMenu } from "./handlers/CineplexHandler.jsx";
+import CineplexCreateMenu from "./pages/CineplexCreateMenu.jsx";
 
 const router = createBrowserRouter([
   // 3 path utama buat masing-masing aktor
@@ -115,6 +119,20 @@ const router = createBrowserRouter([
       {
         path: "pending-email",
         element: <PendingEmail />,
+      },
+      {
+        path: "concession",
+        element: <CineplexConcession />,
+        loader: loadMenu,
+        // action: loginCineplex,
+        errorElement: <Error />,
+      },
+      {
+        path: "create-menu",
+        element: <CineplexCreateMenu />,
+        // loader: loadMenu,
+        action: createMenu,
+        errorElement: <Error />,
       },
     ],
   },

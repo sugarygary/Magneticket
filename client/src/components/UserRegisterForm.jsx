@@ -50,7 +50,6 @@ const UserRegisterForm = (props) => {
     }
     return (
         <>
-
             <div className="w-screen h-full flex justify-center items-center text-white my-10">
                 <div className="biruTua p-12 text-center rounded  w-1/2 mx-auto ">
                     <div className="justify-center">

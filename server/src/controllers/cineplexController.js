@@ -353,7 +353,7 @@ const getPromo = async (req, res) => {
 };
 const getMenu = async (req, res) => {
   const menus = await Menu.find({ cineplex: req.userId });
-  res.status(200).json({ menus });
+  res.status(200).json({ menus });  
 };
 const getStudio = async (req, res) => {
   const studios = await Studio.find({ cineplex: req.userId });

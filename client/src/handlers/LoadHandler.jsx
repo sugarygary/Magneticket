@@ -60,3 +60,15 @@ export const loadSeatInfo = async (data) => {
     console.error("Error fetching data:", error);
   }
 };
+
+export const loadMenu = async  (data) =>{
+  console.log(data);
+  try {
+    const response = await client.get("api/cineplex/menus");
+
+    return response.data;
+  } catch (error) {
+    return error;
+    console.error("Error fetching data:", error);
+  }
+}
