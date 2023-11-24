@@ -49,6 +49,7 @@ const router = createBrowserRouter([
   {
     path: "/user",
     element: <LayoutUser />,
+    // errorElement:<Navigate to="/server-error"></Navigate>,
     children: [
       {
         index: true,

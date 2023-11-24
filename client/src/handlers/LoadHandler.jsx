@@ -40,7 +40,7 @@ export const loadSeatInfo = async (data) => {
   try {
     // localhost:3000/api/public/movie-details/:movie_id
     const currUser = await client.get("api/auth/current-user");
-    console.log(currUser.data);
+    console.log("masuk");
     const response = await client.get(
       `api/user/screening/${data?.params?.screening_id}/seat-info`
     );
@@ -57,7 +57,6 @@ export const loadSeatInfo = async (data) => {
       const logout = await client.get("api/auth/logout");
     }
     return error;
-    console.error("Error fetching data:", error);
   }
 };
 

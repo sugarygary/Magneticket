@@ -20,7 +20,6 @@ const Homepage = () => {
             return (
               <>
                 <CardHome {...movie}></CardHome>
-
                 <CardHome {...movie}></CardHome>
                 <CardHome {...movie}></CardHome>
                 <CardHome {...movie}></CardHome>

@@ -34,7 +34,9 @@ const verifyUserCookie = async (req, res, next) => {
 };
 const getSeatsInfo = async (req, res) => {
   const { screening_id } = req.params;
-  const findScreening = await Screening.findById(screening_id);
+  const findScreening = await Screening.findById(screening_id)
+    .populate("movie")
+    .populate("branch");
   if (findScreening == null) {
     return res.status(404).send({ message: "Screening not found" });
   }
@@ -75,6 +77,10 @@ const getSeatsInfo = async (req, res) => {
     taken: takenSeats.includes(seat.seat_number),
   }));
   return res.status(200).send({
+    branch_name: findScreening.branch.branch_name,
+    showtime: findScreening.showtime,
+    price: findScreening.price,
+    movie_title: findScreening.movie.title,
     seating_layout: findStudio.seating_layout,
     row: findStudio.row,
     seats,
