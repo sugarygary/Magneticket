@@ -3,6 +3,7 @@ const User = require("../models/User");
 const { GMAIL_ACC, GMAIL_APP_PASSWORD, BACKEND_URL, FRONTEND_URL } =
   process.env;
 const nodemailer = require("nodemailer");
+const multer = require("multer");
 const { body, validationResult } = require("express-validator");
 const generateToken = require("../util/generateToken");
 const Cineplex = require("../models/Cineplex");
@@ -157,6 +158,16 @@ const registerCineplex = async function (req, res) {
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array() });
   }
+  const storage_npwp_cineplex = multer.diskStorage({
+    destination: "./public/uploads/",
+    filename: function (req, file, cb) {
+      cb(null, "IMAGE-" + Date.now() + path.extname(file.originalname));
+    },
+  });
+  const upload_npwp_cineplex = multer({
+    storage: storage,
+    limits: { fileSize: 1000000 },
+  }).single("npwp_cineplex");
   let { email, password, company_name, brand_name } = req.body;
   let findCineplex = await Cineplex.findByEmail(email);
   if (findCineplex !== null) {
