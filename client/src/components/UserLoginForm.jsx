@@ -49,13 +49,13 @@ const UserLoginForm = (props) => {
     navigate("/");
   }
   return (
-    <div className=" w-screen h-full flex justify-center text-white my-5">
-      <div className="biruTua p-12 rounded  w-1/2 mx-auto ">
+    <div className="w-full h-full flex justify-center text-white mt-24 my-12">
+      <div className="biruTua p-12 rounded w-3/4 sm:w-1/2 mx-auto ">
         <div className="justify-center">
-          <img src={logo1} alt="" className="w-96 mx-auto" />
-          <p className="font-magneticket text-center text-7xl">MAGNETICKET</p>
+          <img src={logo1} alt="" className="w-48 mx-auto" />
+          <p className="font-magneticket text-center text-4xl">MAGNETICKET</p>
         </div>
-        <form onSubmit={submitForm} className="mt-5">
+        <form onSubmit={submitForm} className="mt-2">
           <div className="mb-3 text-left">
             <p>Email</p>
             <input

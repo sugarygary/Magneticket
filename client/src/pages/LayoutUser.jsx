@@ -7,7 +7,9 @@ export const LayoutUser = () => {
   return (
     <>
       <Header></Header>
-      <Outlet></Outlet>
+      <div className="mt-12 min-h-[32rem]">
+        <Outlet></Outlet>
+      </div>
       <Footer></Footer>
     </>
   );

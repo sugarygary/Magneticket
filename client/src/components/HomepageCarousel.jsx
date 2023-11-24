@@ -10,32 +10,31 @@ export default function HomepageCarousel() {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    zIndex: 0,
   };
   return (
-    <div className="">
-      <Slider {...settings}>
-        <div>
-          <img
-            src="https://media.21cineplex.com/webcontent/gallery/pictures/165209081845156_925x527.jpg"
-            alt=""
-            className="w-full h-auto"
-          />
-        </div>
-        <div>
-          <img
-            src="https://media.21cineplex.com/webcontent/gallery/pictures/167652365439081_925x527.jpg"
-            alt=""
-            className="w-full h-auto"
-          />
-        </div>
-        <div>
-          <img
-            src="https://media.21cineplex.com/webcontent/gallery/pictures/158251458710331_926x528.jpg"
-            alt=""
-            className="w-full h-auto"
-          />
-        </div>
-      </Slider>
-    </div>
+    <Slider {...settings}>
+      <div>
+        <img
+          src="https://media.21cineplex.com/webcontent/gallery/pictures/165209081845156_925x527.jpg"
+          alt=""
+          className="w-full h-auto aspect-[16/9]"
+        />
+      </div>
+      <div>
+        <img
+          src="https://media.21cineplex.com/webcontent/gallery/pictures/167652365439081_925x527.jpg"
+          alt=""
+          className="w-full h-auto aspect-[16/9]"
+        />
+      </div>
+      <div>
+        <img
+          src="https://media.21cineplex.com/webcontent/gallery/pictures/158251458710331_926x528.jpg"
+          alt=""
+          className="w-full h-auto aspect-[16/9]"
+        />
+      </div>
+    </Slider>
   );
 }
