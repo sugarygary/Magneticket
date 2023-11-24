@@ -9,6 +9,8 @@ const generateToken = require("../util/generateToken");
 const Cineplex = require("../models/Cineplex");
 const Promotor = require("../models/Promotor");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
+const path = require("path");
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -39,7 +41,6 @@ const validateRegisterCineplex = [
 
 const registerUser = async function (req, res) {
   const errors = validationResult(req);
-  console.log(req.body.full_name);
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array() });
   }
@@ -104,7 +105,6 @@ const loginUser = async function (req, res) {
   }
   const { email, password } = req.body;
   const findUser = await User.findByEmail(email);
-  console.log(email, password)
   if (findUser === null) {
     res.status(400);
     throw new Error("Invalid email or password");
@@ -153,24 +153,109 @@ const activateUser = async function (req, res) {
 };
 
 //#region bioskop
+const storage_npwp_cineplex = multer.diskStorage({
+  destination: "uploads/cineplex",
+  filename: function (req, file, cb) {
+    if (file.fieldname === "npwp") {
+      cb(null, file.fieldname + +"_abc" + +path.extname(file.originalname));
+    } else if (file.fieldname === "surat") {
+      cb(
+        null,
+        file.fieldname + +"_" + "abc" + +path.extname(file.originalname)
+      );
+    }
+  },
+});
+// const upload_cineplex = multer({
+//   dest: path.join(__dirname, "public/uploads"),
+//   limits: { fileSize: 1000000 },
+//   fileFilter: function (req, file, cb) {
+//     if (
+//       file.mimetype != "image/jpg" &&
+//       file.mimetype != "image/jpeg" &&
+//       file.mimetype != "image/png"
+//     ) {
+//       return cb(new Error("Invalid file format"), null);
+//     }
+//     cb(null, true);
+//   },
+// });
+// const uploadFile = upload_cineplex.single("photo");
+let storage_cineplex = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "../../uploads/cineplex"));
+  },
+
+  filename: function (req, file, cb) {
+    let filename = file.fieldname + "_" + file.originalname;
+    cb(null, filename);
+  },
+});
+
+let upload_cineplex = multer({
+  storage: storage_cineplex,
+  fileFilter: function (req, file, cb) {
+    if (
+      file.mimetype != "image/jpg" &&
+      file.mimetype != "image/jpeg" &&
+      file.mimetype != "image/png"
+    ) {
+      return cb(new Error("Invalid file format"), null);
+    }
+    cb(null, true);
+  },
+});
+let registerCineplexMulter = upload_cineplex.fields([
+  { name: "npwp", maxCount: 1 },
+  { name: "surat", maxCount: 1 },
+]);
 const registerCineplex = async function (req, res) {
   const errors = validationResult(req);
+  if (!req.files?.npwp || !req.files?.surat) {
+    fs.unlinkSync(
+      path.join(
+        __dirname,
+        `../../uploads/cineplex/${req.files.npwp[0].filename}`
+      )
+    );
+    fs.unlinkSync(
+      path.join(
+        __dirname,
+        `../../uploads/cineplex/${req.files.surat[0].filename}`
+      )
+    );
+    return res.status(400).send({ message: "Image must be included" });
+  }
   if (!errors.isEmpty()) {
+    fs.unlinkSync(
+      path.join(
+        __dirname,
+        `../../uploads/cineplex/${req.files.npwp[0].filename}`
+      )
+    );
+    fs.unlinkSync(
+      path.join(
+        __dirname,
+        `../../uploads/cineplex/${req.files.surat[0].filename}`
+      )
+    );
     return res.status(400).send({ errors: errors.array() });
   }
-  const storage_npwp_cineplex = multer.diskStorage({
-    destination: "./public/uploads/",
-    filename: function (req, file, cb) {
-      cb(null, "IMAGE-" + Date.now() + path.extname(file.originalname));
-    },
-  });
-  const upload_npwp_cineplex = multer({
-    storage: storage,
-    limits: { fileSize: 1000000 },
-  }).single("npwp_cineplex");
   let { email, password, company_name, brand_name } = req.body;
   let findCineplex = await Cineplex.findByEmail(email);
   if (findCineplex !== null) {
+    fs.unlinkSync(
+      path.join(
+        __dirname,
+        `../../uploads/cineplex/${req.files.npwp[0].filename}`
+      )
+    );
+    fs.unlinkSync(
+      path.join(
+        __dirname,
+        `../../uploads/cineplex/${req.files.surat[0].filename}`
+      )
+    );
     res.status(409);
     throw new Error("Email already exists");
   }
@@ -180,6 +265,30 @@ const registerCineplex = async function (req, res) {
     company_name: company_name,
     brand_name: brand_name,
   });
+  fs.renameSync(
+    path.join(
+      __dirname,
+      `../../uploads/cineplex/${req.files.npwp[0].filename}`
+    ),
+    path.join(
+      __dirname,
+      `../../uploads/cineplex/npwp-${newCineplex._id}${path.extname(
+        req.files.npwp[0].filename
+      )}`
+    )
+  );
+  fs.renameSync(
+    path.join(
+      __dirname,
+      `../../uploads/cineplex/${req.files.surat[0].filename}`
+    ),
+    path.join(
+      __dirname,
+      `../../uploads/cineplex/surat-${newCineplex._id}${path.extname(
+        req.files.surat[0].filename
+      )}`
+    )
+  );
   await newCineplex.save();
   const link = `${BACKEND_URL}/api/auth/activate-cineplex/${newCineplex._id.toString()}`;
   const result = await transporter.sendMail({
@@ -384,4 +493,5 @@ module.exports = {
   activatePromotor,
   loginPromotor,
   currentUser,
+  registerCineplexMulter,
 };

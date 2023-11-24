@@ -1,22 +1,33 @@
+import moment from "moment-timezone";
 import React, { useEffect, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 
 export default function SeatingPage() {
   const navigate = useNavigate();
   const data = useLoaderData();
-  const [seatingConfig, setSeatingConfig] = useState("");
+  useEffect(() => {
+    if (!data.screening_data) {
+      navigate("/user/login");
+    }
+    if (!data.current_user) {
+      navigate("/user/login");
+    }
+  }, []);
   const [chooseSeat, setChooseSeat] = useState([]);
   function toggleChooseSeat({ _id, seat_number }) {
-    // console.log(chooseSeat);
-    // console.log("masuk");
     let temp = Array.from(chooseSeat);
-    console.log(chooseSeat + "contains" + _id);
     let idx = temp.findIndex((seat) => seat._id == _id);
-
-    // console.log(idx);
     if (idx == -1) {
       temp.push({ _id: _id, seat_number: seat_number });
-      console.log(temp);
+      temp.sort((a, b) => {
+        if (a.seat_number < b.seat_number) {
+          return -1;
+        }
+        if (a.seat_number > b.seat_number) {
+          return 1;
+        }
+        return 0;
+      });
       setChooseSeat(temp);
       return;
     }
@@ -24,32 +35,37 @@ export default function SeatingPage() {
     console.log(temp);
     setChooseSeat(temp);
   }
-  let columns = data.response.data.seating_layout
+  if (data.current_user == undefined) {
+    return;
+  } else {
+    if (data.current_user.role !== "USER") {
+      return;
+    }
+  }
+  if (data.screening_data == undefined) {
+    return;
+  }
+  let columns = data?.screening_data.seating_layout
     .split("-")
     .map(function (item) {
       return parseInt(item, 10);
     });
-  let row = data.response.data.row;
+  let row = data?.screening_data.row;
   let totalColumn = columns.reduce((total, col) => {
     return total + col;
   });
-  useEffect(() => {
-    if (data.currUser == undefined) {
-      navigate("/user/login");
-    } else {
-      if (data.currUser.data.role !== "USER") {
-        alert(data.role);
-      }
-    }
-  }, [data.currUser]);
   return (
     <>
       <div className="w-full justify-center px-10 py-10">
         <div className="font-bold mb-1 text-xl">
-          {data.response.data.branch_name}
+          {data.screening_data.branch_name}
         </div>
-        <div className="font-bold mb-1">{data.response.data.movie_title}</div>
-        <div className="mb-4">{data.response.data.showtime}</div>
+        <div className="font-bold mb-1">{data.screening_data.movie_title}</div>
+        <div className="mb-4">
+          {moment(data.screening_data.showtime)
+            .tz("Asia/Jakarta")
+            .format("DD MMMM YYYY | HH:mm")}
+        </div>
         <div className="max-w-full w-full overflow-x-auto biruTua text-white rounded-t pt-4">
           {[...Array(row)].map((row, i) => {
             let pointer = 0;
@@ -61,7 +77,9 @@ export default function SeatingPage() {
                     <div className="flex gap-2 justify-center">
                       {[...Array(col_group)].map((col, k) => {
                         let seatPtr =
-                          data.response.data.seats[pointer++ + totalColumn * i];
+                          data.screening_data.seats[
+                            pointer++ + totalColumn * i
+                          ];
                         if (seatPtr.taken) {
                           return (
                             <div
@@ -109,6 +127,27 @@ export default function SeatingPage() {
         </div>
         <div className="bg-gray-600 text-[#f8f8f8] rounded-b text-center p-2 w-full">
           LAYAR
+        </div>
+        <div className="mt-4 font-bold">
+          {chooseSeat.length} Tiket{" "}
+          {chooseSeat.length > 0 &&
+            "(" +
+              chooseSeat.reduce((accumulator, seat, index) => {
+                if (index == 0) {
+                  console.log(seat);
+                  return accumulator + seat.seat_number;
+                } else {
+                  return accumulator + ", " + seat.seat_number;
+                }
+              }, "") +
+              ")"}
+        </div>
+        <div className="font-bold">
+          Total :{" "}
+          {new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+          }).format(data.screening_data.price * chooseSeat.length)}
         </div>
       </div>
     </>

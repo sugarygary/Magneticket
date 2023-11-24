@@ -19,7 +19,11 @@ server.use(
 );
 server.use(express.urlencoded({ extended: true }));
 server.use(express.json());
+// server.use(formidable());
 server.use(cookieParser());
+// server.use(function (req, res, next) {
+//   setTimeout(next, 1000);
+// });
 server.use("/api", router);
 
 getDBStatus();

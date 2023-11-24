@@ -38,6 +38,7 @@ import SeatingPage from "./pages/SeatingPage.jsx";
 import CineplexConcession from "./pages/CineplexConcession.jsx";
 import { createMenu } from "./handlers/CineplexHandler.jsx";
 import CineplexCreateMenu from "./pages/CineplexCreateMenu.jsx";
+import ErrorElement from "./pages/ErrorElement.jsx";
 
 const router = createBrowserRouter([
   // 3 path utama buat masing-masing aktor
@@ -49,7 +50,7 @@ const router = createBrowserRouter([
   {
     path: "/user",
     element: <LayoutUser />,
-    // errorElement:<Navigate to="/server-error"></Navigate>,
+    // errorElement: <Navigate to="/server-ErrorElement"></Navigate>
     children: [
       {
         index: true,
@@ -60,7 +61,7 @@ const router = createBrowserRouter([
         element: <RegisterUser />,
         // loader: loadUsers,
         action: registerUser,
-        errorElement: <Error />,
+        errorElement: <ErrorElement />,
       },
       {
         path: "login",
@@ -76,19 +77,19 @@ const router = createBrowserRouter([
         element: <Homepage />,
         loader: loadInTheater,
         // action: loginUser,
-        errorElement: <Error />,
+        errorElement: <ErrorElement />,
       },
       {
         path: "screening/:movie_id",
         element: <ScreeningByMovie></ScreeningByMovie>,
         loader: loadScreenByMovie,
-        errorElement: <Error />,
+        errorElement: <ErrorElement />,
       },
       {
         path: "seating/:screening_id",
         element: <SeatingPage></SeatingPage>,
         loader: loadSeatInfo,
-        errorElement: <Error />,
+        errorElement: <ErrorElement />,
       },
     ],
   },
@@ -97,7 +98,7 @@ const router = createBrowserRouter([
     element: <LayoutCineplex />,
     // loader: loadUsers,
     // action: registerUser,
-    errorElement: <Error />,
+    errorElement: <ErrorElement />,
     children: [
       {
         index: true,
@@ -108,14 +109,14 @@ const router = createBrowserRouter([
         element: <RegisterCineplex />,
         // loader: loadUsers,
         action: registerCineplex,
-        errorElement: <Error />,
+        errorElement: <ErrorElement />,
       },
       {
         path: "login",
         element: <LoginCineplex />,
         // loader: loadUsers,
         action: loginCineplex,
-        errorElement: <Error />,
+        errorElement: <ErrorElement />,
       },
       {
         path: "pending-email",
@@ -126,14 +127,14 @@ const router = createBrowserRouter([
         element: <CineplexConcession />,
         loader: loadMenu,
         // action: loginCineplex,
-        errorElement: <Error />,
+        errorElement: <ErrorElement />,
       },
       {
         path: "create-menu",
         element: <CineplexCreateMenu />,
         // loader: loadMenu,
         action: createMenu,
-        errorElement: <Error />,
+        errorElement: <ErrorElement />,
       },
     ],
   },
@@ -143,7 +144,7 @@ const router = createBrowserRouter([
     element: <LayoutEventOrganizer />,
     // loader: loadUsers,
     // action: registerUser,
-    errorElement: <Error />,
+    errorElement: <ErrorElement />,
     children: [
       {
         index: true,
@@ -154,31 +155,31 @@ const router = createBrowserRouter([
         element: <RegisterEventOrganizer />,
         // loader: loadUsers,
         action: registerEventOrganizer,
-        errorElement: <Error />,
+        errorElement: <ErrorElement />,
       },
       {
         path: "login",
         // element: <LoginEventOrganizer />,
         // loader: loadUsers,
         // action: loginEventOrganizer,
-        errorElement: <Error />,
+        errorElement: <ErrorElement />,
       },
     ],
   },
-  //error page kalo server down
+  //ErrorElement page kalo server down
   {
     path: "/pending-email",
     element: <PendingEmail />,
     // loader: loadUsers,
     // action: registerUser,
-    // errorElement: <Error />,
+    // errorElement: <ErrorElement />,
   },
   {
-    path: "/error-page",
+    path: "/ErrorElement-page",
     element: <ErrorPage />,
     // loader: loadUsers,
     // action: registerUser,
-    // errorElement: <Error />,
+    // errorElement: <ErrorElement />,
   },
 
   {
@@ -186,7 +187,7 @@ const router = createBrowserRouter([
     element: <RegisterEventOrganizer />,
     // loader: loadUsers,
     action: registerEventOrganizer,
-    errorElement: <Error />,
+    errorElement: <ErrorElement />,
   },
 ]);
 

@@ -1,5 +1,6 @@
 const express = require("express");
 const { body, validationResult } = require("express-validator");
+const path = require("path");
 const {
   registerUser,
   activateUser,
@@ -16,8 +17,10 @@ const {
   activatePromotor,
   loginPromotor,
   currentUser,
+  registerCineplexMulter,
 } = require("../controllers/authController");
 const expressAsyncHandler = require("express-async-handler");
+const multer = require("multer");
 const authRouter = express.Router();
 
 authRouter.get("/activate-user/:user_id", expressAsyncHandler(activateUser));
@@ -31,7 +34,7 @@ authRouter.get("/logout", logout);
 
 authRouter.post(
   "/register-cineplex",
-  validateRegisterCineplex,
+  [registerCineplexMulter, validateRegisterCineplex],
   expressAsyncHandler(registerCineplex)
 );
 authRouter.post(
