@@ -92,3 +92,12 @@ export const loadMenu = async (data) => {
     return error;
   }
 };
+export const loadPromo = async () => {
+  try {
+    const response = await client.get("api/cineplex/promos");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return error.message;
+  }
+};

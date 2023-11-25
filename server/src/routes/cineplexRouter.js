@@ -13,6 +13,7 @@ const {
   getPromo,
   getMenu,
   getStudio,
+  deletePromo
 } = require("../controllers/cineplexController");
 const expressAsyncHandler = require("express-async-handler");
 const cineplexRouter = express.Router();
@@ -35,5 +36,6 @@ cineplexRouter.get("/screenings", expressAsyncHandler(getScreening));
 cineplexRouter.get("/promos", expressAsyncHandler(getPromo));
 cineplexRouter.get("/menus", expressAsyncHandler(getMenu));
 cineplexRouter.get("/studios", expressAsyncHandler(getStudio));
+cineplexRouter.post("/delete-promo/:id", expressAsyncHandler(deletePromo));
 
 module.exports = cineplexRouter;

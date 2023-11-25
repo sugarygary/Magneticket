@@ -11,6 +11,14 @@ const promotionSchema = new Schema(
   },
   { timestamps: true }
 );
+promotionSchema.statics.removePromo = async function (id) {
+  try {
+    const result = await this.deleteOne({ _id: id });
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
 
 const Promotion = mongoose.model("Promotion", promotionSchema, "promotions");
 

@@ -16,3 +16,46 @@ export const createMenu = async (data) => {
     return error.message;
   }
 };
+
+export const createKodePromo = async (data) => {
+  // console.log(data);
+  try {
+    const response = await client.post("api/cineplex/create-promo", {
+      promo_code: data.kode_promo,
+      valid_until: data.masa_berlaku,
+      discount_amount: data.potongan,
+      minimum_transaction: data.minimum_transaksi,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return error.message;
+  }
+};
+
+export const createCabang = async (data) => {
+  // console.log(data);
+  try {
+    const response = await client.post("api/cineplex/create-branch", {
+      branch_name: data.branch_name,
+      address: data.address,
+      city: data.city,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return error.message;
+  }
+}
+export const deleteKodePromo = async (data) => {
+  try {
+    const response = await client.post(`api/cineplex/delete-promo/${data}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return error.message;
+  }
+}
+

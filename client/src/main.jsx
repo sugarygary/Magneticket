@@ -28,6 +28,7 @@ import {
   loadMenu,
   loadScreenByMovie,
   loadSeatInfo,
+  loadPromo,
 } from "./handlers/LoadHandler.jsx";
 import PendingEmail from "./pages/pendingEmail.jsx";
 import { LayoutUser } from "./pages/LayoutUser.jsx";
@@ -40,6 +41,10 @@ import { createMenu } from "./handlers/CineplexHandler.jsx";
 import { createTiket } from "./handlers/UserHandler.jsx";
 import CineplexCreateMenu from "./pages/CineplexCreateMenu.jsx";
 import ErrorElement from "./pages/ErrorElement.jsx";
+import CineplexCreateKodePromo from "./pages/CineplexCreateKodePromo.jsx";
+import { createKodePromo } from "./handlers/CineplexHandler.jsx";
+import CineplexKodePromo from "./pages/CineplexKodePromo.jsx";
+import CineplexCreateCabang from "./pages/CineplexCreateCabang.jsx";
 
 const router = createBrowserRouter([
   // 3 path utama buat masing-masing aktor
@@ -139,6 +144,27 @@ const router = createBrowserRouter([
         element: <CineplexCreateMenu />,
         // loader: loadMenu,
         action: createMenu,
+        errorElement: <ErrorElement />,
+      },
+      {
+        path: "kode-promo",
+        element: <CineplexKodePromo />,
+        loader: loadPromo,
+        // action: createMenu,
+        errorElement: <ErrorElement />,
+      },
+      {
+        path: "create-promo",
+        element: <CineplexCreateKodePromo />,
+        // loader: loadMenu,
+        // action: createMenu,
+        errorElement: <ErrorElement />,
+      },
+      {
+        path: "create-branch",
+        element: <CineplexCreateCabang />,
+        // loader: loadMenu,
+        // action: createMenu,
         errorElement: <ErrorElement />,
       },
     ],

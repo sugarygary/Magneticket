@@ -359,6 +359,18 @@ const getStudio = async (req, res) => {
   const studios = await Studio.find({ cineplex: req.userId });
   res.status(200).json({ studios });
 };
+const deletePromo = async (req, res) => {
+  // return res.status(200).json({ message: promo });
+  const promo = await Promotion.findById(req.params.id);
+  if (promo == null) {
+    return res.status(404).send({ message: "Promo not found" });
+  }
+  if (promo.cineplex != req.userId) {
+    return res.status(403).send({ message: "Forbidden" });
+  }
+  await Promotion.removePromo(req.params.id);
+  res.status(200).json({ message: "Promo deleted" });
+};
 module.exports = {
   verifyCineplexCookie,
   createBranch,
@@ -373,4 +385,5 @@ module.exports = {
   getPromo,
   getMenu,
   getStudio,
+  deletePromo,
 };
