@@ -133,6 +133,7 @@ export default function SeatingPage() {
   };
 
   async function bayar() {
+    console.log(keranjang)
     let temp = 0;
     if (choosedPromo.length > 0) {
       temp = choosedPromo[0].discount_amount

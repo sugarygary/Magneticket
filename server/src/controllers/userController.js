@@ -143,7 +143,7 @@ const createTicket = async (req, res) => {
   for (let i = 0; i < foods.length; i++) {
     const element = foods[i];
     let findFood = await Menu.findOne({
-      _id: element.food_id,
+      _id: element._id,
       cineplex: findScreening.cineplex,
     });
     if (findFood == null) {
