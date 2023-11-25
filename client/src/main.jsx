@@ -37,6 +37,7 @@ import ScreeningByMovie from "./pages/ScreeningByMovie.jsx";
 import SeatingPage from "./pages/SeatingPage.jsx";
 import CineplexConcession from "./pages/CineplexConcession.jsx";
 import { createMenu } from "./handlers/CineplexHandler.jsx";
+import { createTiket } from "./handlers/UserHandler.jsx";
 import CineplexCreateMenu from "./pages/CineplexCreateMenu.jsx";
 import ErrorElement from "./pages/ErrorElement.jsx";
 
@@ -89,6 +90,7 @@ const router = createBrowserRouter([
         path: "seating/:movie_id/:screening_id",
         element: <SeatingPage></SeatingPage>,
         loader: loadSeatInfo,
+        action: createTiket,
         errorElement: <ErrorElement />,
       },
       {

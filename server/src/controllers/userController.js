@@ -11,6 +11,7 @@ const Studio = require("../models/Studio");
 const Branch = require("../models/Branch");
 const { default: axios } = require("axios");
 const Menu = require("../models/Menu");
+const Promotion = require("../models/Promotion");
 
 const verifyUserCookie = async (req, res, next) => {
   try {
@@ -98,8 +99,19 @@ const findMenuByScreening = async (req, res) => {
   return res.status(200).send(findMenu);
 };
 
+const findPromoByScreening = async (req, res) => {
+  let { screening_id } = req.params;
+  let findScreening = await Screening.findById(screening_id);
+  if (findScreening == null) {
+    return res.status(404).send({ message: "Screening not found" });
+  }
+  let findPromo = await Promotion.find({ cineplex: findScreening.cineplex });
+  return res.status(200).send(findPromo);
+};
+
 const createTicket = async (req, res) => {
-  const { foods, seats, screening_id } = req.body;
+  const { foods, seats, screening_id, discount_amount } = req.body;
+  console.log(discount_amount)
   const findScreening = await Screening.findById(screening_id);
   if (findScreening == null) {
     return res.status(404).send({ message: "Screening not found" });
@@ -152,7 +164,14 @@ const createTicket = async (req, res) => {
   let findStudio = await Studio.findById(findScreening.studio);
   let customer = await User.findById(req.userId);
   let movie = await Movie.findById(findScreening.movie);
-  let amounts_paid = findScreening.price * seats.length + foodTotal;
+  let amounts_paid = 0;
+  if(discount_amount != 0){
+    amounts_paid = findScreening.price * seats.length + foodTotal + 4000 - discount_amount;
+    console.log(amounts_paid)
+  } else {
+    amounts_paid = findScreening.price * seats.length + foodTotal + 4000
+  }
+
   let newMovieTransaction = new MovieTransaction({
     cineplex_brand: findCineplex.brand_name,
     cineplex_id: findCineplex._id,
@@ -212,4 +231,5 @@ module.exports = {
   createTicket,
   getSeatsInfo,
   findMenuByScreening,
+  findPromoByScreening
 };

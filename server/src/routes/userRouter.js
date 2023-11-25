@@ -4,6 +4,7 @@ const {
   createTicket,
   getSeatsInfo,
   findMenuByScreening,
+  findPromoByScreening,
 } = require("../controllers/userController");
 const expressAsyncHandler = require("express-async-handler");
 const userRouter = express.Router();
@@ -17,5 +18,10 @@ userRouter.get(
 userRouter.get(
   "/screening/:screening_id/menu",
   expressAsyncHandler(findMenuByScreening)
+);
+
+userRouter.get(
+  "/screening/:screening_id/promotion",
+  expressAsyncHandler(findPromoByScreening)
 );
 module.exports = userRouter;

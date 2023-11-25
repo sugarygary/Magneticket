@@ -2,6 +2,7 @@ import moment from "moment-timezone";
 import React, { useEffect, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import CardMakanan from "../components/CardMakanan";
+import { createTiket } from "../handlers/UserHandler";
 
 export default function SeatingPage() {
   const navigate = useNavigate();
@@ -18,7 +19,8 @@ export default function SeatingPage() {
   const [boolCekout, setBoolCekout] = useState(false);
   const [chooseSeat, setChooseSeat] = useState([]);
   const [keranjang, setKeranjang] = useState([]);
-  const [totalHargMakanan, setTotalHargaMakanan] = useState(0);
+  const [boolPromo, setBoolPromo] = useState(false)
+  const [choosedPromo, setChoosedPromo] = useState([])
   function toggleChooseSeat({ _id, seat_number }) {
     let temp = Array.from(chooseSeat);
     let idx = temp.findIndex((seat) => seat._id == _id);
@@ -85,11 +87,73 @@ export default function SeatingPage() {
   }
   }
 
+  const currentDate = new Date();
+
+  const validPromos = data.promo.filter((promo) => {
+    const promoValidUntil = new Date(promo.valid_until);
+    return promoValidUntil > currentDate;
+  });
+
+  const handlePromo = (data) => {
+    setChoosedPromo([...choosedPromo, data]);
+    setBoolPromo(false);
+  }
+
   const calculateTotalPrice = () => {
-    return keranjang.reduce((total, makanan) => {
-      return total + makanan.price * makanan.quantity;
-    }, 0);
+    if (keranjang.length > 0) {
+      return keranjang.reduce((total, makanan) => {
+        return total + makanan.price * makanan.quantity;
+      }, 0); 
+    } else {
+      return 0
+    }
   };
+
+  const totalPromo = () => {
+    if (choosedPromo.length > 0) {
+      return choosedPromo[0].discount_amount
+    } else {
+      return 0
+    }
+  }
+
+  const handleMakanan = (makanan) => {
+    const index = keranjang.findIndex((item) => item._id === makanan._id);
+  
+    if (keranjang[index].quantity > 1) {
+      const updatedMakanan = { ...makanan, quantity: makanan.quantity - 1 };
+      const updatedKeranjang = [...keranjang];
+      updatedKeranjang[index] = updatedMakanan;
+  
+      setKeranjang(updatedKeranjang);
+    } else {
+      const updatedKeranjang = keranjang.filter((item) => item._id !== makanan._id);
+      setKeranjang(updatedKeranjang);
+    }
+  };
+
+  async function bayar() {
+    let temp = 0;
+    if (choosedPromo.length > 0) {
+      temp = choosedPromo[0].discount_amount
+    } else {
+      temp = 0
+    }
+    let bayarTiket = {
+        seats: chooseSeat,
+        foods: keranjang,
+        screening_id: data.screening_id,
+        promo: temp
+    }
+    let checkout = await createTiket(bayarTiket)
+    console.log(checkout);
+    if (checkout.response) {
+        setErrorMessage("Email already exists")
+    } else if (checkout.request) {
+        navigate("/error-page")
+    }
+}
+
   return (
     <>
     {!boolCekout &&
@@ -267,11 +331,19 @@ export default function SeatingPage() {
             <div className="mt-4">
               <p>{data.screening_data.studio_type}</p>
               {keranjang.map((makanan, index)=> {
-                  return <div>{makanan.item_name}</div>
+                  return <div className="flex">
+                      <div>{makanan.item_name}</div>
+                      <p className="bg-gray-400 px-3 pb-1 rounded-2xl ml-4" onClick={(() => {handleMakanan(makanan)})}>-</p>
+                    </div>
               })
               }
               <p>Biaya Layanan</p>
-              <p></p>
+              {choosedPromo.length > 0 &&
+                <div className="flex">
+                  <p className="text-red-500">{choosedPromo[0].promo_code}</p>
+                  <p className="bg-gray-400 px-3 pb-1 rounded-2xl ml-4" onClick={(() => {setChoosedPromo([])})}>-</p>
+                </div>
+              }
             </div>
           </div>
           <div className="text-right">
@@ -289,17 +361,54 @@ export default function SeatingPage() {
                 }).format(makanan.price * makanan.quantity)}</p>
               })
             }
-            <p>Rp 4000</p>
+            <p>Rp 4.000,00</p>
+            {choosedPromo.length > 0 &&
+                <p className="text-red-500"> - {new Intl.NumberFormat("id-ID", {
+                  style: "currency",
+                  currency: "IDR",
+                }).format(choosedPromo[0].discount_amount)}</p>
+              }
             <hr className="bg-black h-0.5"/>
             <p className="font-semibold mt-2">Total Tagihan: 
             {new Intl.NumberFormat("id-ID", {
                 style: "currency",
                 currency: "IDR",
-              }).format((data.screening_data.price * chooseSeat.length) + 4000 + calculateTotalPrice())}
+              }).format(((data.screening_data.price * chooseSeat.length) + 4000 + calculateTotalPrice()) - totalPromo())}
             </p>
             <div>
-                <button className="biruTua text-white px-12 py-2 mt-4 rounded">Kode Promo +</button>
+                <button className="biruTua text-white px-12 py-2 mt-4 rounded" onClick={(() => {setBoolPromo(true)})}>Kode Promo +</button>
             </div>
+          </div>
+        </div>
+        <div className="flex justify-between">
+          <div></div>
+          <div>
+            <button className="cursor-pointer biruMuda text-white px-8 py-2 mt-12 rounded" onClick={(() => {bayar()})}>Bayar</button>
+          </div>
+        </div>
+      </div>
+    }
+    { boolPromo &&
+      <div className="flex items-center justify-center h-screen">
+        <div className="fixed top-0 w-full h-screen bg-black opacity-50"></div>
+        <div className='fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-2xl bg-white w-4/12 h-72 px-4 py-4'>
+          <div className="flex justify-between">
+            <div></div>
+            <div className="cursor-pointer px-2 bg-gray-500 rounded text-white" onClick={(() => {setBoolPromo(false)})}>X</div>
+          </div>
+          <div>
+          {validPromos.map((promo, index) => {
+              return <div className="bg-gray-400 mt-3 px-4 py-2" key={index} onClick={(()=> {handlePromo(promo)})}>
+                <p className="font-semibold">
+                  {promo.promo_code}
+                </p>
+                <p>Diskon : Rp.{promo.discount_amount}</p>
+                <div className="text-right text-sm">
+                  <p>{promo.valid_until.substring(0, 10)}</p>
+                </div>
+                </div>
+            })
+            }
           </div>
         </div>
       </div>
