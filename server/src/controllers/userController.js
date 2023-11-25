@@ -97,6 +97,7 @@ const findMenuByScreening = async (req, res) => {
   let findMenu = await Menu.find({ cineplex: findScreening.cineplex });
   return res.status(200).send(findMenu);
 };
+
 const createTicket = async (req, res) => {
   const { foods, seats, screening_id } = req.body;
   const findScreening = await Screening.findById(screening_id);

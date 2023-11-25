@@ -17,6 +17,8 @@ export default function SeatingPage() {
   }, []);
   const [boolCekout, setBoolCekout] = useState(false);
   const [chooseSeat, setChooseSeat] = useState([]);
+  const [keranjang, setKeranjang] = useState([]);
+  const [totalHargMakanan, setTotalHargaMakanan] = useState(0);
   function toggleChooseSeat({ _id, seat_number }) {
     let temp = Array.from(chooseSeat);
     let idx = temp.findIndex((seat) => seat._id == _id);
@@ -71,7 +73,23 @@ export default function SeatingPage() {
   var days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
   var currentDay = days[dayOfWeek];
 
-  console.log(data)
+  function addKeranjang(data) {
+    const existingItemIndex = keranjang.findIndex(item => item._id === data._id);
+
+  if (existingItemIndex !== -1) {
+    const updatedKeranjang = [...keranjang];
+    updatedKeranjang[existingItemIndex].quantity += 1;
+    setKeranjang(updatedKeranjang);
+  } else {
+    setKeranjang(prevKeranjang => [...prevKeranjang, { ...data, quantity: 1 }]);
+  }
+  }
+
+  const calculateTotalPrice = () => {
+    return keranjang.reduce((total, makanan) => {
+      return total + makanan.price * makanan.quantity;
+    }, 0);
+  };
   return (
     <>
     {!boolCekout &&
@@ -234,12 +252,58 @@ export default function SeatingPage() {
             </div>
           </div>
         </div>
-        <div>
-            <CardMakanan></CardMakanan>
+        <div className="flex">
+            {data.menu.map((menu, index) => {
+              return <CardMakanan key={index} {...menu} setKeranjang={setKeranjang} addKeranjang={addKeranjang}></CardMakanan>
+            })
+              
+            }
+        </div>
+        <div className="flex justify-between">
+          <div className="">
+            <div className="text-2xl font-semibold underline">
+              Detail Transaksi
+            </div>
+            <div className="mt-4">
+              <p>{data.screening_data.studio_type}</p>
+              {keranjang.map((makanan, index)=> {
+                  return <div>{makanan.item_name}</div>
+              })
+              }
+              <p>Biaya Layanan</p>
+              <p></p>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="mt-12">
+              {new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR",
+              }).format(data.screening_data.price * chooseSeat.length)}
+            </p>
+            {
+              keranjang.map((makanan, index)=> {
+                return <p>{new Intl.NumberFormat("id-ID", {
+                  style: "currency",
+                  currency: "IDR",
+                }).format(makanan.price * makanan.quantity)}</p>
+              })
+            }
+            <p>Rp 4000</p>
+            <hr className="bg-black h-0.5"/>
+            <p className="font-semibold mt-2">Total Tagihan: 
+            {new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR",
+              }).format((data.screening_data.price * chooseSeat.length) + 4000 + calculateTotalPrice())}
+            </p>
+            <div>
+                <button className="biruTua text-white px-12 py-2 mt-4 rounded">Kode Promo +</button>
+            </div>
+          </div>
         </div>
       </div>
     }
-
     </>
   );
 }
