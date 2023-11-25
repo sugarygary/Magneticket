@@ -1,10 +1,12 @@
 import moment from "moment-timezone";
 import React, { useEffect, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
+import CardMakanan from "../components/CardMakanan";
 
 export default function SeatingPage() {
   const navigate = useNavigate();
   const data = useLoaderData();
+  console.log(data)
   useEffect(() => {
     if (!data.screening_data) {
       navigate("/user/login");
@@ -13,6 +15,7 @@ export default function SeatingPage() {
       navigate("/user/login");
     }
   }, []);
+  const [boolCekout, setBoolCekout] = useState(false);
   const [chooseSeat, setChooseSeat] = useState([]);
   function toggleChooseSeat({ _id, seat_number }) {
     let temp = Array.from(chooseSeat);
@@ -54,8 +57,24 @@ export default function SeatingPage() {
   let totalColumn = columns.reduce((total, col) => {
     return total + col;
   });
+
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  let mm = today.getMonth() + 1;
+  let dd = today.getDate();
+
+  if (dd < 10) dd = '0' + dd;
+  if (mm < 10) mm = '0' + mm;
+
+
+  var dayOfWeek = today.getDay();
+  var days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+  var currentDay = days[dayOfWeek];
+
+  console.log(data)
   return (
     <>
+    {!boolCekout &&
       <div className="w-full justify-center px-10 py-10">
         <div className="font-bold mb-1 text-xl">
           {data.screening_data.branch_name}
@@ -142,14 +161,85 @@ export default function SeatingPage() {
               }, "") +
               ")"}
         </div>
-        <div className="font-bold">
-          Total :{" "}
-          {new Intl.NumberFormat("id-ID", {
-            style: "currency",
-            currency: "IDR",
-          }).format(data.screening_data.price * chooseSeat.length)}
+        <div className="flex justify-between">
+          <div className="font-bold">
+            Total :{" "}
+            {new Intl.NumberFormat("id-ID", {
+              style: "currency",
+              currency: "IDR",
+            }).format(data.screening_data.price * chooseSeat.length)}
+          </div>
+          <div>
+              <button className="biruCariTiket px-4 py-2 text-white rounded" onClick={(() => {setBoolCekout(true)})}>Lanjutkan ke Pembayaran</button>
+          </div>
         </div>
       </div>
+    }
+    {boolCekout &&
+      <div className="text-black px-10 py-10">
+        <div className="text-3xl font-semibold">
+          Ringkasan Pesanan
+        </div>
+        <div className="flex">
+          <div>
+            <img className="w-52 mt-8" src={data.detail_movie.img} alt="" />
+          </div>
+          <div className="mt-8 ml-4">
+            <div className="text-2xl font-semibold ">
+              {data.detail_movie.title}
+            </div>
+            <div>
+            <table className="ml-8">
+                    <tbody>
+                        <tr>
+                            <td><p>Bioskop</p></td>
+                            <td><p className="ml-10">: {data.screening_data.branch_name}</p></td>
+                        </tr>
+                        <tr>
+                            <td><p>Tiket</p></td>
+                            <td><p className="ml-10">: {chooseSeat.length} Tiket</p></td>
+                        </tr>
+                        <tr>
+                            <td><p>Tempat duduk</p></td>
+                            <td><p className="ml-10">: 
+                              {chooseSeat.length > 0 && " " +
+                                chooseSeat.reduce((accumulator, seat, index) => {
+                                  if (index == 0) {
+                                    console.log(seat);
+                                    return accumulator + seat.seat_number;
+                                  } else {
+                                    return accumulator + ", " + seat.seat_number;
+                                  }
+                                }, "")}
+                            </p></td>
+                        </tr>
+                        <tr>
+                            <td><p>Tipe</p></td>
+                            <td><p className="ml-10">: {data.screening_data.studio_type}</p></td>
+                        </tr>
+                        <tr>
+                            <td><p>Studio</p></td>
+                            <td><p className="ml-10">: {data.screening_data.studio_name}</p></td>
+                        </tr>
+                        <tr>
+                            <td><p>Hari/Tanggal</p></td>
+                            <td><p className="ml-10">: {currentDay + ', ' + dd + '-' + mm + '-' + yyyy}</p></td>
+                        </tr>
+                        <tr>
+                            <td><p>Waktu</p></td>
+                            <td><p className="ml-10">: {data.screening_data.showtime.substring(16, 11)}</p></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+          </div>
+        </div>
+        <div>
+            <CardMakanan></CardMakanan>
+        </div>
+      </div>
+    }
+
     </>
   );
 }

@@ -8,7 +8,7 @@ import openheimer from "../assets/openheimer.jpg";
 const CardHome = (props) => {
 //   console.log(props.movie);
   return (
-    <div className="biruTua my-5 w-fit text-center  rounded">
+    <div className="biruTua my-5 w-fit text-center mr-8 rounded">
       <img src={props.movie.img} alt="" className="w-64 rounded" />
       <div className="text-white py-3">
         <p className="font-bold text-lg">{props.movie.title}</p>

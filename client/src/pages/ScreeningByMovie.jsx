@@ -33,7 +33,7 @@ export default function ScreeningByMovie() {
                     return (
                       <>
                         <Link
-                          to={`/user/seating/${jadwal.screening_id}`}
+                          to={`/user/seating/${data.responseMovie._id}/${jadwal.screening_id}`}
                           className="p-2 bg-white border border-1 border-black rounded-2xl "
                         >
                           {moment(jadwal.showtime)

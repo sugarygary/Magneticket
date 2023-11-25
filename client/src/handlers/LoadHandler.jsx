@@ -52,9 +52,15 @@ export const loadSeatInfo = async (data) => {
     const screening_data = await client.get(
       `api/user/screening/${data?.params?.screening_id}/seat-info`
     );
+
+    const responseMovie = await client.get(
+      `api/public/movie-details/${data?.params?.movie_id}`
+    );
+
     return {
       current_user: currUser.data,
       screening_data: screening_data.data,
+      detail_movie: responseMovie.data,
     };
   } catch (error) {
     if (error.response) {

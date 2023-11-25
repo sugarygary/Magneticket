@@ -218,7 +218,7 @@ const validateCreateScreening = [
   body("showtime")
     .notEmpty()
     .withMessage("Field cannot be empty")
-    .isDate()
+    .isISO8601()
     .withMessage("Showtime must be a recognizable javascript date"),
 ];
 const createScreening = async (req, res) => {

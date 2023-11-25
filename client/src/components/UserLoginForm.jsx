@@ -84,7 +84,7 @@ const UserLoginForm = (props) => {
           </div>
           <div className="mb-3 text-left flex">
             <p>Belum punya akun?</p>
-            <Link to="/register" className="biruDaftarSekarang ml-1">
+            <Link to="/user/register" className="biruDaftarSekarang ml-1">
               Daftar sekarang{" "}
             </Link>
           </div>

@@ -86,11 +86,14 @@ const router = createBrowserRouter([
         errorElement: <ErrorElement />,
       },
       {
-        path: "seating/:screening_id",
+        path: "seating/:movie_id/:screening_id",
         element: <SeatingPage></SeatingPage>,
         loader: loadSeatInfo,
         errorElement: <ErrorElement />,
       },
+      {
+
+      }
     ],
   },
   {
