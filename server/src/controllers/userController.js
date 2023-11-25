@@ -88,6 +88,15 @@ const getSeatsInfo = async (req, res) => {
     seats,
   });
 };
+const findMenuByScreening = async (req, res) => {
+  let { screening_id } = req.params;
+  let findScreening = await Screening.findById(screening_id);
+  if (findScreening == null) {
+    return res.status(404).send({ message: "Screening not found" });
+  }
+  let findMenu = await Menu.find({ cineplex: findScreening.cineplex });
+  return res.status(200).send(findMenu);
+};
 const createTicket = async (req, res) => {
   const { foods, seats, screening_id } = req.body;
   const findScreening = await Screening.findById(screening_id);
@@ -133,7 +142,6 @@ const createTicket = async (req, res) => {
     });
     foodTotal += findFood.price * element.quantity;
   }
-  console.log(foodTotal);
   let displaySeats = [];
   findSeats.forEach((seat) => {
     displaySeats.push(seat.seat_number);
@@ -198,4 +206,9 @@ const createTicket = async (req, res) => {
 };
 const getAndUpdateTransactions = async (req, res) => {};
 
-module.exports = { verifyUserCookie, createTicket, getSeatsInfo };
+module.exports = {
+  verifyUserCookie,
+  createTicket,
+  getSeatsInfo,
+  findMenuByScreening,
+};
