@@ -111,7 +111,7 @@ const findPromoByScreening = async (req, res) => {
 
 const createTicket = async (req, res) => {
   const { foods, seats, screening_id, discount_amount } = req.body;
-  console.log(discount_amount)
+  console.log(discount_amount);
   const findScreening = await Screening.findById(screening_id);
   if (findScreening == null) {
     return res.status(404).send({ message: "Screening not found" });
@@ -165,11 +165,12 @@ const createTicket = async (req, res) => {
   let customer = await User.findById(req.userId);
   let movie = await Movie.findById(findScreening.movie);
   let amounts_paid = 0;
-  if(discount_amount != 0){
-    amounts_paid = findScreening.price * seats.length + foodTotal + 4000 - discount_amount;
-    console.log(amounts_paid)
+  if (discount_amount != 0) {
+    amounts_paid =
+      findScreening.price * seats.length + foodTotal + 4000 - discount_amount;
+    console.log(amounts_paid);
   } else {
-    amounts_paid = findScreening.price * seats.length + foodTotal + 4000
+    amounts_paid = findScreening.price * seats.length + foodTotal + 4000;
   }
 
   let newMovieTransaction = new MovieTransaction({
@@ -222,7 +223,11 @@ const createTicket = async (req, res) => {
   await newTicket.save();
   return res
     .status(201)
-    .send({ message: "Order created. Please pay.", ...midtrans.data });
+    .send({
+      message: "Order created. Please pay.",
+      order_id: newMovieTransaction._id,
+      ...midtrans.data,
+    });
 };
 const getAndUpdateTransactions = async (req, res) => {};
 
@@ -231,5 +236,5 @@ module.exports = {
   createTicket,
   getSeatsInfo,
   findMenuByScreening,
-  findPromoByScreening
+  findPromoByScreening,
 };
