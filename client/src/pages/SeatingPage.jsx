@@ -3,20 +3,15 @@ import React, { useEffect, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import CardMakanan from "../components/CardMakanan";
 import { createTiket } from "../handlers/UserHandler";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function SeatingPage() {
   const navigate = useNavigate();
   const data = useLoaderData();
-  // console.log(data);
+  const { current_user, status } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   useEffect(() => {
-    if (!data.screening_data) {
-      navigate("/user/login");
-    }
-    if (!data.current_user) {
-      navigate("/user/login");
-    }
     const midtransScriptUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
-
     let scriptTag = document.createElement("script");
     scriptTag.src = midtransScriptUrl;
 
@@ -27,6 +22,12 @@ export default function SeatingPage() {
       document.body.removeChild(scriptTag);
     };
   }, []);
+  if (
+    (current_user.userId == null || current_user.role != "USER") &&
+    status == "succeeded"
+  ) {
+    navigate("/user/login", { replace: true });
+  }
   const [boolCekout, setBoolCekout] = useState(false);
   const [chooseSeat, setChooseSeat] = useState([]);
   const [keranjang, setKeranjang] = useState([]);

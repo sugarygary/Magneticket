@@ -131,7 +131,7 @@ const loginUser = async function (req, res) {
 const currentUser = async function (req, res) {
   const token = req.cookies.magneticket_token;
   if (!token) {
-    return res.status(204).send(null);
+    return res.status(200).send({ userId: null, role: null });
   }
   const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
   return res.status(200).send({ userId: verified.userId, role: verified.role });

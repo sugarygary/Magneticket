@@ -57,9 +57,13 @@ export const loadSeatInfo = async (data) => {
       `api/public/movie-details/${data?.params?.movie_id}`
     );
 
-    const menu = await client.get(`api/user/screening/${data?.params?.screening_id}/menu`)
+    const menu = await client.get(
+      `api/user/screening/${data?.params?.screening_id}/menu`
+    );
 
-    const promotion = await client.get(`api/user/screening/${data?.params?.screening_id}/promotion`)
+    const promotion = await client.get(
+      `api/user/screening/${data?.params?.screening_id}/promotion`
+    );
 
     return {
       current_user: currUser.data,
@@ -67,7 +71,7 @@ export const loadSeatInfo = async (data) => {
       screening_data: screening_data.data,
       detail_movie: responseMovie.data,
       menu: menu.data,
-      promo: promotion.data
+      promo: promotion.data,
     };
   } catch (error) {
     if (error.response) {

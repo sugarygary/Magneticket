@@ -71,7 +71,7 @@ const Footer = (props) => {
     //     </div>
 
     // </div>
-    <footer className="biruTua w-full">
+    <footer className="biruTua w-full absolute b-0">
       <div className="mx-auto w-full max-w-screen-xl px-6 py-6 lg:py-8">
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">

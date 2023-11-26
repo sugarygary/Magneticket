@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 // import { joiResolver } from "@hookform/resolvers/joi"
 import openheimer from "../assets/openheimer.jpg";
 const CardTicketByMovie = (props) => {
-  console.log(props);
   return (
     <div className="my-5 rounded flex shadow-lg">
       <img src={props.img} alt="" className="w-64 rounded" />

@@ -7,7 +7,6 @@ import CardHome from "../components/CardHome";
 
 const Homepage = () => {
   const data = useLoaderData();
-  console.log(data);
   return (
     <>
       <div className="w-full p-10">
