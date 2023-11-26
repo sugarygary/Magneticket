@@ -20,6 +20,51 @@ export const loadInTheater = async (data) => {
     return error;
   }
 };
+export const loadCabang = async (data) => {
+  try {
+    const response = await client.get("api/cineplex/branches");
+
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      if (error.response.status == 403) {
+        const logout = await client.get("api/auth/logout");
+      }
+      if (error.response.status == 404) {
+        throw new Response("Not found", { status: 404 });
+      }
+    } else if (error.request) {
+      throw new Response("Internal Server Error", { status: 500 });
+    }
+    return error;
+  }
+};
+export const loadStudio = async (data) => {
+  try {
+    console.log(data.params.branch_id);
+    const response = await client.get(
+      `api/cineplex/studios/${data.params.branch_id}`
+    );
+    const responseCabang = await client.get("api/cineplex/branches");
+    return {
+      responseStudio: response.data,
+      responseCabang:responseCabang.data,
+      currentCabang:data.params.branch_id
+    };
+  } catch (error) {
+    if (error.response) {
+      if (error.response.status == 403) {
+        const logout = await client.get("api/auth/logout");
+      }
+      if (error.response.status == 404) {
+        throw new Response("Not found", { status: 404 });
+      }
+    } else if (error.request) {
+      throw new Response("Internal Server Error", { status: 500 });
+    }
+    return error;
+  }
+};
 export const loadScreenByMovie = async (data) => {
   try {
     let responseScreening = await client.get(
@@ -107,7 +152,9 @@ export const loadPromo = async () => {
 };
 export const loadSingleMenu = async (data) => {
   try {
-    const response = await client.get(`api/cineplex/menus/${data.params.menu_id}`);
+    const response = await client.get(
+      `api/cineplex/menus/${data.params.menu_id}`
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
