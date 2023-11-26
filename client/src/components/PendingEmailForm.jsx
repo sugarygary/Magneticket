@@ -8,7 +8,7 @@ import { loginUser } from "../handlers/LoginHandler";
 
 const PendingEmailForm = ({ email }) => {
   return (
-    <div className=" w-screen h-full flex justify-center text-white my-5">
+    <div className=" w-screen mt-24 h-full flex justify-center text-white my-5">
       <div className="biruTua p-12 rounded  w-1/2 mx-auto ">
         <div className="justify-center">
           <img src={logo1} alt="" className="w-96 mx-auto" />

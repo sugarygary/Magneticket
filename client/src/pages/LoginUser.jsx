@@ -1,24 +1,22 @@
-import Footer from "../components/Footer";
-import Header from "../components/Header";
+import { useEffect } from "react";
 import UserLoginForm from "../components/UserLoginForm";
-import { loginUser } from "../handlers/LoginHandler";
-import CardFilmTerlaris from "../components/CardFilmTerlaris";
-import CardEventTerlaris from "../components/CardEventTerlaris";
-import TabelLaporanPenjualanBioskop from "../components/TabelLaporanPenjualanBioskop";
-import TabelLaporanPenjualanKonser from "../components/TabelLaporanPenjualanKonser";
 
-import { Outlet } from "react-router-dom";
-import HomepageCarousel from "../components/HomepageCarousel";
+import { useSelector } from "react-redux";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const LoginUser = () => {
-  // if(){
-
-  // }
+  const { current_user, status } = useSelector((state) => state.user);
+  const navigate = useNavigate();
+  if (
+    current_user.userId != null &&
+    current_user.role == "USER" &&
+    status == "succeeded"
+  ) {
+    return <Navigate to={"/user/home"}></Navigate>;
+  }
   return (
     <>
       <UserLoginForm></UserLoginForm>
-
-      {/* <Outlet></Outlet> */}
     </>
   );
 };

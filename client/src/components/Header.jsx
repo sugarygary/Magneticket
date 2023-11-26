@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
-// import { useForm } from "react-hook-form"
-// import Joi from "joi"
-// import { joiResolver } from "@hookform/resolvers/joi"
 import logo1 from "../assets/logo1.png";
 import search from "../assets/search.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCurrentUser } from "../redux/userSlice";
 import client from "../util/client";
-
+import { initFlowbite } from "flowbite";
+import "flowbite";
 const Header = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,6 +18,7 @@ const Header = (props) => {
   useEffect(() => {
     dispatch(fetchCurrentUser());
   }, []);
+  initFlowbite();
   return (
     <nav className="border-gray-200 z-50 biruTua fixed top-0 w-full">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">

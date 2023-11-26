@@ -13,8 +13,8 @@ const Homepage = () => {
         <HomepageCarousel></HomepageCarousel>
       </div>
       <div className="px-10">
-        <p className="text-4xl font-bold">In Theater</p>
-        <div className="grid gap-4 justify grid-cols-4">
+        <p className="text-xl sm:text-4xl font-bold">In Theater</p>
+        <div className="grid gap-4 justify grid-cols-1 sm:grid-cols-4">
           {data.map((movie) => {
             return (
               <>

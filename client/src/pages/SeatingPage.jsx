@@ -9,7 +9,6 @@ export default function SeatingPage() {
   const navigate = useNavigate();
   const data = useLoaderData();
   const { current_user, status } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
   useEffect(() => {
     const midtransScriptUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
     let scriptTag = document.createElement("script");
@@ -18,6 +17,12 @@ export default function SeatingPage() {
     const myMidtransClientKey = process.env.REACT_APP_MIDTRANS_CLIENT_KEY;
     scriptTag.setAttribute("data-client-key", myMidtransClientKey);
     document.body.appendChild(scriptTag);
+    if (
+      (current_user.userId == null || current_user.role != "USER") &&
+      status == "succeeded"
+    ) {
+      navigate("/user/login", { replace: true });
+    }
     return () => {
       document.body.removeChild(scriptTag);
     };

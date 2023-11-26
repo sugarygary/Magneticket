@@ -10,11 +10,15 @@
   .font-magneticket {
     font-family: "VT323";
   }
-  /* body{
-    background-color: black;
-  } */
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 }
-
+footer {
+  margin-top: auto;
+}
 .biruTua {
   background-color: #1f2a37;
 }
@@ -69,4 +73,3 @@
 .abuBgInput {
   background-color: #4b5563;
 }
-
