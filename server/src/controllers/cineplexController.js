@@ -371,6 +371,40 @@ const deletePromo = async (req, res) => {
   await Promotion.removePromo(req.params.id);
   res.status(200).json({ message: "Promo deleted" });
 };
+const getSingleMenu = async (req, res) => {
+  const menu = await Menu.findById(req.params.id);
+  if (menu == null) {
+    return res.status(404).send({ message: "Menu not found" });
+  }
+  if (menu.cineplex != req.userId) {
+    return res.status(403).send({ message: "Forbidden" });
+  }
+  res.status(200).json({ menu });
+};
+const editMenu = async (req, res) => {
+  const menu = await Menu.findById(req.params.id);
+  
+  if (menu == null) {
+    return res.status(404).send({ message: "Menu not found" });
+  }
+  if (menu.cineplex != req.userId) {
+    return res.status(403).send({ message: "Forbidden" });
+  }
+  const { item_name, item_description, price } = req.body;
+  let temp=menu;
+  
+  if(item_name!=null){
+    temp.item_name = item_name;
+  }
+  if(item_description!=null){
+    temp.item_description = item_description;
+  }
+  if(price!=null){
+    temp.price = price;
+  }
+  await Menu.updateOne({ _id: menu._id }, temp);
+  res.status(200).json({ temp });
+};
 module.exports = {
   verifyCineplexCookie,
   createBranch,
@@ -386,4 +420,6 @@ module.exports = {
   getMenu,
   getStudio,
   deletePromo,
+  getSingleMenu,
+  editMenu,
 };

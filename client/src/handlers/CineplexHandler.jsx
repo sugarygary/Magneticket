@@ -58,4 +58,18 @@ export const deleteKodePromo = async (data) => {
     return error.message;
   }
 }
+export const editMenu = async (data) => {
+  console.log("ini datanyaa", data);
+  try {
+    const response = await client.post(`api/cineplex/edit-menu/${data._id}`, {
+      item_name: data.item_name,
+      item_description: data.item_description,
+      price: data.price,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return error.message;
+  }
+}
 

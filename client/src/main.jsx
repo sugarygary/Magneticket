@@ -45,6 +45,8 @@ import CineplexCreateKodePromo from "./pages/CineplexCreateKodePromo.jsx";
 import { createKodePromo } from "./handlers/CineplexHandler.jsx";
 import CineplexKodePromo from "./pages/CineplexKodePromo.jsx";
 import CineplexCreateCabang from "./pages/CineplexCreateCabang.jsx";
+import CineplexEditMenu from "./pages/CineplexEditMenu.jsx";
+import { loadSingleMenu } from "./handlers/LoadHandler.jsx";
 
 const router = createBrowserRouter([
   // 3 path utama buat masing-masing aktor
@@ -147,6 +149,13 @@ const router = createBrowserRouter([
         errorElement: <ErrorElement />,
       },
       {
+        path: "edit-menu/:menu_id",
+        element: <CineplexEditMenu />,
+        loader: loadSingleMenu,
+        // action: createMenu,
+        errorElement: <ErrorElement />,
+      },
+      {
         path: "kode-promo",
         element: <CineplexKodePromo />,
         loader: loadPromo,
@@ -156,7 +165,7 @@ const router = createBrowserRouter([
       {
         path: "create-promo",
         element: <CineplexCreateKodePromo />,
-        // loader: loadMenu,
+        // loader: loadPromo,
         // action: createMenu,
         errorElement: <ErrorElement />,
       },

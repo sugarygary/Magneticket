@@ -26,7 +26,14 @@ const menuSchema = new Schema(
   },
   { timestamps: true }
 );
-
+menuSchema.statics.apdet = async function (id, data) {
+  try {
+    const result = await this.updateOne({ _id: id }, data);
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
 const Menu = mongoose.model("Menu", menuSchema, "menus");
 
 module.exports = Menu;

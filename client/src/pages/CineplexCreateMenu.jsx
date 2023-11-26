@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import upload from "../assets/upload.png";
 import { createMenu } from "../handlers/CineplexHandler";
+// import { useLoaderData } from "react-router-dom";
 
 export default function CineplexCreateMenu() {
+  // const dataxxxxx = useLoaderData();
   const [namaMenu, setNamaMenu] = useState(null);
   const [hargaMenu, setHargaMenu] = useState(null);
   const [deskripsiMenu, setDeskripsiMenu] = useState(null);

@@ -105,3 +105,12 @@ export const loadPromo = async () => {
     return error.message;
   }
 };
+export const loadSingleMenu = async (data) => {
+  try {
+    const response = await client.get(`api/cineplex/menus/${data.params.menu_id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return error.message;
+  }
+};

@@ -27,6 +27,7 @@ export default function CineplexConcession() {
         </div>
         <div className="mt-10 rounded">
           {data.menus.map((menu) => {
+            // {console.log(menu._id)}
             return (
               <div className="">
                 <div className="flex shadow-2xl mb-5">
@@ -41,7 +42,7 @@ export default function CineplexConcession() {
                     </p>
                     <div className="mt-9 flex justify-between">
                       <div></div>
-                      <Link className="biruCariTiket p-2 text-white rounded">
+                      <Link className="biruCariTiket p-2 text-white rounded" to={`/cineplex/edit-menu/${menu._id}`} >
                         Edit Menu
                       </Link>
                     </div>
