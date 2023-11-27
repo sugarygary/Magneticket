@@ -6,7 +6,7 @@ const moment = require("moment-timezone");
 
 require("dotenv").config();
 const getNowShowingMovie = async (req, res) => {
-  let start = moment().tz("Asia/Jakarta").startOf("day").toDate();
+  let start = moment().tz("Asia/Jakarta").toDate();
   let end = moment().tz("Asia/Jakarta").endOf("day").toDate();
   let jadwal = await Screening.aggregate()
     .match({ showtime: { $gte: start, $lt: end } })

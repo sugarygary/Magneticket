@@ -56,7 +56,6 @@ export default function SeatingPage() {
       return;
     }
     temp.splice(idx, 1);
-    console.log(temp);
     setChooseSeat(temp);
   }
   if (data.current_user == undefined) {
@@ -213,7 +212,7 @@ export default function SeatingPage() {
               .tz("Asia/Jakarta")
               .format("DD MMMM YYYY | HH:mm")}
           </div>
-          <div className="max-w-full w-full overflow-x-auto biruTua text-white rounded-t pt-4">
+          <div className="max-w-full pt-8 pb-24 w-full overflow-x-auto biruTua text-white rounded-t pt-4">
             {[...Array(row)].map((row, i) => {
               let pointer = 0;
               return (
@@ -231,8 +230,10 @@ export default function SeatingPage() {
                             return (
                               <div
                                 title={seatPtr.seat_number}
-                                className="bg-red-500 w-4 h-4 rounded-sm"
-                              ></div>
+                                className="bg-red-500 font-mono text-sm py-2 px-2 cursor-pointer rounded-sm"
+                              >
+                                {seatPtr.seat_number}
+                              </div>
                             );
                           }
                           if (
@@ -247,8 +248,10 @@ export default function SeatingPage() {
                                     seat_number: seatPtr.seat_number,
                                   });
                                 }}
-                                className="bg-yellow-500 w-4 h-4 rounded-sm cursor-pointer"
-                              ></div>
+                                className="bg-yellow-500 select-none font-mono py-2 px-2 text-sm rounded-sm select-none cursor-pointer"
+                              >
+                                {seatPtr.seat_number}
+                              </div>
                             );
                           }
                           return (
@@ -260,8 +263,10 @@ export default function SeatingPage() {
                                   seat_number: seatPtr.seat_number,
                                 });
                               }}
-                              className="bg-blue-500 w-4 h-4 rounded-sm cursor-pointer"
-                            ></div>
+                              className="biruCariTiket font-mono py-2 px-2 text-sm rounded-sm select-none cursor-pointer"
+                            >
+                              {seatPtr.seat_number}
+                            </div>
                           );
                         })}
                       </div>
@@ -281,7 +286,6 @@ export default function SeatingPage() {
               "(" +
                 chooseSeat.reduce((accumulator, seat, index) => {
                   if (index == 0) {
-                    console.log(seat);
                     return accumulator + seat.seat_number;
                   } else {
                     return accumulator + ", " + seat.seat_number;
@@ -289,7 +293,7 @@ export default function SeatingPage() {
                 }, "") +
                 ")"}
           </div>
-          <div className="flex justify-between">
+          <div className="sm:flex items-center w-full justify-between">
             <div className="font-bold">
               Total :{" "}
               {new Intl.NumberFormat("id-ID", {
