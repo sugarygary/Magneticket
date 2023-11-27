@@ -5,6 +5,8 @@ const {
   getSeatsInfo,
   findMenuByScreening,
   findPromoByScreening,
+  getHistory,
+  getDetailHistory
 } = require("../controllers/userController");
 const expressAsyncHandler = require("express-async-handler");
 const userRouter = express.Router();
@@ -24,4 +26,14 @@ userRouter.get(
   "/screening/:screening_id/promotion",
   expressAsyncHandler(findPromoByScreening)
 );
+
+userRouter.get(
+  "/history",
+  expressAsyncHandler(getHistory)
+)
+
+userRouter.get(
+  "/history/:history_id",
+  expressAsyncHandler(getDetailHistory)
+)
 module.exports = userRouter;

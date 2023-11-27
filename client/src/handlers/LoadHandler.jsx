@@ -161,3 +161,32 @@ export const loadSingleMenu = async (data) => {
     return error.message;
   }
 };
+
+export const loadHistory = async (data) => {
+  try {
+    const response = await client.get(`api/user/history`);
+    return response.data
+  } catch (error) {
+    console.error("Error fetching load history:", error);
+    return error.message;
+  }
+}
+
+export const loadDetailHistory = async (data) => {
+  try {
+    const response = await client.get(`api/user/history/${data.params.history_id}`);
+    return response.data
+  } catch (error) {
+    if (error.response) {
+      if (error.response.status == 403) {
+        throw new Response("Forbidden", { status: 403 });
+      }
+      if (error.response.status == 404) {
+        throw new Response("Not found", { status: 404 });
+      }
+    } else if (error.request) {
+      throw new Response("Internal Server Error", { status: 500 });
+    }
+    return error;
+  }
+}

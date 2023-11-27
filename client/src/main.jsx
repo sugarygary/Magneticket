@@ -31,6 +31,8 @@ import {
   loadPromo,
   loadCabang,
   loadStudio,
+  loadHistory,
+  loadDetailHistory
 } from "./handlers/LoadHandler.jsx";
 import PendingEmail from "./pages/pendingEmail.jsx";
 import { LayoutUser } from "./pages/LayoutUser.jsx";
@@ -51,6 +53,8 @@ import CineplexEditMenu from "./pages/CineplexEditMenu.jsx";
 import { loadSingleMenu } from "./handlers/LoadHandler.jsx";
 import CineplexListStudios from "./pages/CineplexListStudios.jsx";
 import CineplexCreateStudio from "./pages/CineplexCreateStudio.jsx";
+import HistoryPage from "./pages/HistoryPage.jsx"
+import DetailHistory from "./pages/DetailHistory.jsx";
 
 const router = createBrowserRouter([
   // 3 path utama buat masing-masing aktor
@@ -104,7 +108,18 @@ const router = createBrowserRouter([
         action: createTiket,
         errorElement: <ErrorElement />,
       },
-      {},
+      {
+        path: "history",
+        element: <HistoryPage></HistoryPage>,
+        loader: loadHistory,
+        errorElement: <ErrorElement />,
+      },
+      {
+        path: "history/:history_id",
+        element: <DetailHistory></DetailHistory>,
+        loader: loadDetailHistory,
+        errorElement: <ErrorElement />,
+      }
     ],
   },
   {

@@ -229,6 +229,23 @@ const createTicket = async (req, res) => {
       ...midtrans.data,
     });
 };
+
+const getHistory = async (req, res) => {
+  let findHistory = await MovieTransaction.find({customer_id: req.userId});
+  return res.status(200).send(findHistory);
+};
+
+const getDetailHistory = async (req, res) => {
+  let findHistory = await MovieTransaction.findById(req.params.history_id);
+  if(findHistory == null) {
+    return res.status(404).send({message: "Not Found"})
+  }
+  if (findHistory.customer_id != req.userId) {
+    return res.status(403).send({message: "Forbidden"})
+  }
+  return res.status(200).send(findHistory);
+};
+
 const getAndUpdateTransactions = async (req, res) => {};
 
 module.exports = {
@@ -237,4 +254,6 @@ module.exports = {
   getSeatsInfo,
   findMenuByScreening,
   findPromoByScreening,
+  getHistory,
+  getDetailHistory
 };
