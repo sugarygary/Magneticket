@@ -22,7 +22,7 @@ const cineplexRouter = express.Router();
 cineplexRouter.use(verifyCineplexCookie);
 cineplexRouter.post("/create-branch", expressAsyncHandler(createBranch));
 cineplexRouter.post(
-  "/create-studio",
+  "/studios/create-studio",
   validateCreateStudio,
   expressAsyncHandler(createStudio)
 );
@@ -37,7 +37,7 @@ cineplexRouter.get("/branches", expressAsyncHandler(getBranch));
 cineplexRouter.get("/screenings", expressAsyncHandler(getScreening));
 cineplexRouter.get("/promos", expressAsyncHandler(getPromo));
 cineplexRouter.get("/menus", expressAsyncHandler(getMenu));
-cineplexRouter.get("/studios", expressAsyncHandler(getStudio));
+cineplexRouter.get("/studios/:branchId", expressAsyncHandler(getStudio));
 cineplexRouter.post("/delete-promo/:id", expressAsyncHandler(deletePromo));
 cineplexRouter.get("/menus/:id", expressAsyncHandler(getSingleMenu));
 cineplexRouter.post("/edit-menu/:id", expressAsyncHandler(editMenu));

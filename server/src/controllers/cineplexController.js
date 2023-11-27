@@ -132,6 +132,7 @@ const createStudio = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array() });
   }
+  
   let { branch_id, studio_name, type, row, seating_layout } = req.body;
   let findBranch = await Branch.findById(branch_id);
   if (findBranch == null) {
@@ -356,7 +357,7 @@ const getMenu = async (req, res) => {
   res.status(200).json({ menus });  
 };
 const getStudio = async (req, res) => {
-  const studios = await Studio.find({ cineplex: req.userId });
+  const studios = await Studio.find({ branch: req.params.branchId });
   res.status(200).json({ studios });
 };
 const deletePromo = async (req, res) => {

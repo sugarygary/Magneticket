@@ -48,7 +48,24 @@ export const createCabang = async (data) => {
     console.error("Error fetching data:", error);
     return error.message;
   }
-}
+};
+export const createStudio = async (data) => {
+  // console.log(data);
+  try {
+    const response = await client.post(`api/cineplex/studios/create-Studio`, {
+      branch_id: data.branch_id,
+      studio_name: data.studio_name,
+      type: data.type,
+      row: data.row,
+      seating_layout: data.seating_layout,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error creating Studio:", error);
+    return error.message;
+  }
+};
 export const deleteKodePromo = async (data) => {
   try {
     const response = await client.post(`api/cineplex/delete-promo/${data}`);
@@ -57,7 +74,7 @@ export const deleteKodePromo = async (data) => {
     console.error("Error fetching data:", error);
     return error.message;
   }
-}
+};
 export const editMenu = async (data) => {
   console.log("ini datanyaa", data);
   try {
@@ -71,5 +88,4 @@ export const editMenu = async (data) => {
     console.error("Error fetching data:", error);
     return error.message;
   }
-}
-
+};
