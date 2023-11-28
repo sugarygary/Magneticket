@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
+import { Provider } from "react-redux";
+import userStore from "./redux/userStore.js";
 import "./index.css";
 import {
   RouterProvider,
@@ -55,6 +57,7 @@ import CineplexListStudios from "./pages/CineplexListStudios.jsx";
 import CineplexCreateStudio from "./pages/CineplexCreateStudio.jsx";
 import HistoryPage from "./pages/HistoryPage.jsx"
 import DetailHistory from "./pages/DetailHistory.jsx";
+import LoginEventOrganizer from "./pages/LoginEventOrganizer.jsx";
 
 const router = createBrowserRouter([
   // 3 path utama buat masing-masing aktor
@@ -62,6 +65,7 @@ const router = createBrowserRouter([
   {
     index: true,
     element: <Navigate to="/user" />,
+    errorElement: <ErrorElement />,
   },
   {
     path: "/user",
@@ -138,14 +142,14 @@ const router = createBrowserRouter([
         element: <RegisterCineplex />,
         // loader: loadUsers,
         action: registerCineplex,
-        errorElement: <ErrorElement />,
+        // errorElement: <ErrorElement />,
       },
       {
         path: "login",
         element: <LoginCineplex />,
         // loader: loadUsers,
         action: loginCineplex,
-        errorElement: <ErrorElement />,
+        // errorElement: <ErrorElement />,
       },
       {
         path: "pending-email",
@@ -161,7 +165,7 @@ const router = createBrowserRouter([
       {
         path: "create-menu",
         element: <CineplexCreateMenu />,
-        // loader: loadMenu,
+        loader: loadMenu,
         action: createMenu,
         errorElement: <ErrorElement />,
       },
@@ -182,7 +186,7 @@ const router = createBrowserRouter([
       {
         path: "create-promo",
         element: <CineplexCreateKodePromo />,
-        // loader: loadPromo,
+        loader: loadPromo,
         // action: createMenu,
         errorElement: <ErrorElement />,
       },
@@ -197,12 +201,14 @@ const router = createBrowserRouter([
         path: "studios/:branch_id",
         element: <CineplexListStudios></CineplexListStudios>,
         loader: loadStudio,
+        errorElement: <ErrorElement />,
       },
       {
         path: "studios/:branch_id/create-studio",
         element: <CineplexCreateStudio />,
         loader: loadStudio,
         action:createStudio,
+        errorElement: <ErrorElement />,
       },
     ],
   },
@@ -227,7 +233,7 @@ const router = createBrowserRouter([
       },
       {
         path: "login",
-        // element: <LoginEventOrganizer />,
+        element: <LoginEventOrganizer />,
         // loader: loadUsers,
         // action: loginEventOrganizer,
         errorElement: <ErrorElement />,
@@ -262,6 +268,8 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     {/* <App /> */}
-    <RouterProvider router={router}></RouterProvider>
+    <Provider store={userStore}>
+      <RouterProvider router={router}></RouterProvider>
+    </Provider>
   </React.StrictMode>
 );

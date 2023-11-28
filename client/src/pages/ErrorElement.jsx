@@ -11,7 +11,7 @@ const ErrorElement = () => {
         </div>
       )}
       {error.status == 403 && (
-        <div className="text-xl font-semibold">Forbidden </div>
+        <div className="text-xl font-semibold">Forbidden</div>
       )}
       {error.status == 404 && (
         <div className="text-xl font-semibold">404 Page Not Found</div>

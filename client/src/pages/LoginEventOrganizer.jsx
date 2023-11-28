@@ -7,7 +7,7 @@ import { loginUser } from "../handlers/LoginHandler"
 const LoginEventOrganizer = () => {
     return (
         <>
-            <CineplexHeader></CineplexHeader>
+            {/* <CineplexHeader></CineplexHeader> */}
             <UserLoginForm></UserLoginForm>
             <Footer></Footer>
         </>

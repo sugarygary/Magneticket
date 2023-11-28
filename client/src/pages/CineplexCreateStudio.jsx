@@ -7,6 +7,9 @@ import { createStudio } from "../handlers/CineplexHandler";
 export default function CineplexCreateStudio() {
   const navigate = useNavigate();
   const data = useLoaderData();
+  if (data.response && data.response.status == 401) {
+    throw new Response("", { status: 401 });
+  }
   const [namaStudio, setNamaStudio] = useState(null);
   const [tipeStudio, setTipeStudio] = useState(null);
   const [barisStudio, setBarisStudio] = useState(null);

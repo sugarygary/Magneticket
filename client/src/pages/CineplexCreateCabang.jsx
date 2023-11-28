@@ -12,6 +12,9 @@ const CineplexCreateCabang = () => {
   const [kotaKabupaten, setKotaKabupaten] = useState(null);
   const [alamat, setAlamat] = useState(null);
   const data = useLoaderData();
+  if(data.response&&data.response.status == 401){
+    throw new Response('', { status: 401 })
+  }
   console.log(data.branches);
   const { current_user, status } = useSelector((state) => state.user);
   useEffect(() => {

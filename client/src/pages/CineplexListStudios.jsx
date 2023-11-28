@@ -7,6 +7,9 @@ import { Link } from "react-router-dom";
 export default function CineplexListStudios() {
   const navigate = useNavigate();
   const data = useLoaderData();
+  if(data.response&&data.response.status == 401){
+    throw new Response('', { status: 401 })
+  }
   console.log(data.responseStudio.studios);
   const matchingBranch = data.responseCabang.branches.find(
     (branch) => branch._id === data.currentCabang

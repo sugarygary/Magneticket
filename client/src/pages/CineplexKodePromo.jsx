@@ -5,6 +5,9 @@ import { deleteKodePromo } from "../handlers/CineplexHandler";
 
 const CineplexKodePromo = () => {
     const data = useLoaderData();
+    if (data == "Request failed with status code 401") {
+        throw new Response('', { status: 401 })
+    }
     async function handleDelete(id) {
         // console.log(id);
         const response = await deleteKodePromo(id);

@@ -6,6 +6,13 @@ import popcorn from "../assets/popcorn.jpg";
 export default function CineplexConcession() {
   const navigate = useNavigate();
   const data = useLoaderData();
+  console.log("ini data",data);
+  if (data.response && data.response.status == 401) {
+    throw new Response('', { status: 401 })
+  }
+  else{
+
+  }
   console.log(data.menus);
   return (
     <>

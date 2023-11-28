@@ -380,7 +380,7 @@ const getSingleMenu = async (req, res) => {
   if (menu.cineplex != req.userId) {
     return res.status(403).send({ message: "Forbidden" });
   }
-  res.status(200).json({ menu });
+  return res.status(200).json({ menu });
 };
 const editMenu = async (req, res) => {
   const menu = await Menu.findById(req.params.id);

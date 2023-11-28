@@ -8,7 +8,10 @@ import { editMenu } from "../handlers/CineplexHandler";
 
 const CineplexEditMenu = () => {
     const data = useLoaderData();
-    // console.log(data);
+    // console.log("ini data",data);
+    if (data =="Request failed with status code 401") {
+        throw new Response('', { status: 401 })
+    }
     let menu = data.menu;
     const [namaMenu, setNamaMenu] = useState(null);
     const [hargaMenu, setHargaMenu] = useState(null);
@@ -18,17 +21,17 @@ const CineplexEditMenu = () => {
     async function submitForm(e) {
         e.preventDefault();
         setErrorMsg(null);
-        if (isNaN(hargaMenu)&& hargaMenu!=null) {
+        if (isNaN(hargaMenu) && hargaMenu != null) {
             setErrorMsg("Price field must be number");
             return;
         }
-        if(namaMenu==null){
+        if (namaMenu == null) {
             setNamaMenu("");
         }
-        if(hargaMenu==null){
+        if (hargaMenu == null) {
             setHargaMenu("");
         }
-        if(deskripsiMenu==null){
+        if (deskripsiMenu == null) {
             setDeskripsiMenu("");
         }
         let data = {
