@@ -191,3 +191,22 @@ export const loadDetailHistory = async (data) => {
     return error;
   }
 };
+export const loadCineplexHistory = async (data) => {
+  try {
+    const response = await client.get(`api/cineplex/movie-ticket`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching load history:", error);
+    return error.message;
+  }
+}
+export const loadCineplexDetailHistory = async (data) => {
+  console.log("ehehehehehe",data.params.history_id)
+  try {
+    const response = await client.get(`api/cineplex/movie-ticket/${data.params.history_id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching load history:", error);
+    return error.message;
+  }
+}

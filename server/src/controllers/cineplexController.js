@@ -12,6 +12,7 @@ const Studio = require("../models/Studio");
 const Seat = require("../models/Seat");
 const axios = require("axios");
 const Movie = require("../models/Movie");
+const MovieTicket = require("../models/MovieTicket");
 const Screening = require("../models/Screening");
 const moment = require("moment-timezone");
 const multer = require("multer");
@@ -462,6 +463,20 @@ const editMenu = async (req, res) => {
   await Menu.updateOne({ _id: menu._id }, temp);
   res.status(200).json({ temp });
 };
+const getMovieTicket = async (req, res) => {
+  const movieTickets = await MovieTicket.find({ cineplex: req.userId }).populate("screening").populate("customer").populate("transaction").populate({path:"screening",populate:{path:"branch"}});
+  res.status(200).json({ movieTickets });
+};
+const getSingleMovieTicket = async (req, res) => {
+  const movieTicket = await MovieTicket.findById(req.params.id).populate("screening").populate("customer").populate("transaction").populate({path:"screening",populate:{path:"branch"}}).populate({path:"screening",populate:{path:"movie"}}).populate({path:"screening",populate:{path:"studio"}}).populate({path:"transaction.foods",populate:{path:"menu"}});
+  if (movieTicket == null) {
+    return res.status(404).send({ message: "Movie ticket not found" });
+  }
+  if (movieTicket.cineplex != req.userId) {
+    return res.status(403).send({ message: "Forbidden" });
+  }
+  return res.status(200).json({ movieTicket });
+};
 module.exports = {
   verifyCineplexCookie,
   createBranch,
@@ -480,4 +495,6 @@ module.exports = {
   deletePromo,
   getSingleMenu,
   editMenu,
+  getMovieTicket,
+  getSingleMovieTicket,
 };

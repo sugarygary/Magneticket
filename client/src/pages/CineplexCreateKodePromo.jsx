@@ -7,6 +7,7 @@ const CineplexCreateKodePromo = () => {
   if (data == "Request failed with status code 401") {
     throw new Response('', { status: 401 })
   }
+  
   return (
     <>
         <CineplexCreatePromo />

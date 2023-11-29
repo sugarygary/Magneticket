@@ -35,6 +35,8 @@ import {
   loadStudio,
   loadHistory,
   loadDetailHistory,
+  loadCineplexHistory,
+  loadCineplexDetailHistory,
 } from "./handlers/LoadHandler.jsx";
 import PendingEmail from "./pages/pendingEmail.jsx";
 import { LayoutUser } from "./pages/LayoutUser.jsx";
@@ -59,8 +61,13 @@ import HistoryPage from "./pages/HistoryPage.jsx";
 import DetailHistory from "./pages/DetailHistory.jsx";
 import LoginEventOrganizer from "./pages/LoginEventOrganizer.jsx";
 import { UserFindBranch } from "./pages/UserFindBranch.jsx";
+<<<<<<< Updated upstream
 import EventOrganizerCreateEvent from "./pages/EventOrganizerCreateEvent.jsx";
 import { createEvent } from "./handlers/EventOrganizerHandler.jsx";
+=======
+import CineplexHistoryTiket from "./pages/CineplexHistoryTiket.jsx";
+import CineplexDetailHistoryTiket from "./pages/CineplexDetailHistoryTiket.jsx";
+>>>>>>> Stashed changes
 
 const router = createBrowserRouter([
   // 3 path utama buat masing-masing aktor
@@ -217,6 +224,18 @@ const router = createBrowserRouter([
         action: createStudio,
         errorElement: <ErrorElement />,
       },
+      {
+        path: "history",
+        element: <CineplexHistoryTiket></CineplexHistoryTiket>,
+        loader: loadCineplexHistory,
+        // action: createStudio,
+        errorElement: <ErrorElement />,
+      },
+      {
+        path: "history/:history_id",
+        element: <CineplexDetailHistoryTiket/>,
+        loader: loadCineplexDetailHistory,
+      }
     ],
   },
 

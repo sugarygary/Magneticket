@@ -18,6 +18,8 @@ const {
   deletePromo,
   getSingleMenu,
   editMenu,
+  getMovieTicket,
+  getSingleMovieTicket
 } = require("../controllers/cineplexController");
 const expressAsyncHandler = require("express-async-handler");
 const cineplexRouter = express.Router();
@@ -43,5 +45,7 @@ cineplexRouter.get("/studios/:branchId", expressAsyncHandler(getStudio));
 cineplexRouter.post("/delete-promo/:id", expressAsyncHandler(deletePromo));
 cineplexRouter.get("/menus/:id", expressAsyncHandler(getSingleMenu));
 cineplexRouter.post("/edit-menu/:id", expressAsyncHandler(editMenu));
+cineplexRouter.get("/movie-ticket",expressAsyncHandler(getMovieTicket));
+cineplexRouter.get("/movie-ticket/:id",expressAsyncHandler(getSingleMovieTicket));
 
 module.exports = cineplexRouter;
