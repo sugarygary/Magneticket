@@ -37,6 +37,7 @@ import {
   loadDetailHistory,
   loadCineplexHistory,
   loadCineplexDetailHistory,
+  loadOngoingEvent,
 } from "./handlers/LoadHandler.jsx";
 import PendingEmail from "./pages/pendingEmail.jsx";
 import { LayoutUser } from "./pages/LayoutUser.jsx";
@@ -61,13 +62,20 @@ import HistoryPage from "./pages/HistoryPage.jsx";
 import DetailHistory from "./pages/DetailHistory.jsx";
 import LoginEventOrganizer from "./pages/LoginEventOrganizer.jsx";
 import { UserFindBranch } from "./pages/UserFindBranch.jsx";
-<<<<<<< Updated upstream
 import EventOrganizerCreateEvent from "./pages/EventOrganizerCreateEvent.jsx";
 import { createEvent } from "./handlers/EventOrganizerHandler.jsx";
-=======
 import CineplexHistoryTiket from "./pages/CineplexHistoryTiket.jsx";
 import CineplexDetailHistoryTiket from "./pages/CineplexDetailHistoryTiket.jsx";
->>>>>>> Stashed changes
+
+async function coba() {
+  let x = loadInTheater();
+  let y = loadOngoingEvent();
+  let temp = {
+    inTheater: x,
+    ongoingEvent: y
+  };
+  return temp;
+}
 
 const router = createBrowserRouter([
   // 3 path utama buat masing-masing aktor
@@ -105,7 +113,15 @@ const router = createBrowserRouter([
       {
         path: "home",
         element: <Homepage />,
-        loader: loadInTheater,
+        loader: async () => {
+          let x = await loadInTheater();
+          let y = await loadOngoingEvent();
+          let temp = {
+            inTheater: x,
+            ongoingEvent: y
+          };
+          return temp;
+        },
         // action: loginUser,
         errorElement: <ErrorElement />,
       },
@@ -233,7 +249,7 @@ const router = createBrowserRouter([
       },
       {
         path: "history/:history_id",
-        element: <CineplexDetailHistoryTiket/>,
+        element: <CineplexDetailHistoryTiket />,
         loader: loadCineplexDetailHistory,
       }
     ],

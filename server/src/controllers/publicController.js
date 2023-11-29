@@ -4,11 +4,14 @@ const Movie = require("../models/Movie");
 const Screening = require("../models/Screening");
 const moment = require("moment-timezone");
 const Cineplex = require("../models/Cineplex");
+const Event = require("../models/Event");
+const Promotor = require("../models/Promotor");
 
 require("dotenv").config();
 const getNowShowingMovie = async (req, res) => {
   let start = moment().tz("Asia/Jakarta").toDate();
   let end = moment().tz("Asia/Jakarta").endOf("day").toDate();
+  // console.log(start, end);
   let jadwal = await Screening.aggregate()
     .match({ showtime: { $gte: start, $lt: end } })
     .group({ _id: "$movie" })
@@ -143,6 +146,65 @@ const getMovieDetails = async (req, res) => {
   return res.status(200).send(movie_details);
 };
 
+const getOngoingEvent = async (req, res) => {
+  // const { city } = req.query;//harusnya ini
+  const city = ""; // Assuming city is defined somewhere
+
+  let matchStage = {};
+  if (city) {
+    matchStage = { city: city };
+  }
+
+  try {
+    let result = await Event.aggregate([
+      { $match: matchStage },
+      {
+        $lookup: {
+          from: "promotors",
+          localField: "promotor",
+          foreignField: "_id",
+          as: "promotorData",
+        },
+      },
+      { $unwind: "$promotorData" }, // If promotor field is an array, unwind it
+      {
+        $group: {
+          _id: "$promotorData._id",
+          promotor_name: { $first: "$promotorData.promotor_name" },
+          city: { $first: "$city" },
+          events: {
+            $push: {
+              event_id: "$_id",
+              event_name: "$event_name",
+              event_img: "$event_img",
+              event_start: "$event_start",
+              event_end: "$event_end",
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          promotor_name: 1,
+          city: 1,
+          events: 1,
+        },
+      },
+    ]);
+
+    // Event.populate(result, { path: "events" });
+
+    // result=result.populate("events.event_id", "event_name event_img event_start event_end");
+    return res.status(200).send(result);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ error: "Internal server error" });
+  }
+};
+
+
+
 module.exports = {
   getNowShowingMovie,
   getMovieDetails,
@@ -150,4 +212,5 @@ module.exports = {
   getScreeningByBranch,
   getScreeningByMovie,
   getCineplex,
+  getOngoingEvent,
 };

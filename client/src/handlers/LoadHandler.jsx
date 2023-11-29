@@ -20,6 +20,25 @@ export const loadInTheater = async (data) => {
     return error;
   }
 };
+export const loadOngoingEvent = async (data) => {
+  try {
+    const response = await client.get("api/public/ongoing-event");
+
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      if (error.response.status == 403) {
+        const logout = await client.get("api/auth/logout");
+      }
+      if (error.response.status == 404) {
+        throw new Response("Not found", { status: 404 });
+      }
+    } else if (error.request) {
+      throw new Response("Internal Server Error", { status: 500 });
+    }
+    return error;
+  }
+}
 export const loadCabang = async (data) => {
   try {
     const response = await client.get("api/cineplex/branches");
@@ -201,7 +220,7 @@ export const loadCineplexHistory = async (data) => {
   }
 }
 export const loadCineplexDetailHistory = async (data) => {
-  console.log("ehehehehehe",data.params.history_id)
+  console.log("ehehehehehe", data.params.history_id)
   try {
     const response = await client.get(`api/cineplex/movie-ticket/${data.params.history_id}`);
     return response.data;
