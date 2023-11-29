@@ -1,17 +1,14 @@
 const express = require("express");
 const { body, validationResult } = require("express-validator");
 const {
-  verifyCineplexCookie,
-  createBranch,
-  createPromo,
-  createMenu,
-} = require("../controllers/cineplexController");
+  createEvent, verifyPromotorCookie, createEventMulter
+} = require("../controllers/promotorController");
 const expressAsyncHandler = require("express-async-handler");
 
 const promotorRouter = express.Router();
-promotorRouter.use(verifyCineplexCookie);
+promotorRouter.use(verifyPromotorCookie);
 
-promotorRouter.post("/create-branch", expressAsyncHandler(createBranch));
-promotorRouter.post("/create-promo", createPromo);
-promotorRouter.post("/create-menu", createMenu); // ngaco
+promotorRouter.post("/create-event", 
+[createEventMulter],
+expressAsyncHandler(createEvent));
 module.exports = promotorRouter;

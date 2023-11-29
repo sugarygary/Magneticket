@@ -35,7 +35,7 @@ server.get("/", (req, res) => {
 
 init();
 server.use(notFound);
-server.use(errorHandler);
+// server.use(errorHandler);
 server.listen(PORT, async () => {
   console.log(`Server running on port http://${HOSTNAME}:${PORT}/`);
 });

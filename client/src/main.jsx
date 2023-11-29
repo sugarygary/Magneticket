@@ -59,6 +59,8 @@ import HistoryPage from "./pages/HistoryPage.jsx";
 import DetailHistory from "./pages/DetailHistory.jsx";
 import LoginEventOrganizer from "./pages/LoginEventOrganizer.jsx";
 import { UserFindBranch } from "./pages/UserFindBranch.jsx";
+import EventOrganizerCreateEvent from "./pages/EventOrganizerCreateEvent.jsx";
+import { createEvent } from "./handlers/EventOrganizerHandler.jsx";
 
 const router = createBrowserRouter([
   // 3 path utama buat masing-masing aktor
@@ -243,6 +245,13 @@ const router = createBrowserRouter([
         // action: loginEventOrganizer,
         errorElement: <ErrorElement />,
       },
+      {
+        path: "create-event",
+        element: <EventOrganizerCreateEvent />,
+        // loader: loadUsers,
+        action: createEvent,
+        errorElement: <ErrorElement />,
+      }
     ],
   },
   //ErrorElement page kalo server down
