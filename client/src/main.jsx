@@ -58,6 +58,7 @@ import CineplexCreateStudio from "./pages/CineplexCreateStudio.jsx";
 import HistoryPage from "./pages/HistoryPage.jsx";
 import DetailHistory from "./pages/DetailHistory.jsx";
 import LoginEventOrganizer from "./pages/LoginEventOrganizer.jsx";
+import { UserFindBranch } from "./pages/UserFindBranch.jsx";
 
 const router = createBrowserRouter([
   // 3 path utama buat masing-masing aktor
@@ -121,6 +122,11 @@ const router = createBrowserRouter([
         path: "history/:history_id",
         element: <DetailHistory></DetailHistory>,
         loader: loadDetailHistory,
+        errorElement: <ErrorElement />,
+      },
+      {
+        path: "branches",
+        element: <UserFindBranch></UserFindBranch>,
         errorElement: <ErrorElement />,
       },
     ],

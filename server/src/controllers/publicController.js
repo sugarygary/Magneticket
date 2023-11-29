@@ -3,6 +3,7 @@ const Branch = require("../models/Branch");
 const Movie = require("../models/Movie");
 const Screening = require("../models/Screening");
 const moment = require("moment-timezone");
+const Cineplex = require("../models/Cineplex");
 
 require("dotenv").config();
 const getNowShowingMovie = async (req, res) => {
@@ -23,14 +24,25 @@ const getNowShowingMovie = async (req, res) => {
 };
 const getBranch = async (req, res) => {
   let { cineplex, city } = req.query;
-  let options;
+  let options = {};
+
   if (city) {
     options.city = city;
   }
+
   if (cineplex) {
     options.cineplex = cineplex;
   }
-  let result = await Branch.find({ ...options });
+  if (!city && !cineplex) {
+    let result = await Branch.find();
+    return res.status(200).send(result);
+  } else {
+    let result = await Branch.find({ ...options });
+    return res.status(200).send(result);
+  }
+};
+const getCineplex = async (req, res) => {
+  let result = await Cineplex.find({}, { _id: 1, brand_name: 1 });
   return res.status(200).send(result);
 };
 const getScreeningByBranch = async (req, res) => {
@@ -137,4 +149,5 @@ module.exports = {
   getBranch,
   getScreeningByBranch,
   getScreeningByMovie,
+  getCineplex,
 };

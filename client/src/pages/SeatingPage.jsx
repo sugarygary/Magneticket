@@ -555,7 +555,7 @@ export default function SeatingPage() {
       )}
       {boolPromo && (
         <>
-          <div className="fixed top-0 w-full h-screen bg-black opacity-50"></div>
+          <div className="fixed top-0 left-0 w-full h-screen bg-black opacity-50"></div>
           <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-2xl bg-white w-4/12 h-72 px-4 py-4">
             <div className="flex justify-between">
               <div></div>

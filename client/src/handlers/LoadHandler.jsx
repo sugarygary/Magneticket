@@ -41,7 +41,6 @@ export const loadCabang = async (data) => {
 };
 export const loadStudio = async (data) => {
   try {
-    console.log(data.params.branch_id);
     const response = await client.get(
       `api/cineplex/studios/${data.params.branch_id}`
     );
@@ -93,9 +92,6 @@ export const loadScreenByMovie = async (data) => {
 };
 export const loadSeatInfo = async (data) => {
   try {
-    if (sessionStorage.getItem("order_id") != null) {
-      //cancel order_id delete ticket
-    }
     const currUser = await client.get("api/auth/current-user");
     const screening_data = await client.get(
       `api/user/screening/${data?.params?.screening_id}/seat-info`
