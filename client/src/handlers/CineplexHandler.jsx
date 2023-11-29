@@ -1,15 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import client from "../util/client";
 
-export const createMenu = async (data) => {
+export const createMenu = async (data, config) => {
   console.log(data);
+  console.log(config)
   try {
-    const response = await client.post("api/cineplex/create-menu", {
-      item_name: data.item_name,
-      item_description: data.item_description,
-      price: data.price,
+    const response = await client.post("api/cineplex/create-menu", data, {
+      ...config,
     });
-
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);

@@ -272,9 +272,7 @@ const registerCineplex = async function (req, res) {
     ),
     path.join(
       __dirname,
-      `../../uploads/cineplex/npwp-${newCineplex._id}${path.extname(
-        req.files.npwp[0].filename
-      )}`
+      `../../uploads/cineplex/npwp-${newCineplex._id}.jpg`
     )
   );
   fs.renameSync(
@@ -284,9 +282,7 @@ const registerCineplex = async function (req, res) {
     ),
     path.join(
       __dirname,
-      `../../uploads/cineplex/surat-${newCineplex._id}${path.extname(
-        req.files.surat[0].filename
-      )}`
+      `../../uploads/cineplex/surat-${newCineplex._id}.jpg`
     )
   );
   await newCineplex.save();

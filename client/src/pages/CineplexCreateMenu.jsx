@@ -7,33 +7,43 @@ import { useLoaderData } from "react-router-dom";
 export default function CineplexCreateMenu() {
   const dataxxxxx = useLoaderData();
   if (dataxxxxx.response && dataxxxxx.response.status == 401) {
-    throw new Response('', { status: 401 })
-  }
-  else {
-
+    throw new Response("", { status: 401 });
+  } else {
   }
 
   const [namaMenu, setNamaMenu] = useState(null);
   const [hargaMenu, setHargaMenu] = useState(null);
   const [deskripsiMenu, setDeskripsiMenu] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [thumbnail, setThumbnail] = useState(null);
   const navigate = useNavigate();
   async function submitForm(e) {
     e.preventDefault();
     setErrorMsg(null);
-    if (namaMenu == null || deskripsiMenu == "" || hargaMenu == null) {
+    if (
+      namaMenu == null ||
+      deskripsiMenu == null ||
+      hargaMenu == null ||
+      thumbnail == null
+    ) {
       setErrorMsg("All field must be filled");
       return;
     } else if (typeof parseInt(hargaMenu) != "number") {
       setErrorMsg("Price field must be number");
       return;
     }
-    let data = {
-      item_name: namaMenu,
-      item_description: deskripsiMenu,
-      price: parseInt(hargaMenu),
-    };
-    createMenu(data);
+    // let data = {
+    //   item_name: namaMenu,
+    //   item_description: deskripsiMenu,
+    //   price: parseInt(hargaMenu),
+    // };
+    const formData = new FormData();
+    const config = { headers: { "Content-Type": "multipart/form-data" } };
+    formData.append("item_name", namaMenu);
+    formData.append("item_description", deskripsiMenu);
+    formData.append("price", hargaMenu);
+    formData.append("thumbnail", thumbnail);
+    createMenu(formData, config);
     navigate("/cineplex/concession");
   }
   return (
@@ -46,7 +56,15 @@ export default function CineplexCreateMenu() {
           <p>Unggah Foto Produk</p>
           <p>Direkomendasikan 595 x 842 px dan tidak lebih dari 30 MB</p>
           <div className="ml-12 ">
-            <input type="file" name="" id="" className="ml-12 pl-12" />
+            <input
+              type="file"
+              name=""
+              id=""
+              className="ml-12 pl-12"
+              onChange={(e) => {
+                setThumbnail(e.target.files[0]);
+              }}
+            />
           </div>
         </div>
         <hr />

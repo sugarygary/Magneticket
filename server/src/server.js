@@ -24,6 +24,7 @@ server.use(cookieParser());
 // server.use(function (req, res, next) {
 //   setTimeout(next, 1000);
 // });
+server.use(express.static('uploads'))
 server.use("/api", router);
 
 getDBStatus();

@@ -6,12 +6,10 @@ import popcorn from "../assets/popcorn.jpg";
 export default function CineplexConcession() {
   const navigate = useNavigate();
   const data = useLoaderData();
-  console.log("ini data",data);
+  console.log("ini data", data);
   if (data.response && data.response.status == 401) {
-    throw new Response('', { status: 401 })
-  }
-  else{
-
+    throw new Response("", { status: 401 });
+  } else {
   }
   console.log(data.menus);
   return (
@@ -38,7 +36,12 @@ export default function CineplexConcession() {
             return (
               <div className="">
                 <div className="flex shadow-2xl mb-5">
-                  <img src={popcorn} alt="" className="w-48" />
+                  {/* http://localhost:3000/cineplex/npwp-6566e2382d4522b6ed7c227a.jpg */}
+                  <img
+                    src={`${process.env.BACKEND_URL}/cineplex/menu-${menu._id}.jpg`}
+                    alt=""
+                    className="w-48"
+                  />
                   <div className="p-5  w-full">
                     <p className="font-bold text-2xl">{menu.item_name}</p>
                     <p className="my-3 abuDeskripsiMakanan">
@@ -49,7 +52,10 @@ export default function CineplexConcession() {
                     </p>
                     <div className="mt-9 flex justify-between">
                       <div></div>
-                      <Link className="biruCariTiket p-2 text-white rounded" to={`/cineplex/edit-menu/${menu._id}`} >
+                      <Link
+                        className="biruCariTiket p-2 text-white rounded"
+                        to={`/cineplex/edit-menu/${menu._id}`}
+                      >
                         Edit Menu
                       </Link>
                     </div>

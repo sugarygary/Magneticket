@@ -14,7 +14,9 @@ const axios = require("axios");
 const Movie = require("../models/Movie");
 const Screening = require("../models/Screening");
 const moment = require("moment-timezone");
-
+const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
 const verifyCineplexCookie = async (req, res, next) => {
   try {
     const token = req.cookies.magneticket_token;
@@ -62,8 +64,52 @@ const createPromo = async (req, res) => {
     minimum_transaction: minimum_transaction,
   });
 };
+let storage_cineplex = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "../../uploads/cineplex"));
+  },
+
+  filename: function (req, file, cb) {
+    let filename = file.fieldname + "_" + file.originalname;
+    cb(null, filename);
+  },
+});
+let upload_cineplex = multer({
+  storage: storage_cineplex,
+  fileFilter: function (req, file, cb) {
+    if (
+      file.mimetype != "image/jpg" &&
+      file.mimetype != "image/jpeg" &&
+      file.mimetype != "image/png"
+    ) {
+      return cb(new Error("Invalid file format"), null);
+    }
+    cb(null, true);
+  },
+});
+let registerMenuMulter = upload_cineplex.fields([
+  { name: "thumbnail", maxCount: 1 },
+]);
 const createMenu = async (req, res) => {
   const errors = validationResult(req);
+  if (!req.files?.thumbnail ) {
+    fs.unlinkSync(
+      path.join(
+        __dirname,
+        `../../uploads/cineplex/${req.files.thumbnail[0].filename}`
+      )
+    );
+    return res.status(400).send({ message: "Image must be included" });
+  }
+  if (!errors.isEmpty()) {
+    fs.unlinkSync(
+      path.join(
+        __dirname,
+        `../../uploads/cineplex/${req.files.thumbnail[0].filename}`
+      )
+    );
+    return res.status(400).send({ errors: errors.array() });
+  }
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array() });
   }
@@ -75,6 +121,16 @@ const createMenu = async (req, res) => {
     item_description: item_description,
     price: parseInt(price),
   });
+  fs.renameSync(
+    path.join(
+      __dirname,
+      `../../uploads/cineplex/${req.files.thumbnail[0].filename}`
+    ),
+    path.join(
+      __dirname,
+      `../../uploads/cineplex/menu-${newMenu._id}.jpg`
+    )
+  );
   await newMenu.save();
 
   return res.status(201).send({
@@ -411,6 +467,7 @@ module.exports = {
   createBranch,
   createPromo,
   createMenu,
+  registerMenuMulter,
   createStudio,
   validateCreateStudio,
   createScreening,

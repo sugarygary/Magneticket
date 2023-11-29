@@ -1,9 +1,11 @@
 const express = require("express");
+
 const {
   verifyCineplexCookie,
   createBranch,
   createPromo,
   createMenu,
+  registerMenuMulter,
   createStudio,
   validateCreateStudio,
   createScreening,
@@ -32,7 +34,7 @@ cineplexRouter.post(
   expressAsyncHandler(createScreening)
 );
 cineplexRouter.post("/create-promo", expressAsyncHandler(createPromo));
-cineplexRouter.post("/create-menu", expressAsyncHandler(createMenu));
+cineplexRouter.post("/create-menu",[registerMenuMulter] ,expressAsyncHandler(createMenu));
 cineplexRouter.get("/branches", expressAsyncHandler(getBranch));
 cineplexRouter.get("/screenings", expressAsyncHandler(getScreening));
 cineplexRouter.get("/promos", expressAsyncHandler(getPromo));

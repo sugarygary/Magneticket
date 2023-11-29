@@ -8,43 +8,77 @@ import { useNavigate } from "react-router-dom";
 
 const CineplexRegisterForm = (props) => {
   const navigate = useNavigate();
+  const [npwp, setNpwp] = useState(null);
+  const [surat, setSurat] = useState(null);
+  const [namaPerusahaan, setNamaPerusahaan] = useState(null);
+  const [namaBisnis, setNamaBisnis] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null);
+  const [conPass, setConPass] = useState(null);
+  const [tnc, setTnc] = useState(false);
+  const [errMsg, setErrMsg] = useState(null);
+  const [errMsgFileNpwp, setErrMsgFileNpwp] = useState(null);
+  const [errMsgFileSurat, setErrMsgFileSurat] = useState(null);
+  async function submitForm(e) {
+    e.preventDefault();
+    if (
+      npwp == null ||
+      surat == null ||
+      namaPerusahaan == null ||
+      namaBisnis == null ||
+      email == null ||
+      password == null ||
+      conPass == null ||
+      tnc == false
+    ) {
+      setErrMsg("Inputan ada yang kosong");
+      return;
+    }
+    if (password != conPass) {
+      setErrMsg("Password dan confirm password tidak sama");
+      return;
+    }
+    // let cineplexBaru = {
+    //   email: email,
+    //   password: password,
+    //   company_name: namaPerusahaan,
+    //   brand_name: namaBisnis,
+    // };
+    const formData = new FormData();
+    formData.append("npwp", npwp);
+    formData.append("surat", surat);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("company_name", namaPerusahaan);
+    formData.append("brand_name", namaBisnis);
 
-  const schema = Joi.object({
-    brand_name: Joi.string().required(),
-    company_name: Joi.string().required(),
-    email: Joi.string()
-      .email({ tlds: { allow: false } })
-      .required(),
-    password: Joi.string().required(),
-    confirmPassword: Joi.string()
-      .valid(Joi.ref("password"))
-      .required()
-      .label("Confirm Password")
-      .messages({ "any.only": "{{#label}} does not match the password" }),
-    termsAndConditions: Joi.boolean().valid(true).required(),
-  });
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: joiResolver(schema),
-  });
-  async function submitForm(data) {
-    console.log(data);
-    let cineplexBaru = {
-      email: data.email,
-      password: data.password,
-      company_name: data.company_name,
-      brand_name: data.brand_name,
-    };
-    let retu = await registerCineplex(cineplexBaru);
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ", " + pair[1]);
+    }
+    const config = { headers: { "Content-Type": "multipart/form-data" } };
+    let retu = await registerCineplex(formData, config);
     if (retu == "Request failed with status code 409") {
       alert("email sudah terdaftar");
     } else {
-      navigate("/");
+      navigate("/cineplex/login");
     }
   }
+  const handleNpwp = (file) => {
+    console.log(file);
+    if (file.type != "image/jpeg") {
+      setErrMsgFileNpwp("Npwp harus berupa image");
+      return;
+    }
+    setNpwp(file);
+  };
+  const handleSurat = (file) => {
+    console.log(file);
+    if (file.type != "image/jpeg") {
+      setErrMsgFileSurat("Surat harus berupa image");
+      return;
+    }
+    setSurat(file);
+  };
   return (
     <div className=" w-screen h-full flex justify-center items-center text-white my-10">
       <div className="biruTua p-12 text-center rounded  w-1/2 mx-auto ">
@@ -52,16 +86,17 @@ const CineplexRegisterForm = (props) => {
           <img src={logo1} alt="" className="w-96 mx-auto" />
           <p className="font-magneticket text-7xl">MAGNETICKET</p>
         </div>
-        <form onSubmit={handleSubmit(submitForm)} className="mt-5">
+        <form onSubmit={submitForm} className="mt-5">
           <div className="mb-3 text-left">
             <p>Nama Perusahaan</p>
             <input
               type="text"
               className="abuInput w-full rounded p-1 pl-2"
               placeholder="Masukkan Nama Perusahaan"
-              {...register("company_name")}
+              onChange={(e) => {
+                setNamaPerusahaan(e.target.value);
+              }}
             />
-            <span className="text-red-500">{errors.company_name?.message}</span>
           </div>
           <div className="mb-3 text-left">
             <p>Nama Bisnis</p>
@@ -69,9 +104,10 @@ const CineplexRegisterForm = (props) => {
               type="text"
               className="abuInput w-full rounded p-1 pl-2"
               placeholder="Masukkan Nama Bisnis"
-              {...register("brand_name")}
+              onChange={(e) => {
+                setNamaBisnis(e.target.value);
+              }}
             />
-            <span className="text-red-500">{errors.brand_name?.message}</span>
           </div>
           <div className="mb-3 text-left">
             <p>Email</p>
@@ -79,31 +115,54 @@ const CineplexRegisterForm = (props) => {
               type="text"
               className="abuInput w-full rounded p-1 pl-2"
               placeholder="Enter your email"
-              {...register("email")}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
             />
-            <span className="text-red-500">{errors.email?.message}</span>
           </div>
-
           {/* MULTERRR MBO NANTI AJA DULUm, BELUM KEPAKE */}
-          {/* <div className="mb-3 text-left">
-                        <p>Unggah NPWP Badan</p>
-                        
-                        <input type="file" className="block w-96 mb-5 text-md text-white border border-gray-600 bg-gray-600 rounded-lg cursor-pointer mt-2" id="" name="" />
-                    </div>
-                    <div className="mb-3 text-left">
-                        <p>Unggah Surat Kerjasama</p>
-                        
-                        <input type="file" className="block w-96 mb-5 text-md text-white border border-gray-600 bg-gray-600 rounded-lg cursor-pointer mt-2" id="" name="" />
-                    </div> */}
+          <div className="mb-3 text-left">
+            <p>Unggah NPWP Badan</p>
+            <input
+              type="file"
+              className="block w-96 mb-5 text-md text-white border border-gray-600 bg-gray-600 rounded-lg cursor-pointer mt-2"
+              id=""
+              name=""
+              onChange={(e) => {
+                // setNpwp(e.target.files[0])
+                // alert(e.target.files[0]);
+                handleNpwp(e.target.files[0]);
+              }}
+            />
+            {errMsgFileNpwp != null && (
+              <span className="text-red-500">{errMsgFileNpwp}</span>
+            )}
+          </div>
+          <div className="mb-3 text-left">
+            <p>Unggah Surat Kerjasama</p>
+            <input
+              type="file"
+              className="block w-96 mb-5 text-md text-white border border-gray-600 bg-gray-600 rounded-lg cursor-pointer mt-2"
+              id=""
+              name=""
+              onChange={(e) => {
+                handleSurat(e.target.files[0]);
+              }}
+            />
+            {errMsgFileSurat != null && (
+              <span className="text-red-500">{errMsgFileSurat}</span>
+            )}
+          </div>
           <div className="mb-3 text-left">
             <p>Password</p>
             <input
               type="password"
               className="abuInput w-full rounded p-1 pl-2"
               placeholder="Enter your password"
-              {...register("password")}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
             />
-            <span className="text-red-500">{errors.password?.message}</span>
           </div>
           <div className="mb-3 text-left">
             <p>Confirm Password</p>
@@ -111,11 +170,10 @@ const CineplexRegisterForm = (props) => {
               type="password"
               className="abuInput w-full rounded p-1 pl-2"
               placeholder="Enter your confirm password"
-              {...register("confirmPassword")}
+              onChange={(e) => {
+                setConPass(e.target.value);
+              }}
             />
-            <span className="text-red-500">
-              {errors.confirmPassword?.message}
-            </span>
           </div>
           <div>
             {/* ini captcha */}
@@ -127,7 +185,9 @@ const CineplexRegisterForm = (props) => {
               type="checkbox"
               name="kebijakanPrivasi"
               id=""
-              {...register("termsAndConditions")}
+              onChange={(e) => {
+                setTnc(e.target.value);
+              }}
             />
             <p>Saya setuju dengan </p>
             <p className="biruDaftarSekarang ml-1">
@@ -135,7 +195,8 @@ const CineplexRegisterForm = (props) => {
             </p>
           </div>
           <span className="text-red-500">
-            {errors.termsAndConditions?.message}
+            {/* {errors.termsAndConditions?.message} */}
+            {errMsg && <p className="text-red-500">{errMsg}</p>}
           </span>
           <div className="mb-3 text-left mt-10">
             <button className="biruMuda w-full rounded p-1 pl-2">Daftar</button>

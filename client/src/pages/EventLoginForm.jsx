@@ -4,9 +4,9 @@ import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
 import { Link, useFetcher, useLoaderData, useNavigate } from "react-router-dom";
-import { loginUser } from "../handlers/LoginHandler";
+import { loginPromotor, loginUser } from "../handlers/LoginHandler";
 
-const UserLoginForm = (props) => {
+const EventLoginForm = (props) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,7 +28,7 @@ const UserLoginForm = (props) => {
       return;
     }
 
-    let retu = await loginUser(data);
+    let retu = await loginPromotor(data);
     console.log(retu);
     if (retu.response) {
       if (retu.response.status == 400) {
@@ -36,9 +36,13 @@ const UserLoginForm = (props) => {
         setErrorMsg(retu.response.data.message);
         return;
       }
+      if (retu.response.status == 401) {
+        setErrorMsg(retu.response.data.message);
+        return;
+      }
       if (retu.response.status == 403) {
         //navigate ke email belum aktif
-        navigate("/user/pending-email", {
+        navigate("/event-organizer/pending-email", {
           state: { pending_email: data.email },
         });
         return;
@@ -47,7 +51,7 @@ const UserLoginForm = (props) => {
       navigate("/error-page");
     }
 
-    navigate("/");
+    navigate("/event-organizer/home");
   }
   return (
     <div className="w-full h-full flex justify-center text-white mt-24 my-12">
@@ -85,7 +89,10 @@ const UserLoginForm = (props) => {
           </div>
           <div className="mb-3 text-left flex">
             <p>Belum punya akun?</p>
-            <Link to="/user/register" className="biruDaftarSekarang ml-1">
+            <Link
+              to="/event-organizer/register"
+              className="biruDaftarSekarang ml-1"
+            >
               Daftar sekarang{" "}
             </Link>
           </div>
@@ -95,4 +102,4 @@ const UserLoginForm = (props) => {
   );
 };
 
-export default UserLoginForm;
+export default EventLoginForm;

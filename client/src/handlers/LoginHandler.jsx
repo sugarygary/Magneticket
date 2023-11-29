@@ -8,7 +8,7 @@ export const loginUser = async (data) => {
   try {
     const response = await client.post("api/auth/login-user", {
       email: data.email,
-      password: data.password
+      password: data.password,
     });
     return response;
   } catch (error) {
@@ -31,12 +31,12 @@ export const registerUser = async (data) => {
     return error;
   }
 };
-export const loginCineplex= async (data) => {
+export const loginCineplex = async (data) => {
   console.log(data);
   try {
     const response = await client.post("api/auth/login-cineplex", {
       email: data.email,
-      password: data.password
+      password: data.password,
     });
     return response;
   } catch (error) {
@@ -44,16 +44,27 @@ export const loginCineplex= async (data) => {
     console.error("Error fetching data:", error);
   }
 };
-export const registerCineplex = async (data) => {
+export const loginPromotor = async (data) => {
   console.log(data);
+
   try {
-    const response = await client.post("api/auth/register-cineplex", {
-      company_name: data.company_name,
+    const response = await client.post("api/auth/login-promotor", {
       email: data.email,
       password: data.password,
-      brand_name: data.brand_name,
     });
-
+    return response;
+  } catch (error) {
+    return error;
+    console.error("Error fetching data:", error);
+  }
+};
+export const registerCineplex = async (data, config) => {
+  console.log(data);
+  console.log(config);
+  try {
+    const response = await client.post("api/auth/register-cineplex", data, {
+      ...config,
+    });
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);
