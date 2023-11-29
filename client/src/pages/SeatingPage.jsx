@@ -1,15 +1,19 @@
 import moment from "moment-timezone";
 import React, { useEffect, useState } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
 import CardMakanan from "../components/CardMakanan";
-import { createTiket } from "../handlers/UserHandler";
 import { useDispatch, useSelector } from "react-redux";
+import client from "../util/client";
 
 export default function SeatingPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const data = useLoaderData();
   const { current_user, status } = useSelector((state) => state.user);
   useEffect(() => {
+    if (searchParams.has("order_id")) {
+      navigate("/user/history");
+    }
     const midtransScriptUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
     let scriptTag = document.createElement("script");
     scriptTag.src = midtransScriptUrl;
@@ -165,33 +169,37 @@ export default function SeatingPage() {
       seats: chooseSeat,
       foods: keranjang,
       screening_id: data.screening_id,
-      promo: temp,
+      discount_amount: temp,
     };
-    let checkout = await createTiket(bayarTiket);
-    console.log(checkout);
-    if (checkout.response) {
-    } else if (checkout.request) {
-      navigate("/error-page");
+    let checkout;
+    try {
+      checkout = await client.post("api/user/create-transaction", bayarTiket);
+    } catch (error) {
+      console.log(error.message);
     }
-    window.snap.pay(checkout.token, {
+    window.snap.pay(checkout.data.token, {
       onSuccess: async function (result) {
-        /* You may add your own implementation here */
-        alert("payment success!");
-        //navigate ke transactions backend belum jadi hehe
-        console.log(result);
+        let requestBody = {
+          seats: chooseSeat,
+          foods: keranjang,
+          screening_id: data.screening_id,
+          discount_amount: temp,
+          order_id: checkout.data.order_id,
+          midtrans_token: checkout.data.token,
+        };
+        let ticket = await client.post("api/user/create-ticket", requestBody);
+        alert("masidmaisdm");
+        window.location.replace("localhost:5173/user/history");
       },
       onPending: async function (result) {
-        /* You may add your own implementation here */
         alert("wating your payment!");
         console.log(result);
       },
       onError: async function (result) {
-        /* You may add your own implementation here */
         alert("payment failed!");
         console.log(result);
       },
       onClose: async function () {
-        /* You may add your own implementation here */
         alert("you closed the popup without finishing the payment");
       },
     });
@@ -302,112 +310,128 @@ export default function SeatingPage() {
               }).format(data.screening_data.price * chooseSeat.length)}
             </div>
             <div>
-              <button
-                className="biruCariTiket px-4 py-2 text-white rounded"
-                onClick={() => {
-                  setBoolCekout(true);
-                }}
-              >
-                Lanjutkan ke Pembayaran
-              </button>
+              {chooseSeat.length > 0 && (
+                <button
+                  className="biruCariTiket px-4 py-2 text-white rounded"
+                  onClick={() => {
+                    setBoolCekout(true);
+                  }}
+                >
+                  Lanjutkan ke Pembayaran
+                </button>
+              )}
             </div>
           </div>
         </div>
       )}
       {boolCekout && (
         <div className="text-black px-10 py-10">
-          <div className="text-3xl font-semibold">Ringkasan Pesanan</div>
-          <div className="flex">
-            <div>
-              <img className="w-52 mt-8" src={data.detail_movie.img} alt="" />
-            </div>
-            <div className="mt-8 ml-4">
-              <div className="text-2xl font-semibold ">
-                {data.detail_movie.title}
+          <div className="flex items-center justify-start gap-3">
+            <div className="text-3xl font-semibold">&lt;--</div>
+            <div className="text-3xl font-semibold">Ringkasan Pesanan</div>
+          </div>
+          <div className="shadow-lg mt-4 rounded">
+            <div className="flex flex-row w-full flex-wrap">
+              <div className="basis-full sm:basis-1/5">
+                <img
+                  className="w-full h-auto aspect-[2/3] rounded"
+                  src={data.detail_movie.img}
+                  alt=""
+                />
               </div>
-              <div>
-                <table className="ml-8">
-                  <tbody>
-                    <tr>
-                      <td>
-                        <p>Bioskop</p>
-                      </td>
-                      <td>
-                        <p className="ml-10">
-                          : {data.screening_data.branch_name}
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>Tiket</p>
-                      </td>
-                      <td>
-                        <p className="ml-10">: {chooseSeat.length} Tiket</p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>Tempat duduk</p>
-                      </td>
-                      <td>
-                        <p className="ml-10">
-                          :
-                          {chooseSeat.length > 0 &&
-                            " " +
-                              chooseSeat.reduce((accumulator, seat, index) => {
-                                if (index == 0) {
-                                  console.log(seat);
-                                  return accumulator + seat.seat_number;
-                                } else {
-                                  return accumulator + ", " + seat.seat_number;
-                                }
-                              }, "")}
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>Tipe</p>
-                      </td>
-                      <td>
-                        <p className="ml-10">
-                          : {data.screening_data.studio_type}
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>Studio</p>
-                      </td>
-                      <td>
-                        <p className="ml-10">
-                          : {data.screening_data.studio_name}
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>Hari/Tanggal</p>
-                      </td>
-                      <td>
-                        <p className="ml-10">
-                          : {currentDay + ", " + dd + "-" + mm + "-" + yyyy}
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <p>Waktu</p>
-                      </td>
-                      <td>
-                        <p className="ml-10">
-                          : {data.screening_data.showtime.substring(16, 11)}
-                        </p>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+              <div className="basis-full p-4 sm:basis-4/5">
+                <div className="text-2xl mb-2 font-semibold ">
+                  {data.detail_movie.title}
+                </div>
+                <div>
+                  <table className="sm:text-lg">
+                    <tbody>
+                      <tr>
+                        <td>
+                          <p>Bioskop</p>
+                        </td>
+                        <td>
+                          <p className="ml-10">
+                            : {data.screening_data.branch_name}
+                          </p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p>Tiket</p>
+                        </td>
+                        <td>
+                          <p className="ml-10">: {chooseSeat.length} Tiket</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p>Tempat duduk</p>
+                        </td>
+                        <td>
+                          <p className="ml-10">
+                            :
+                            {chooseSeat.length > 0 &&
+                              " " +
+                                chooseSeat.reduce(
+                                  (accumulator, seat, index) => {
+                                    if (index == 0) {
+                                      console.log(seat);
+                                      return accumulator + seat.seat_number;
+                                    } else {
+                                      return (
+                                        accumulator + ", " + seat.seat_number
+                                      );
+                                    }
+                                  },
+                                  ""
+                                )}
+                          </p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p>Tipe</p>
+                        </td>
+                        <td>
+                          <p className="ml-10">
+                            : {data.screening_data.studio_type}
+                          </p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p>Studio</p>
+                        </td>
+                        <td>
+                          <p className="ml-10">
+                            : {data.screening_data.studio_name}
+                          </p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p>Hari/Tanggal</p>
+                        </td>
+                        <td>
+                          <p className="ml-10">
+                            : {currentDay + ", " + dd + "-" + mm + "-" + yyyy}
+                          </p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <p>Waktu</p>
+                        </td>
+                        <td>
+                          <p className="ml-10">
+                            : {data.screening_data.showtime.substring(16, 11)}
+                          </p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -423,11 +447,11 @@ export default function SeatingPage() {
               );
             })}
           </div>
+          <div className="text-2xl font-semibold underline">
+            Detail Transaksi
+          </div>
           <div className="flex justify-between">
             <div className="">
-              <div className="text-2xl font-semibold underline">
-                Detail Transaksi
-              </div>
               <div className="mt-4">
                 <p>{data.screening_data.studio_type}</p>
                 {keranjang.map((makanan, index) => {
@@ -530,7 +554,7 @@ export default function SeatingPage() {
         </div>
       )}
       {boolPromo && (
-        <div className="flex items-center justify-center h-screen">
+        <>
           <div className="fixed top-0 w-full h-screen bg-black opacity-50"></div>
           <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-2xl bg-white w-4/12 h-72 px-4 py-4">
             <div className="flex justify-between">
@@ -564,7 +588,7 @@ export default function SeatingPage() {
               })}
             </div>
           </div>
-        </div>
+        </>
       )}
     </>
   );

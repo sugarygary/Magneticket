@@ -48,8 +48,8 @@ export const loadStudio = async (data) => {
     const responseCabang = await client.get("api/cineplex/branches");
     return {
       responseStudio: response.data,
-      responseCabang:responseCabang.data,
-      currentCabang:data.params.branch_id
+      responseCabang: responseCabang.data,
+      currentCabang: data.params.branch_id,
     };
   } catch (error) {
     if (error.response) {
@@ -93,6 +93,9 @@ export const loadScreenByMovie = async (data) => {
 };
 export const loadSeatInfo = async (data) => {
   try {
+    if (sessionStorage.getItem("order_id") != null) {
+      //cancel order_id delete ticket
+    }
     const currUser = await client.get("api/auth/current-user");
     const screening_data = await client.get(
       `api/user/screening/${data?.params?.screening_id}/seat-info`
@@ -165,17 +168,19 @@ export const loadSingleMenu = async (data) => {
 export const loadHistory = async (data) => {
   try {
     const response = await client.get(`api/user/history`);
-    return response.data
+    return response.data;
   } catch (error) {
     console.error("Error fetching load history:", error);
     return error.message;
   }
-}
+};
 
 export const loadDetailHistory = async (data) => {
   try {
-    const response = await client.get(`api/user/history/${data.params.history_id}`);
-    return response.data
+    const response = await client.get(
+      `api/user/history/${data.params.history_id}`
+    );
+    return response.data;
   } catch (error) {
     if (error.response) {
       if (error.response.status == 403) {
@@ -189,4 +194,4 @@ export const loadDetailHistory = async (data) => {
     }
     return error;
   }
-}
+};

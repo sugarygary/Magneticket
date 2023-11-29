@@ -34,7 +34,7 @@ import {
   loadCabang,
   loadStudio,
   loadHistory,
-  loadDetailHistory
+  loadDetailHistory,
 } from "./handlers/LoadHandler.jsx";
 import PendingEmail from "./pages/pendingEmail.jsx";
 import { LayoutUser } from "./pages/LayoutUser.jsx";
@@ -44,7 +44,7 @@ import ScreeningByMovie from "./pages/ScreeningByMovie.jsx";
 import SeatingPage from "./pages/SeatingPage.jsx";
 import CineplexConcession from "./pages/CineplexConcession.jsx";
 import { createMenu, createStudio } from "./handlers/CineplexHandler.jsx";
-import { createTiket } from "./handlers/UserHandler.jsx";
+// import { createTiket } from "./handlers/UserHandler.jsx";
 import CineplexCreateMenu from "./pages/CineplexCreateMenu.jsx";
 import ErrorElement from "./pages/ErrorElement.jsx";
 import CineplexCreateKodePromo from "./pages/CineplexCreateKodePromo.jsx";
@@ -55,7 +55,7 @@ import CineplexEditMenu from "./pages/CineplexEditMenu.jsx";
 import { loadSingleMenu } from "./handlers/LoadHandler.jsx";
 import CineplexListStudios from "./pages/CineplexListStudios.jsx";
 import CineplexCreateStudio from "./pages/CineplexCreateStudio.jsx";
-import HistoryPage from "./pages/HistoryPage.jsx"
+import HistoryPage from "./pages/HistoryPage.jsx";
 import DetailHistory from "./pages/DetailHistory.jsx";
 import LoginEventOrganizer from "./pages/LoginEventOrganizer.jsx";
 
@@ -109,7 +109,6 @@ const router = createBrowserRouter([
         path: "seating/:movie_id/:screening_id",
         element: <SeatingPage></SeatingPage>,
         loader: loadSeatInfo,
-        action: createTiket,
         errorElement: <ErrorElement />,
       },
       {
@@ -123,7 +122,7 @@ const router = createBrowserRouter([
         element: <DetailHistory></DetailHistory>,
         loader: loadDetailHistory,
         errorElement: <ErrorElement />,
-      }
+      },
     ],
   },
   {
@@ -207,7 +206,7 @@ const router = createBrowserRouter([
         path: "studios/:branch_id/create-studio",
         element: <CineplexCreateStudio />,
         loader: loadStudio,
-        action:createStudio,
+        action: createStudio,
         errorElement: <ErrorElement />,
       },
     ],

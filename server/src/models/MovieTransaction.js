@@ -55,7 +55,7 @@ const movieTransactionSchema = new Schema(
     status: {
       type: String,
       default: "PENDING",
-      enum: ["PENDING", "FAILED", "SUCCESS"],
+      enum: ["PENDING", "FAILED", "SUCCESS", "REFUND"],
     },
     seats: [{ type: String }],
     foods: [

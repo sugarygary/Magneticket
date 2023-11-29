@@ -6,12 +6,14 @@ const {
   findMenuByScreening,
   findPromoByScreening,
   getHistory,
-  getDetailHistory
+  getDetailHistory,
+  createTicketReal,
 } = require("../controllers/userController");
 const expressAsyncHandler = require("express-async-handler");
 const userRouter = express.Router();
 userRouter.use(verifyUserCookie);
-userRouter.post("/create-ticket", expressAsyncHandler(createTicket));
+userRouter.post("/create-transaction", expressAsyncHandler(createTicket));
+userRouter.post("/create-ticket", expressAsyncHandler(createTicketReal));
 
 userRouter.get(
   "/screening/:screening_id/seat-info",
@@ -27,13 +29,7 @@ userRouter.get(
   expressAsyncHandler(findPromoByScreening)
 );
 
-userRouter.get(
-  "/history",
-  expressAsyncHandler(getHistory)
-)
+userRouter.get("/history", expressAsyncHandler(getHistory));
 
-userRouter.get(
-  "/history/:history_id",
-  expressAsyncHandler(getDetailHistory)
-)
+userRouter.get("/history/:history_id", expressAsyncHandler(getDetailHistory));
 module.exports = userRouter;

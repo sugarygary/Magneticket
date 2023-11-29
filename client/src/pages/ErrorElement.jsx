@@ -19,8 +19,6 @@ const ErrorElement = () => {
       {error.status == 500 && (
         <div className="text-xl font-semibold">Internal Server Error</div>
       )}
-      {console.log(error)}
-      {console.log("ini error status",error)}
       <Link to="/" className="text-blue-700">
         Go back
       </Link>
