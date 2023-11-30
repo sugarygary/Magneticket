@@ -280,6 +280,7 @@ const validateCreateScreening = [
     .withMessage("Showtime must be a recognizable javascript date"),
 ];
 const createScreening = async (req, res) => {
+  console.log(req.body)
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array() });
@@ -413,6 +414,10 @@ const getMenu = async (req, res) => {
   const menus = await Menu.find({ cineplex: req.userId });
   res.status(200).json({ menus });  
 };
+const getStudioAll = async (req, res) => {
+  const studios = await Studio.find({cineplex: req.userId});
+  res.status(200).json({ studios });
+};
 const getStudio = async (req, res) => {
   const studios = await Studio.find({ branch: req.params.branchId });
   res.status(200).json({ studios });
@@ -492,6 +497,7 @@ module.exports = {
   getPromo,
   getMenu,
   getStudio,
+  getStudioAll,
   deletePromo,
   getSingleMenu,
   editMenu,

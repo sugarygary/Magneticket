@@ -38,7 +38,7 @@ export const loadOngoingEvent = async (data) => {
     }
     return error;
   }
-}
+};
 export const loadCabang = async (data) => {
   try {
     const response = await client.get("api/cineplex/branches");
@@ -218,14 +218,42 @@ export const loadCineplexHistory = async (data) => {
     console.error("Error fetching load history:", error);
     return error.message;
   }
-}
+};
 export const loadCineplexDetailHistory = async (data) => {
-  console.log("ehehehehehe", data.params.history_id)
+  console.log("ehehehehehe", data.params.history_id);
   try {
-    const response = await client.get(`api/cineplex/movie-ticket/${data.params.history_id}`);
+    const response = await client.get(
+      `api/cineplex/movie-ticket/${data.params.history_id}`
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching load history:", error);
+    return error.message;
+  }
+};
+
+export const loadCineplexJadwal = async (data) => {
+  try {
+    const response = await client.get(`api/cineplex/screenings`);
+    const responseCabang = await client.get("api/cineplex/branches");
+    const responseStudio = await client.get("api/cineplex/studios");
+    let respon = {
+      jadwal: response.data,
+      cabang: responseCabang.data,
+      studio: responseStudio.data,
+    };
+    return respon;
+  } catch (error) {
+    console.error("Error fetching load CineplexJadwal", error);
+    return error.message;
+  }
+};
+export const loadStudioAll = async (data)=>{
+  try {
+    const response = await client.get("api/cineplex/studios");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all studios:", error);
     return error.message;
   }
 }

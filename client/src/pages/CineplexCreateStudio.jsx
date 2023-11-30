@@ -52,7 +52,7 @@ export default function CineplexCreateStudio() {
       setErrorMsg("Baris harus berupa angka");
       return;
     }
-    const pattern = /^\d+-\d+-\d+$/;
+    const pattern = /^(\d+-)+\d+$/;
     if (!pattern.test(kolomStudio)) {
       setErrorMsg("Format kolom tidak sesuai");
       return;

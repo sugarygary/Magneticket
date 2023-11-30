@@ -3,7 +3,7 @@ import client from "../util/client";
 
 export const createMenu = async (data, config) => {
   console.log(data);
-  console.log(config)
+  console.log(config);
   try {
     const response = await client.post("api/cineplex/create-menu", data, {
       ...config,
@@ -80,6 +80,21 @@ export const editMenu = async (data) => {
       item_name: data.item_name,
       item_description: data.item_description,
       price: data.price,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return error.message;
+  }
+};
+export const createScreening = async (data) => {
+  console.log(data);
+  try {
+    const response = await client.post(`api/cineplex/create-screening`, {
+      studio_id: data.studio_id,
+      movie_id: data.movie_id,
+      price: data.price,
+      showtime: data.showtime,
     });
     return response.data;
   } catch (error) {

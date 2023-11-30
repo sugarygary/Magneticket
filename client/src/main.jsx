@@ -38,6 +38,8 @@ import {
   loadCineplexHistory,
   loadCineplexDetailHistory,
   loadOngoingEvent,
+  loadCineplexJadwal,
+  loadStudioAll,
 } from "./handlers/LoadHandler.jsx";
 import PendingEmail from "./pages/pendingEmail.jsx";
 import { LayoutUser } from "./pages/LayoutUser.jsx";
@@ -46,7 +48,11 @@ import { LayoutEventOrganizer } from "./pages/LayoutEventOrganizer.jsx";
 import ScreeningByMovie from "./pages/ScreeningByMovie.jsx";
 import SeatingPage from "./pages/SeatingPage.jsx";
 import CineplexConcession from "./pages/CineplexConcession.jsx";
-import { createMenu, createStudio } from "./handlers/CineplexHandler.jsx";
+import {
+  createMenu,
+  createScreening,
+  createStudio,
+} from "./handlers/CineplexHandler.jsx";
 // import { createTiket } from "./handlers/UserHandler.jsx";
 import CineplexCreateMenu from "./pages/CineplexCreateMenu.jsx";
 import ErrorElement from "./pages/ErrorElement.jsx";
@@ -66,13 +72,15 @@ import EventOrganizerCreateEvent from "./pages/EventOrganizerCreateEvent.jsx";
 import { createEvent } from "./handlers/EventOrganizerHandler.jsx";
 import CineplexHistoryTiket from "./pages/CineplexHistoryTiket.jsx";
 import CineplexDetailHistoryTiket from "./pages/CineplexDetailHistoryTiket.jsx";
+import CineplexJadwal from "./pages/CineplexJadwal.jsx";
+import CineplexCreateScreening from "./pages/CineplexCreateScreening.jsx";
 
 async function coba() {
   let x = loadInTheater();
   let y = loadOngoingEvent();
   let temp = {
     inTheater: x,
-    ongoingEvent: y
+    ongoingEvent: y,
   };
   return temp;
 }
@@ -118,7 +126,7 @@ const router = createBrowserRouter([
           let y = await loadOngoingEvent();
           let temp = {
             inTheater: x,
-            ongoingEvent: y
+            ongoingEvent: y,
           };
           return temp;
         },
@@ -241,6 +249,20 @@ const router = createBrowserRouter([
         errorElement: <ErrorElement />,
       },
       {
+        path: "jadwal",
+        element: <CineplexJadwal />,
+        loader: loadCineplexJadwal,
+        errorElement: <ErrorElement />,
+      },
+      {
+        //create screening
+        path: "jadwal/create-screening",
+        element: <CineplexCreateScreening />,
+        loader: loadStudioAll,
+        action: createScreening,
+        errorElement: <ErrorElement />,
+      },
+      {
         path: "history",
         element: <CineplexHistoryTiket></CineplexHistoryTiket>,
         loader: loadCineplexHistory,
@@ -251,7 +273,7 @@ const router = createBrowserRouter([
         path: "history/:history_id",
         element: <CineplexDetailHistoryTiket />,
         loader: loadCineplexDetailHistory,
-      }
+      },
     ],
   },
 
@@ -286,7 +308,7 @@ const router = createBrowserRouter([
         // loader: loadUsers,
         action: createEvent,
         errorElement: <ErrorElement />,
-      }
+      },
     ],
   },
   //ErrorElement page kalo server down
