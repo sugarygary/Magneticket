@@ -38,7 +38,7 @@ export default function CineplexConcession() {
                 <div className="flex shadow-2xl mb-5">
                   {/* http://localhost:3000/cineplex/npwp-6566e2382d4522b6ed7c227a.jpg */}
                   <img
-                    src={`${process.env.BACKEND_URL}/cineplex/menu-${menu._id}.jpg`}
+                    src={`x${process.env.BACKEND_URL}/cineplex/menu-${menu._id}.jpg`}
                     alt=""
                     className="w-48"
                   />
