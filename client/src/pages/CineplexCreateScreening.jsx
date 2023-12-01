@@ -73,7 +73,13 @@ export default function CineplexCreateScreening() {
   };
   return (
     <div className="p-2 text-white biruTua p-5 my-10 rounded w-3/4 mx-auto ">
-      <p className="text-2xl font-bold mb-5">Tambah Jadwal Screening</p>
+      <div className="flex justify-between">
+        <p className="text-2xl font-bold mb-5">Tambah Jadwal Screening</p>
+        <Link className="p-2 h-fit rounded bg-red-500" to={-1}>
+          Kembali
+        </Link>
+      </div>
+
       <form onSubmit={submitForm}>
         <div className="mb-5">
           <p>Studio Id</p>

@@ -143,7 +143,7 @@ export default function CineplexJadwal() {
         </div>
       </div>
       {data.jadwal.screenings
-        .filter((screening) => new Date(screening.showtime) > new Date())
+        // .filter((screening) => new Date(screening.showtime) > new Date())
         .map((screening, index) => {
           // {console.log(menu._id)}
           // let movie = getMovie(screening.movie);
