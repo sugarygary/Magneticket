@@ -41,6 +41,8 @@ import {
   loadCineplexJadwal,
   loadStudioAll,
   loadScreeningLengkap,
+  loadDetailEvent,
+  loadCategoryEvent,
 } from "./handlers/LoadHandler.jsx";
 import PendingEmail from "./pages/pendingEmail.jsx";
 import { LayoutUser } from "./pages/LayoutUser.jsx";
@@ -75,6 +77,8 @@ import CineplexHistoryTiket from "./pages/CineplexHistoryTiket.jsx";
 import CineplexDetailHistoryTiket from "./pages/CineplexDetailHistoryTiket.jsx";
 import CineplexJadwal from "./pages/CineplexJadwal.jsx";
 import CineplexCreateScreening from "./pages/CineplexCreateScreening.jsx";
+import EventDetail from "./pages/EventDetail.jsx";
+
 
 async function coba() {
   let x = loadInTheater();
@@ -163,6 +167,21 @@ const router = createBrowserRouter([
         element: <UserFindBranch></UserFindBranch>,
         errorElement: <ErrorElement />,
       },
+      {
+        path: "event/:event_id",
+        element: <EventDetail/>,
+        loader: async (params) => {
+          console.log("ini params", params);
+          let x = await loadDetailEvent(params);
+          let y = await loadCategoryEvent(params);
+          let temp = {
+            detailEvent: x,
+            categoryEvent: y,
+          };
+          return temp;
+        },
+        errorElement: <ErrorElement />,
+      }
     ],
   },
   {

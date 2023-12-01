@@ -6,6 +6,8 @@ const moment = require("moment-timezone");
 const Cineplex = require("../models/Cineplex");
 const Event = require("../models/Event");
 const Promotor = require("../models/Promotor");
+const EventCategory = require("../models/EventCategory");
+const EventTicket = require("../models/EventTicket");
 
 require("dotenv").config();
 const getNowShowingMovie = async (req, res) => {
@@ -202,6 +204,42 @@ const getOngoingEvent = async (req, res) => {
     return res.status(500).send({ error: "Internal server error" });
   }
 };
+const getSingleEvent = async (req, res) => {
+  const { event_id } = req.params;
+  try {
+    let result = await Event.findById(event_id);
+    if (!result) {
+      return res.status(404).send({ error: "Event not found" });
+    }
+    return res.status(200).send(result);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ error: "Internal server error" });
+  }
+};
+const getSingleEventCategory = async (req, res) => {
+  // let { event_id } = req.params;
+  // let temp = await EventTicket.find({event_category:event_id});
+  // return res.status(200).send(temp);
+  const { event_id } = req.params;
+  try {
+    let result = await EventCategory.find({ event: event_id });
+    let result2=await Promise.all(result.map(async (item)=>{
+      let booked=await EventTicket.find({event_category:item._id});
+      let ticketLeft=item.slot-booked.length
+      return {...item._doc,ticketLeft}
+    }));
+    result=result2;
+    if (!result) {
+      return res.status(404).send({ error: "Event not found" });
+    }
+    return res.status(200).send(result);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ error: "Internal server error" });
+  }
+};
+
 
 
 
@@ -213,4 +251,6 @@ module.exports = {
   getScreeningByMovie,
   getCineplex,
   getOngoingEvent,
+  getSingleEvent,
+  getSingleEventCategory,
 };

@@ -267,3 +267,25 @@ export const loadScreeningLengkap = async (data) => {
     return error.message;
   }
 };
+
+export const loadDetailEvent = async (data) => {
+  try {
+    const response = await client.get(
+      `api/public/event-details/${data.params.event_id}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching detail event:", error);
+    return error.message;
+  }
+};
+
+export const loadCategoryEvent = async (data) => {
+  try {
+    const response = await client.get(`api/public/event-category/${data.params.event_id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching category event:", error);
+    return error.message;
+  }
+}
