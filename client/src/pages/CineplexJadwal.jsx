@@ -9,9 +9,6 @@ export default function CineplexJadwal() {
   const data = useLoaderData();
   const { current_user, status } = useSelector((state) => state.user);
   console.log(data.studio.studios);
-  const [kota, setKota] = useState(null);
-  const [tanggal, setTanggal] = useState(null);
-  const [cabang, setCabang] = useState(null);
 
   const [studios, setStudios] = useState([]);
   useEffect(() => {
@@ -35,7 +32,16 @@ export default function CineplexJadwal() {
   //     return movie.data;
   //   };
   const [imgScreenings, setImgScreenings] = useState([]);
+  const [filteredScreenings, setFilteredScreenings] = useState([]);
+  const [tanggal, setTanggal] = useState(null);
+  const [kota, setKota] = useState(null);
+  const [cabang, setCabang] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  const [movieData, setMovieData] = useState({
+    imgScreenings: [],
+    filteredScreenings: [],
+  });
   const getMovie = async (movie_id) => {
     try {
       const movie = await client.get(`api/public/movie-details/${movie_id}`);
@@ -55,26 +61,153 @@ export default function CineplexJadwal() {
   useEffect(() => {
     setStudios(data.studio.studios);
   }, [data.studio.studios]);
+  //filter by tanggal no 2
   useEffect(() => {
     const fetchMovieImages = async () => {
-      const imgPromises = data.jadwal.screenings.map(async (screening) => {
-        const movieImg = await getMovie(screening.movie);
-        return movieImg;
-      });
+      setLoading(true);
+
+      const imgPromises = data.jadwal.screenings
+        .filter(
+          (screening) =>
+            !tanggal ||
+            new Date(screening.showtime).toLocaleDateString() ===
+              new Date(tanggal).toLocaleDateString()
+        )
+        .map(async (screening) => {
+          const movieImg = await getMovie(screening.movie);
+          return movieImg;
+        });
 
       const movieImages = await Promise.all(imgPromises);
-      console.log(movieImages);
       setImgScreenings(movieImages);
+
+      const screeningsOnSelectedDate = data.jadwal.screenings.filter(
+        (screening) =>
+          !tanggal ||
+          new Date(screening.showtime).toLocaleDateString() ===
+            new Date(tanggal).toLocaleDateString()
+      );
+      setFilteredScreenings(screeningsOnSelectedDate);
+
+      setLoading(false);
     };
 
     fetchMovieImages();
-  }, [data.jadwal.screenings]);
+  }, [data.jadwal.screenings, tanggal]);
+
+  //filter by tanggal no 1
+  // useEffect(() => {
+  //   const fetchMovieImages = async () => {
+  //     const imgPromises = data.jadwal.screenings
+  //       .filter(
+  //         (screening) =>
+  //           !tanggal ||
+  //           new Date(screening.showtime).toLocaleDateString() ===
+  //             new Date(tanggal).toLocaleDateString()
+  //       )
+  //       .map(async (screening) => {
+  //         const movieImg = await getMovie(screening.movie);
+  //         return movieImg;
+  //       });
+
+  //     const movieImages = await Promise.all(imgPromises);
+  //     setImgScreenings(movieImages);
+
+  //     const screeningsOnSelectedDate = data.jadwal.screenings.filter(
+  //       (screening) =>
+  //         !tanggal ||
+  //         new Date(screening.showtime).toLocaleDateString() ===
+  //           new Date(tanggal).toLocaleDateString()
+  //     );
+  //     setFilteredScreenings(screeningsOnSelectedDate);
+  //   };
+
+  //   fetchMovieImages();
+  // }, [data.jadwal.screenings, tanggal]);
+
+  // useEffect(() => {
+  //   const fetchMovieImages = async () => {
+  //     const imgPromises = data.jadwal.screenings.map(async (screening) => {
+  //       const movieImg = await getMovie(screening.movie);
+  //       return movieImg;
+  //     });
+
+  //     const movieImages = await Promise.all(imgPromises);
+  //     console.log(movieImages);
+  //     setImgScreenings(movieImages);
+  //   };
+
+  //   fetchMovieImages();
+  // }, [data.jadwal.screenings]);
   console.log(imgScreenings);
 
-  if (!imgScreenings.length) {
-    // Loading state or render nothing until data is ready
-    return <p>Loading...</p>;
+  if (loading || !filteredScreenings.length) {
+    // Display the loading message or no screenings found message
+    return (
+      <>
+        <div className="flex gap-3">
+          <div>
+            <p>Tanggal</p>
+            <input
+              className="border text-sm rounded border-s-2 focus:border-blue-500 block w-full p-2.5 biruTua border-gray-600 placeholder-gray-400 text-[#f8f8f8] focus:ring-blue-500 focus:border-blue-500"
+              type="date"
+              onChange={(e) => {
+                setTanggal(e.target.value);
+              }}
+            />
+          </div>
+          <div>
+            <label htmlFor="city" className="">
+              Kota
+            </label>
+            <select
+              id="city"
+              defaultValue={""}
+              autoFocus
+              className="border text-sm rounded border-s-2 focus:border-blue-500 block w-full p-2.5 biruTua border-gray-600 placeholder-gray-400 text-[#f8f8f8] focus:ring-blue-500 focus:border-blue-500"
+              onChange={(e) => {
+                setKota(e.target.value);
+              }}
+            >
+              <option value="">Pilih Kota</option>
+              {kotaDanKabupaten.map((k, index) => (
+                <option key={index} value={k}>
+                  {k}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="city" className="">
+              Cabang
+            </label>
+            <select
+              id="city"
+              defaultValue={""}
+              autoFocus
+              className="border text-sm rounded border-s-2 focus:border-blue-500 block w-full p-2.5 biruTua border-gray-600 placeholder-gray-400 text-[#f8f8f8] focus:ring-blue-500 focus:border-blue-500"
+              onChange={(e) => {
+                setCabang(e.target.value);
+              }}
+            >
+              <option value="">Pilih Cabang</option>
+              {data.cabang.branches.map((c, index) => (
+                <option key={index} value={c.branch_name}>
+                  {c.branch_name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <p>
+          {loading
+            ? "Loading..."
+            : "Tidak ditemukan jadwal sesuai dengan filter tanggal."}
+        </p>
+      </>
+    );
   }
+
   return (
     <div className="w-full px-12 py-5">
       <p className="text-2xl font-bold mb-5">Filter Jadwal</p>
@@ -85,7 +218,11 @@ export default function CineplexJadwal() {
             <input
               className="border text-sm rounded border-s-2 focus:border-blue-500 block w-full p-2.5 biruTua border-gray-600 placeholder-gray-400 text-[#f8f8f8] focus:ring-blue-500 focus:border-blue-500"
               type="date"
+              value={tanggal}
               onChange={(e) => {
+                setTanggal(e.target.value);
+              }}
+              onBlur={(e) => {
                 setTanggal(e.target.value);
               }}
             />
@@ -142,11 +279,14 @@ export default function CineplexJadwal() {
           </Link>
         </div>
       </div>
-      {data.jadwal.screenings
-        // .filter((screening) => new Date(screening.showtime) > new Date())
-        .map((screening, index) => {
-          // {console.log(menu._id)}
-          // let movie = getMovie(screening.movie);
+      {/* kalo mau pake filter by tanggal  pake filteredScreening, kalo default pake data.jadwal.screenings*/}
+
+      {loading && <p>Loading...</p>}
+      {!loading && filteredScreenings.length === 0 ? (
+        <p>Tidak ditemukan jadwal sesuai dengan filter tanggal.</p>
+      ) : (
+        filteredScreenings.map((screening, index) => {
+          // ... (existing code)
           return (
             <div className="" key={index}>
               <div className="flex shadow-2xl mb-5">
@@ -217,7 +357,8 @@ export default function CineplexJadwal() {
               </div>
             </div>
           );
-        })}
+        })
+      )}
     </div>
   );
 }
