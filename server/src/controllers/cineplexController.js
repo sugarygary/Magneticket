@@ -406,6 +406,10 @@ const getScreening = async (req, res) => {
   const screenings = await Screening.find({ cineplex: req.userId });
   res.status(200).json({ screenings });
 };
+const getScreeningLengkap = async (req,res) =>{
+  const screenings = await Screening.find({ cineplex: req.userId }).populate("studio").populate("branch").populate("movie");
+  res.status(200).json({ screenings });
+}
 const getPromo = async (req, res) => {
   const promos = await Promotion.find({ cineplex: req.userId });
   res.status(200).json({ promos });
@@ -503,4 +507,5 @@ module.exports = {
   editMenu,
   getMovieTicket,
   getSingleMovieTicket,
+  getScreeningLengkap,
 };

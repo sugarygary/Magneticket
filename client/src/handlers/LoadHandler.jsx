@@ -248,7 +248,7 @@ export const loadCineplexJadwal = async (data) => {
     return error.message;
   }
 };
-export const loadStudioAll = async (data)=>{
+export const loadStudioAll = async (data) => {
   try {
     const response = await client.get("api/cineplex/studios");
     return response.data;
@@ -256,4 +256,14 @@ export const loadStudioAll = async (data)=>{
     console.error("Error fetching all studios:", error);
     return error.message;
   }
-}
+};
+
+export const loadScreeningLengkap = async (data) => {
+  try {
+    const response = await client.get("api/cineplex/screenings-lengkap");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all studios:", error);
+    return error.message;
+  }
+};

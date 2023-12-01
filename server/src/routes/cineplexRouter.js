@@ -20,7 +20,8 @@ const {
   getSingleMenu,
   editMenu,
   getMovieTicket,
-  getSingleMovieTicket
+  getSingleMovieTicket,
+  getScreeningLengkap
 } = require("../controllers/cineplexController");
 const expressAsyncHandler = require("express-async-handler");
 const cineplexRouter = express.Router();
@@ -40,6 +41,7 @@ cineplexRouter.post("/create-promo", expressAsyncHandler(createPromo));
 cineplexRouter.post("/create-menu",[registerMenuMulter] ,expressAsyncHandler(createMenu));
 cineplexRouter.get("/branches", expressAsyncHandler(getBranch));
 cineplexRouter.get("/screenings", expressAsyncHandler(getScreening));
+cineplexRouter.get("/screenings-lengkap", expressAsyncHandler(getScreeningLengkap));
 cineplexRouter.get("/promos", expressAsyncHandler(getPromo));
 cineplexRouter.get("/menus", expressAsyncHandler(getMenu));
 cineplexRouter.get("/studios", expressAsyncHandler(getStudioAll));

@@ -40,6 +40,7 @@ import {
   loadOngoingEvent,
   loadCineplexJadwal,
   loadStudioAll,
+  loadScreeningLengkap,
 } from "./handlers/LoadHandler.jsx";
 import PendingEmail from "./pages/pendingEmail.jsx";
 import { LayoutUser } from "./pages/LayoutUser.jsx";
@@ -251,7 +252,7 @@ const router = createBrowserRouter([
       {
         path: "jadwal",
         element: <CineplexJadwal />,
-        loader: loadCineplexJadwal,
+        loader: loadScreeningLengkap,
         errorElement: <ErrorElement />,
       },
       {
