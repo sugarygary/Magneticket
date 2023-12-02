@@ -8,14 +8,33 @@ const Event = require("../models/Event");
 const Promotor = require("../models/Promotor");
 const EventCategory = require("../models/EventCategory");
 const EventTicket = require("../models/EventTicket");
+const { isValidObjectId } = require("mongoose");
 
 require("dotenv").config();
 const getNowShowingMovie = async (req, res) => {
-  let start = moment().tz("Asia/Jakarta").toDate();
+  let start = moment().tz("Asia/Jakarta").startOf("day").toDate();
   let end = moment().tz("Asia/Jakarta").endOf("day").toDate();
-  // console.log(start, end);
   let jadwal = await Screening.aggregate()
     .match({ showtime: { $gte: start, $lt: end } })
+    .group({ _id: "$movie" })
+    .lookup({
+      from: "movies",
+      localField: "_id",
+      foreignField: "_id",
+      as: "movie",
+    })
+    .unwind("$movie")
+    .project({ _id: 0, movie: 1 });
+  return res.status(200).send(jadwal);
+};
+const getPresales = async (req, res) => {
+  let start = moment()
+    .tz("Asia/Jakarta")
+    .add(1, "days")
+    .startOf("day")
+    .toDate();
+  let jadwal = await Screening.aggregate()
+    .match({ showtime: { $gte: start } })
     .group({ _id: "$movie" })
     .lookup({
       from: "movies",
@@ -59,9 +78,19 @@ const getScreeningByBranch = async (req, res) => {
     let end = moment(date).tz("Asia/Jakarta").endOf("day").toDate();
     options = { showtime: { $gte: start, $lte: end } };
   }
+  let findBranch = await Branch.findById(branch_id);
+  if (findBranch == null) {
+    return res.status(404).send({ message: "Branch not found" });
+  }
   let result = await Screening.aggregate([
     { $match: { branch: new ObjectId(branch_id), ...options } },
-    { $match: { showtime: { $gte: new Date() } } },
+    {
+      $match: {
+        showtime: {
+          $gte: moment(date).tz("Asia/Jakarta").startOf("day").toDate(),
+        },
+      },
+    },
     {
       $lookup: {
         from: "movies",
@@ -75,6 +104,7 @@ const getScreeningByBranch = async (req, res) => {
         _id: "$movie._id",
         title: { $first: "$movie.title" },
         img: { $first: "$movie.img" },
+        age_rating: { $first: "$movie.age_rating" },
         runtime_minutes: { $first: "$movie.runtime_minutes" },
         screenings: { $push: { screening_id: "$_id", showtime: "$showtime" } },
       },
@@ -83,6 +113,7 @@ const getScreeningByBranch = async (req, res) => {
       $project: {
         _id: 0,
         title: { $arrayElemAt: ["$title", 0] },
+        age_rating: { $arrayElemAt: ["$age_rating", 0] },
         img: { $arrayElemAt: ["$img", 0] },
         runtime_minutes: { $arrayElemAt: ["$runtime_minutes", 0] },
         screenings: {
@@ -91,7 +122,9 @@ const getScreeningByBranch = async (req, res) => {
       },
     },
   ]);
-  return res.status(200).send(result);
+  return res
+    .status(200)
+    .send({ branch_name: findBranch.branch_name, screenings: result });
 };
 const getScreeningByMovie = async (req, res) => {
   let { movie_id } = req.params;
@@ -224,12 +257,14 @@ const getSingleEventCategory = async (req, res) => {
   const { event_id } = req.params;
   try {
     let result = await EventCategory.find({ event: event_id });
-    let result2=await Promise.all(result.map(async (item)=>{
-      let booked=await EventTicket.find({event_category:item._id});
-      let ticketLeft=item.slot-booked.length
-      return {...item._doc,ticketLeft}
-    }));
-    result=result2;
+    let result2 = await Promise.all(
+      result.map(async (item) => {
+        let booked = await EventTicket.find({ event_category: item._id });
+        let ticketLeft = item.slot - booked.length;
+        return { ...item._doc, ticketLeft };
+      })
+    );
+    result = result2;
     if (!result) {
       return res.status(404).send({ error: "Event not found" });
     }
@@ -239,9 +274,6 @@ const getSingleEventCategory = async (req, res) => {
     return res.status(500).send({ error: "Internal server error" });
   }
 };
-
-
-
 
 module.exports = {
   getNowShowingMovie,
@@ -253,4 +285,5 @@ module.exports = {
   getOngoingEvent,
   getSingleEvent,
   getSingleEventCategory,
+  getPresales,
 };

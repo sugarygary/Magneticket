@@ -4,7 +4,6 @@ import client from "../util/client";
 export const loadInTheater = async (data) => {
   try {
     const response = await client.get("api/public/now-showing");
-
     return response.data;
   } catch (error) {
     if (error.response) {
@@ -116,10 +115,6 @@ export const loadSeatInfo = async (data) => {
       `api/user/screening/${data?.params?.screening_id}/seat-info`
     );
 
-    const responseMovie = await client.get(
-      `api/public/movie-details/${data?.params?.movie_id}`
-    );
-
     const menu = await client.get(
       `api/user/screening/${data?.params?.screening_id}/menu`
     );
@@ -132,7 +127,6 @@ export const loadSeatInfo = async (data) => {
       current_user: currUser.data,
       screening_id: data.params.screening_id,
       screening_data: screening_data.data,
-      detail_movie: responseMovie.data,
       menu: menu.data,
       promo: promotion.data,
     };
@@ -185,8 +179,7 @@ export const loadHistory = async (data) => {
     const response = await client.get(`api/user/history`);
     return response.data;
   } catch (error) {
-    console.error("Error fetching load history:", error);
-    return error.message;
+    return error;
   }
 };
 
@@ -282,10 +275,12 @@ export const loadDetailEvent = async (data) => {
 
 export const loadCategoryEvent = async (data) => {
   try {
-    const response = await client.get(`api/public/event-category/${data.params.event_id}`);
+    const response = await client.get(
+      `api/public/event-category/${data.params.event_id}`
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching category event:", error);
     return error.message;
   }
-}
+};

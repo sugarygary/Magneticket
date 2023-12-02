@@ -335,13 +335,13 @@ export default function SeatingPage() {
               <div className="basis-full sm:basis-1/5">
                 <img
                   className="w-full h-auto aspect-[2/3] rounded"
-                  src={data.detail_movie.img}
+                  src={data.screening_data.movie_img}
                   alt=""
                 />
               </div>
               <div className="basis-full p-4 sm:basis-4/5">
                 <div className="text-2xl mb-2 font-semibold ">
-                  {data.detail_movie.title}
+                  {data.screening_data.movie_title}
                 </div>
                 <div>
                   <table className="sm:text-lg">

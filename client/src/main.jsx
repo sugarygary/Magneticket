@@ -70,7 +70,7 @@ import CineplexCreateStudio from "./pages/CineplexCreateStudio.jsx";
 import HistoryPage from "./pages/HistoryPage.jsx";
 import DetailHistory from "./pages/DetailHistory.jsx";
 import LoginEventOrganizer from "./pages/LoginEventOrganizer.jsx";
-import { UserFindBranch } from "./pages/UserFindBranch.jsx";
+import { UserFindBranch, loadBranches } from "./pages/UserFindBranch.jsx";
 import EventOrganizerCreateEvent from "./pages/EventOrganizerCreateEvent.jsx";
 import { createEvent } from "./handlers/EventOrganizerHandler.jsx";
 import CineplexHistoryTiket from "./pages/CineplexHistoryTiket.jsx";
@@ -78,7 +78,11 @@ import CineplexDetailHistoryTiket from "./pages/CineplexDetailHistoryTiket.jsx";
 import CineplexJadwal from "./pages/CineplexJadwal.jsx";
 import CineplexCreateScreening from "./pages/CineplexCreateScreening.jsx";
 import EventDetail from "./pages/EventDetail.jsx";
-
+import ScreeningByBranch, {
+  screeningByBranchLoader,
+} from "./pages/ScreeningByBranch.jsx";
+import client from "./util/client.js";
+import { UserFindFilm, loadFilms } from "./pages/UserFindFilm.jsx";
 
 async function coba() {
   let x = loadInTheater();
@@ -91,11 +95,9 @@ async function coba() {
 }
 
 const router = createBrowserRouter([
-  // 3 path utama buat masing-masing aktor
-  //masing masing aktor punya children
   {
     index: true,
-    element: <Navigate to="/user" />,
+    element: <Navigate to="/user" />, //REDIRECTOR CHECK COOKIE
     errorElement: <ErrorElement />,
   },
   {
@@ -110,7 +112,6 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <RegisterUser />,
-        // loader: loadUsers,
         action: registerUser,
         errorElement: <ErrorElement />,
       },
@@ -135,7 +136,6 @@ const router = createBrowserRouter([
           };
           return temp;
         },
-        // action: loginUser,
         errorElement: <ErrorElement />,
       },
       {
@@ -145,7 +145,7 @@ const router = createBrowserRouter([
         errorElement: <ErrorElement />,
       },
       {
-        path: "seating/:movie_id/:screening_id",
+        path: "seating/:screening_id",
         element: <SeatingPage></SeatingPage>,
         loader: loadSeatInfo,
         errorElement: <ErrorElement />,
@@ -163,13 +163,44 @@ const router = createBrowserRouter([
         errorElement: <ErrorElement />,
       },
       {
-        path: "branches",
-        element: <UserFindBranch></UserFindBranch>,
+        path: "bioskop",
         errorElement: <ErrorElement />,
+        children: [
+          {
+            index: true,
+            element: <UserFindBranch></UserFindBranch>,
+            loader: loadBranches,
+            errorElement: <ErrorElement />,
+          },
+          {
+            path: ":branch_id",
+            element: <ScreeningByBranch></ScreeningByBranch>,
+            loader: screeningByBranchLoader,
+            errorElement: <ErrorElement />,
+          },
+        ],
+      },
+      {
+        path: "film",
+        errorElement: <ErrorElement />,
+        children: [
+          {
+            index: true,
+            element: <UserFindFilm></UserFindFilm>,
+            loader: loadFilms,
+            errorElement: <ErrorElement />,
+          },
+          {
+            path: ":movie_id/screening",
+            element: <ScreeningByMovie></ScreeningByMovie>,
+            loader: loadScreenByMovie,
+            errorElement: <ErrorElement />,
+          },
+        ],
       },
       {
         path: "event/:event_id",
-        element: <EventDetail/>,
+        element: <EventDetail />,
         loader: async (params) => {
           console.log("ini params", params);
           let x = await loadDetailEvent(params);
@@ -181,7 +212,7 @@ const router = createBrowserRouter([
           return temp;
         },
         errorElement: <ErrorElement />,
-      }
+      },
     ],
   },
   {

@@ -16,23 +16,23 @@ export default function HomepageCarousel() {
     <Slider {...settings}>
       <div>
         <img
-          src="https://media.21cineplex.com/webcontent/gallery/pictures/165209081845156_925x527.jpg"
+          src="https://web3.21cineplex.com/mobile-banner/msite%20queen.jpg"
           alt=""
-          className="w-full h-auto aspect-[16/9]"
+          className="w-full h-auto"
         />
       </div>
       <div>
         <img
-          src="https://media.21cineplex.com/webcontent/gallery/pictures/167652365439081_925x527.jpg"
+          src="https://web3.21cineplex.com/mobile-banner/hungergamescombomsite.jpg"
           alt=""
-          className="w-full h-auto aspect-[16/9]"
+          className="w-full h-auto"
         />
       </div>
       <div>
         <img
-          src="https://media.21cineplex.com/webcontent/gallery/pictures/158251458710331_926x528.jpg"
+          src="https://web3.21cineplex.com/mobile-banner/msite.waspada.jpg"
           alt=""
-          className="w-full h-auto aspect-[16/9]"
+          className="w-full h-auto"
         />
       </div>
     </Slider>

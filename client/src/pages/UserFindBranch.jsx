@@ -2,59 +2,84 @@ import { initFlowbite } from "flowbite";
 import React, { useEffect, useState } from "react";
 import { kotaDanKabupaten } from "../util/kotaDanKabupaten";
 import client from "../util/client";
+import {
+  Link,
+  useLoaderData,
+  useNavigation,
+  useSearchParams,
+} from "react-router-dom";
 export const UserFindBranch = () => {
-  const [cineplex, setCineplex] = useState([]);
-  const [branches, setBranches] = useState([]);
-  const [selectedCineplex, setSelectedCineplex] = useState("");
-  const [selectedArea, setSelectedArea] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  async function fetchCineplexes() {
-    let cineplexes = await client.get("api/public/cineplexes");
-    setCineplex(cineplexes.data);
-  }
-  async function fetchBranches() {
-    setIsLoading(true);
-    let params = { city: selectedArea, cineplex: selectedCineplex };
-    let branches = await client.get("api/public/branches", params);
-    setBranches(branches.data);
-    setIsLoading(false);
+  const { branches, cineplexes } = useLoaderData();
+  let [searchParams, setSearchParams] = useSearchParams();
+  const { state } = useNavigation();
+  function handleFilterChange(key, value) {
+    setSearchParams((prevParams) => {
+      if (value === "") {
+        prevParams.delete(key);
+      } else {
+        prevParams.set(key, value);
+      }
+      return prevParams;
+    });
   }
   useEffect(() => {
     initFlowbite();
-    fetchCineplexes();
-    fetchBranches();
   }, []);
   return (
     <div className="mt-24 px-4">
+      <div className="font-bold text-2xl mb-4">Bioskop Tersedia</div>
+      <div className="font-bold mb-1">Filter</div>
       <div className="flex gap-1">
-        <label htmlFor="cineplxex" className="sr-only">
-          Pilih Cineplex
-        </label>
-        <select
-          id="cineplex"
-          autoFocus
-          className="w-1/4 border text-sm rounded border-s-2 focus:border-blue-500 block w-full p-2.5 biruTua border-gray-600 placeholder-gray-400 text-[#f8f8f8] focus:ring-blue-500 focus:border-blue-500"
-        >
-          <option selected="">Pilih Cineplex</option>
-          {cineplex.map((c) => (
-            <option value={c._id}>{c.brand_name}</option>
-          ))}
-        </select>
-        <label htmlFor="city" className="sr-only">
-          Pilih Kota
-        </label>
-        <select
-          id="city"
-          autoFocus
-          className="border text-sm rounded border-s-2 focus:border-blue-500 block w-full p-2.5 biruTua border-gray-600 placeholder-gray-400 text-[#f8f8f8] focus:ring-blue-500 focus:border-blue-500"
-        >
-          <option selected="">Pilih Kota</option>
-          {kotaDanKabupaten.map((k) => (
-            <option value={k}>{k}</option>
-          ))}
-        </select>
+        <div className="w-1/4">
+          <label htmlFor="cineplex" className="sr-only">
+            Pilih Cineplex
+          </label>
+          <select
+            id="cineplex"
+            autoFocus
+            defaultValue={
+              searchParams.get("cineplex") == null
+                ? ""
+                : searchParams.get("city")
+            }
+            onChange={(e) => {
+              handleFilterChange("cineplex", e.target.value);
+            }}
+            className="border text-sm rounded border-s-2 focus:border-blue-500 block w-full p-2.5 biruTua border-gray-600 placeholder-gray-400 text-[#f8f8f8] focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="">Pilih Cineplex</option>
+            {cineplexes.map((c) => (
+              <option key={c.brand_name} value={c._id}>
+                {c.brand_name}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="w-full">
+          <label htmlFor="city" className="sr-only">
+            Pilih Kota
+          </label>
+          <select
+            id="city"
+            autoFocus
+            defaultValue={
+              searchParams.get("city") == null ? "" : searchParams.get("city")
+            }
+            onChange={(e) => {
+              handleFilterChange("city", e.target.value);
+            }}
+            className="border text-sm rounded border-s-2 focus:border-blue-500 block w-full p-2.5 biruTua border-gray-600 placeholder-gray-400 text-[#f8f8f8] focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="">Pilih Kota</option>
+            {kotaDanKabupaten.map((k) => (
+              <option key={k} value={k}>
+                {k}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
-      {isLoading && (
+      {state != "idle" && (
         <div className="grid place-items-center mt-12">
           <div role="status" className="">
             <svg
@@ -76,15 +101,57 @@ export const UserFindBranch = () => {
           </div>
         </div>
       )}
-      {!isLoading && (
+      {state == "idle" && branches.length > 0 && (
         <div className="mt-4">
           {branches.map((b) => (
-            <div className="w-full shadow mb-px rounded biruTua text-[#f8f8f8] py-2.5 px-4 cursor-pointer hover:bg-gray-700">
-              {b.branch_name}
-            </div>
+            <Link to={b._id} key={b._id}>
+              <div
+                key={b._id}
+                className="w-full shadow mb-px rounded biruTua text-[#f8f8f8] py-2.5 px-4 cursor-pointer hover:bg-gray-700"
+              >
+                {b.branch_name}
+              </div>
+            </Link>
           ))}
+        </div>
+      )}
+      {state == "idle" && branches.length == 0 && (
+        <div className="h-48 md:h-96 grid place-items-center">
+          <div className="text-xl">
+            <div className="font-bold mb-4 text-4xl">{":("}</div>
+            Maaf, hasil pencarian tidak ditemukan.
+          </div>
         </div>
       )}
     </div>
   );
 };
+export async function loadBranches({ request }) {
+  let branches, cineplexes;
+  try {
+    const url = new URL(request.url);
+    if (url.searchParams.get("city") != null) {
+      if (!kotaDanKabupaten.includes(url.searchParams.get("city"))) {
+        throw new Response("City not found!", { status: 404 });
+      }
+    }
+
+    let params = {
+      city: url.searchParams.get("city"),
+      cineplex: url.searchParams.get("cineplex"),
+    };
+    branches = await client.get("api/public/branches", { params });
+    cineplexes = await client.get("api/public/cineplexes");
+  } catch (error) {
+    if (error.response) {
+      if (error.response.status == 404) {
+        throw new Response("Not found", { status: 404 });
+      }
+    } else if (error.request) {
+      throw new Response("Internal Server Error", { status: 500 });
+    }
+    return error;
+  }
+
+  return { branches: branches.data, cineplexes: cineplexes.data };
+}

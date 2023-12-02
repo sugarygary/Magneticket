@@ -118,7 +118,13 @@ const loginUser = async function (req, res) {
     res.status(403);
     throw new Error("Please activate your account");
   }
-  generateToken(res, findUser._id.toString(), "USER");
+  generateToken(
+    res,
+    findUser._id.toString(),
+    "USER",
+    findUser.email,
+    findUser.full_name
+  );
   return res.status(200).send({
     message: "Login success",
     _id: findUser._id.toString(),
@@ -131,10 +137,19 @@ const loginUser = async function (req, res) {
 const currentUser = async function (req, res) {
   const token = req.cookies.magneticket_token;
   if (!token) {
-    return res.status(200).send({ userId: null, role: null });
+    return res
+      .status(200)
+      .send({ userId: null, role: null, email: null, display_name: null });
   }
   const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
-  return res.status(200).send({ userId: verified.userId, role: verified.role });
+  return res
+    .status(200)
+    .send({
+      userId: verified.userId,
+      role: verified.role,
+      email: verified.email,
+      display_name: verified.display_name,
+    });
 };
 
 const logout = async function (req, res) {
@@ -270,20 +285,14 @@ const registerCineplex = async function (req, res) {
       __dirname,
       `../../uploads/cineplex/${req.files.npwp[0].filename}`
     ),
-    path.join(
-      __dirname,
-      `../../uploads/cineplex/npwp-${newCineplex._id}.jpg`
-    )
+    path.join(__dirname, `../../uploads/cineplex/npwp-${newCineplex._id}.jpg`)
   );
   fs.renameSync(
     path.join(
       __dirname,
       `../../uploads/cineplex/${req.files.surat[0].filename}`
     ),
-    path.join(
-      __dirname,
-      `../../uploads/cineplex/surat-${newCineplex._id}.jpg`
-    )
+    path.join(__dirname, `../../uploads/cineplex/surat-${newCineplex._id}.jpg`)
   );
   await newCineplex.save();
   const link = `${BACKEND_URL}/api/auth/activate-cineplex/${newCineplex._id.toString()}`;
@@ -352,7 +361,13 @@ const loginCineplex = async function (req, res) {
     res.status(403);
     throw new Error("Please wait for the verification for your account :)");
   }
-  generateToken(res, findCineplex._id.toString(), "CINEPLEX");
+  generateToken(
+    res,
+    findCineplex._id.toString(),
+    "CINEPLEX",
+    findCineplex.email,
+    findCineplex.brand_name
+  );
   return res.status(200).send({
     message: "Login success",
     _id: findCineplex._id.toString(),
@@ -451,7 +466,13 @@ const loginPromotor = async function (req, res) {
     res.status(403);
     throw new Error("Please wait for the verification for your account :)");
   }
-  generateToken(res, findPromotor._id.toString(), "PROMOTOR");
+  generateToken(
+    res,
+    findPromotor._id.toString(),
+    "PROMOTOR",
+    findPromotor.email,
+    findPromotor.brand_name
+  );
   return res.status(200).send({
     message: "Login success",
     _id: findPromotor._id.toString(),

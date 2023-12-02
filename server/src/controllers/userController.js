@@ -82,6 +82,7 @@ const getSeatsInfo = async (req, res) => {
     showtime: findScreening.showtime,
     price: findScreening.price,
     movie_title: findScreening.movie.title,
+    movie_img: findScreening.movie.img,
     studio_name: findStudio.studio_name,
     studio_type: findStudio.type,
     seating_layout: findStudio.seating_layout,

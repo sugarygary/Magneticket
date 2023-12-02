@@ -10,7 +10,7 @@ export const fetchCurrentUser = createAsyncThunk(
 );
 
 const initialState = {
-  current_user: { userId: null, role: null },
+  current_user: { userId: null, role: null, email: null, display_name: null },
   status: "idle",
   error: null,
 };

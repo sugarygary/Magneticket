@@ -24,7 +24,7 @@ server.use(cookieParser());
 // server.use(function (req, res, next) {
 //   setTimeout(next, 1000);
 // });
-server.use(express.static('uploads'))
+server.use(express.static("uploads"));
 server.use("/api", router);
 
 getDBStatus();
@@ -35,7 +35,7 @@ server.get("/", (req, res) => {
 
 init();
 server.use(notFound);
-// server.use(errorHandler);
+server.use(errorHandler);
 server.listen(PORT, async () => {
   console.log(`Server running on port http://${HOSTNAME}:${PORT}/`);
 });

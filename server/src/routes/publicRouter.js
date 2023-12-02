@@ -9,16 +9,50 @@ const {
   getOngoingEvent,
   getSingleEvent,
   getSingleEventCategory,
+  getPresales,
 } = require("../controllers/publicController");
+const expressAsyncHandler = require("express-async-handler");
 const publicRouter = express.Router();
-publicRouter.get("/now-showing", getNowShowingMovie);
-publicRouter.get("/branches", getBranch);
-publicRouter.get("/cineplexes", getCineplex);
-publicRouter.get("/screenings-by-branch/:branch_id", getScreeningByBranch);
-publicRouter.get("/screenings-by-movie/:movie_id", getScreeningByMovie);
-publicRouter.get("/movie-details/:movie_id", getMovieDetails);
-publicRouter.get("/ongoing-event", getOngoingEvent);
-publicRouter.get("/event-details/:event_id", getSingleEvent);
-publicRouter.get("/event-category/:event_id", getSingleEventCategory);
+publicRouter.get("/now-showing", expressAsyncHandler(getNowShowingMovie));
+publicRouter.get("/pre-sale", expressAsyncHandler(getPresales));
+publicRouter.get("/branches", expressAsyncHandler(getBranch));
+publicRouter.get("/cineplexes", expressAsyncHandler(getCineplex));
+publicRouter.get(
+  "/screenings-by-branch/:branch_id",
+  expressAsyncHandler(getScreeningByBranch)
+);
+publicRouter.get(
+  "/screenings-by-movie/:movie_id",
+  expressAsyncHandler(getScreeningByMovie)
+);
+publicRouter.get(
+  "/movie-details/:movie_id",
+  expressAsyncHandler(getMovieDetails)
+);
+publicRouter.get("/ongoing-event", expressAsyncHandler(getOngoingEvent));
+publicRouter.get(
+  "/event-details/:event_id",
+  expressAsyncHandler(getSingleEvent)
+);
+publicRouter.get(
+  "/event-category/:event_id",
+  expressAsyncHandler(getSingleEventCategory)
+);
+publicRouter.get("/now-showing", expressAsyncHandler(getNowShowingMovie));
+publicRouter.get("/branches", expressAsyncHandler(getBranch));
+publicRouter.get("/cineplexes", expressAsyncHandler(getCineplex));
+publicRouter.get(
+  "/screenings-by-branch/:branch_id",
+  expressAsyncHandler(getScreeningByBranch)
+);
+publicRouter.get(
+  "/screenings-by-movie/:movie_id",
+  expressAsyncHandler(getScreeningByMovie)
+);
+publicRouter.get(
+  "/movie-details/:movie_id",
+  expressAsyncHandler(getMovieDetails)
+);
+publicRouter.get("/ongoing-event", expressAsyncHandler(getOngoingEvent));
 
 module.exports = publicRouter;

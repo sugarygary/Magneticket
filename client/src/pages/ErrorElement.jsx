@@ -20,6 +20,7 @@ const ErrorElement = () => {
         <div className="text-xl font-semibold">Internal Server Error</div>
       )}
       <Link to="/" className="text-blue-700">
+        {error.message}
         Go back
       </Link>
     </div>

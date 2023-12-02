@@ -9,11 +9,9 @@ import { Provider } from "react-redux";
 export const LayoutCineplex = () => {
   return (
     <>
-      <Provider store={userStore}>
-        <CineplexHeader></CineplexHeader>
-        <Outlet></Outlet>
-        <Footer></Footer>
-      </Provider>
+      <CineplexHeader></CineplexHeader>
+      <Outlet></Outlet>
+      <Footer></Footer>
     </>
   );
 };

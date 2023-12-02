@@ -4,32 +4,38 @@ import { useDispatch, useSelector } from "react-redux";
 import CardHistoryTransaksi from "../components/CardHistoryTransaksi";
 
 function HistoryPage() {
-    const data = useLoaderData();
-    const navigate = useNavigate();
-    const { current_user, status } = useSelector((state) => state.user);
-    useEffect(() => {
-      if (
-        (current_user.userId == null || current_user.role != "USER") &&
-        status == "succeeded"
-      ) {
-        navigate("/user/login", { replace: true });
-      }
-    }, []);
+  const data = useLoaderData();
+  const navigate = useNavigate();
+  const { current_user, status } = useSelector((state) => state.user);
+  useEffect(() => {
     if (
       (current_user.userId == null || current_user.role != "USER") &&
       status == "succeeded"
     ) {
       navigate("/user/login", { replace: true });
     }
-
-    return (
-        <div className="py-10 text-black">
-            {data.map((history, index) => {
-                return <CardHistoryTransaksi key={index} {...history}></CardHistoryTransaksi>
-            })
-            }
-        </div>
+  }, []);
+  if (
+    (current_user.userId == null || current_user.role != "USER") &&
+    status == "succeeded"
+  ) {
+    navigate("/user/login", { replace: true });
+    return;
+  }
+  {
+    status == "succeeded" && (
+      <div className="py-10 text-black">
+        {data.map((history, index) => {
+          return (
+            <CardHistoryTransaksi
+              key={index}
+              {...history}
+            ></CardHistoryTransaksi>
+          );
+        })}
+      </div>
     );
+  }
 }
 
 export default HistoryPage;

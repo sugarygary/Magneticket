@@ -80,7 +80,7 @@ const UserLoginForm = (props) => {
             />
           </div>
           {errorMsg != null && <span className="text-red-500">{errorMsg}</span>}
-          <div className="mb-3 text-left mt-10">
+          <div className="mb-3 text-left mt-4">
             <button className="biruMuda w-full rounded p-1 pl-2">Masuk</button>
           </div>
           <div className="mb-3 text-left flex">

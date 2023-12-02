@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import logo1 from "../assets/logo1.png";
 import search from "../assets/search.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCurrentUser } from "../redux/userSlice";
 import client from "../util/client";
@@ -24,10 +24,10 @@ const Header = (props) => {
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link
           to={"/user/home"}
-          className="flex items-center space-x-3 rtl:space-x-reverse"
+          className="flex select-none items-center space-x-1 md:space-x-3 rtl:space-x-reverse"
         >
-          <img src={logo1} className="h-8" />
-          <span className="self-center font-magneticket text-xl sm:text-4xl [#f8f8f8]space-nowrap text-[#f8f8f8]">
+          <img src={logo1} className="h-6 md:h-8" />
+          <span className="self-center font-magneticket text-md md:text-4xl [#f8f8f8]space-nowrap text-[#f8f8f8]">
             | MAGNETICKET
           </span>
         </Link>
@@ -62,35 +62,27 @@ const Header = (props) => {
               >
                 <div className="px-4 py-3">
                   <span className="block text-sm text-[#f8f8f8]">
-                    Bonnie Green
+                    {current_user.display_name}
                   </span>
                   <span className="block text-sm truncate text-gray-400">
-                    name@flowbite.com
+                    {current_user.email}
                   </span>
                 </div>
                 <ul className="py-2" aria-labelledby="user-menu-button">
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to={"/user/history"}
                       className="block px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-[#f8f8f8]"
                     >
-                      Dashboard
-                    </a>
+                      Transaksi
+                    </Link>
                   </li>
                   <li>
                     <a
                       href="#"
                       className="block px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-[#f8f8f8]"
                     >
-                      Settings
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-[#f8f8f8]"
-                    >
-                      Earnings
+                      Tiket Saya
                     </a>
                   </li>
                   <li>
@@ -103,34 +95,10 @@ const Header = (props) => {
                   </li>
                 </ul>
               </div>
-              <button
-                data-collapse-toggle="navbar-user"
-                type="button"
-                className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm rounded-lg md:hidden focus:outline-none focus:ring-2 text-gray-400 hover:bg-gray-700 focus:ring-gray-600"
-                aria-controls="navbar-user"
-                aria-expanded="false"
-              >
-                <span className="sr-only">Open main menu</span>
-                <svg
-                  className="w-5 h-5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 17 14"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M1 1h15M1 7h15M1 13h15"
-                  />
-                </svg>
-              </button>
             </>
           )}
           {current_user.role != "USER" && (
-            <div className="flex items-center space-x-6 rtl:space-x-reverse">
+            <div className="flex items-center space-x-4 rtl:space-x-reverse">
               <Link
                 to={"/user/login"}
                 className="text-sm text-[#f8f8f8] hover:text-[#1C64F2] hover:underline"
@@ -145,6 +113,30 @@ const Header = (props) => {
               </Link>
             </div>
           )}
+          <button
+            data-collapse-toggle="navbar-user"
+            type="button"
+            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm rounded-lg md:hidden focus:outline-none focus:ring-2 text-gray-400 hover:bg-gray-700 focus:ring-gray-600"
+            aria-controls="navbar-user"
+            aria-expanded="false"
+          >
+            <span className="sr-only">Open main menu</span>
+            <svg
+              className="w-5 h-5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 17 14"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M1 1h15M1 7h15M1 13h15"
+              />
+            </svg>
+          </button>
         </div>
         <div
           className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
@@ -152,79 +144,50 @@ const Header = (props) => {
         >
           <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 bg-gray-800 md:biruTua border-gray-700">
             <li>
-              <a
-                href="#"
-                className="block py-2 px-3 text-[#f8f8f8] bg-blue-700 rounded md:bg-transparent md:p-0 md:text-blue-500"
+              <NavLink
+                to="/user/home"
+                className={({ isActive }) =>
+                  isActive
+                    ? "block py-2 px-3 text-[#f8f8f8] bg-blue-700 rounded md:bg-transparent md:p-0 md:text-blue-500"
+                    : "block py-2 px-3 rounded md:p-0 text-[#f8f8f8] md:hover:text-blue-500 hover:bg-gray-700 hover:text-[#f8f8f8] md:hover:bg-transparent"
+                }
                 aria-current="page"
               >
                 Home
-              </a>
+              </NavLink>
             </li>
             <li>
               <a
                 href="#"
                 className="block py-2 px-3 rounded md:p-0 text-[#f8f8f8] md:hover:text-blue-500 hover:bg-gray-700 hover:text-[#f8f8f8] md:hover:bg-transparent"
               >
-                About
+                Event
               </a>
             </li>
             <li>
-              <a
-                href="#"
-                className="block py-2 px-3 rounded md:p-0 text-[#f8f8f8] md:hover:text-blue-500 hover:bg-gray-700 hover:text-[#f8f8f8] md:hover:bg-transparent border-gray-700"
+              <NavLink
+                to="/user/bioskop"
+                className={({ isActive }) =>
+                  isActive
+                    ? "block py-2 px-3 text-[#f8f8f8] bg-blue-700 rounded md:bg-transparent md:p-0 md:text-blue-500"
+                    : "block py-2 px-3 rounded md:p-0 text-[#f8f8f8] md:hover:text-blue-500 hover:bg-gray-700 hover:text-[#f8f8f8] md:hover:bg-transparent"
+                }
+                aria-current="page"
               >
-                Services
-              </a>
+                Bioskop
+              </NavLink>
             </li>
             <li>
-              <button
-                id="dropdownNavbarLink"
-                data-dropdown-toggle="dropdownNavbar"
-                className="flex items-center justify-between w-full py-2 px-3 rounded md:border-0 md:p-0 md:w-auto text-[#f8f8f8] md:hover:text-blue-500 focus:text-[#f8f8f8] border-gray-700 hover:bg-gray-700 md:hover:bg-transparent"
+              <NavLink
+                to="/user/film"
+                className={({ isActive }) =>
+                  isActive
+                    ? "block py-2 px-3 text-[#f8f8f8] bg-blue-700 rounded md:bg-transparent md:p-0 md:text-blue-500"
+                    : "block py-2 px-3 rounded md:p-0 text-[#f8f8f8] md:hover:text-blue-500 hover:bg-gray-700 hover:text-[#f8f8f8] md:hover:bg-transparent"
+                }
               >
-                Dropdown
-                <svg
-                  className="w-2.5 h-2.5 ms-2.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 10 6"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="m1 1 4 4 4-4"
-                  />
-                </svg>
-              </button>
-              <div
-                id="dropdownNavbar"
-                className="z-10 hidden font-normal divide-y rounded-lg shadow w-44 bg-gray-700 divide-gray-600"
-              >
-                <ul
-                  className="py-2 text-sm text-gray-400"
-                  aria-labelledby="dropdownLargeButton"
-                >
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-gray-100 hover:bg-gray-600 hover:text-[#f8f8f8]"
-                    >
-                      Dashboard
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 hover:bg-gray-600 hover:text-[#f8f8f8]"
-                    >
-                      Settings
-                    </a>
-                  </li>
-                </ul>
-              </div>
+                Film
+              </NavLink>
             </li>
           </ul>
         </div>

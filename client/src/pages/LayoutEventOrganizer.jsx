@@ -9,11 +9,9 @@ import { Provider } from "react-redux";
 export const LayoutEventOrganizer = () => {
   return (
     <>
-      <Provider store={userStore}>
-        <EventOrganizerHeader></EventOrganizerHeader>
-        <Outlet></Outlet>
-        <Footer></Footer>
-      </Provider>
+      <EventOrganizerHeader></EventOrganizerHeader>
+      <Outlet></Outlet>
+      <Footer></Footer>
     </>
   );
 };
