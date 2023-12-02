@@ -58,8 +58,8 @@ const CineplexCreatePromo = (props) => {
     navigate("/cineplex/kode-promo");
   }
   return (
-    <div className=" w-screen h-full flex justify-center items-center text-white my-10">
-      <div className="biruTua p-12 text-center rounded  w-1/2 mx-auto ">
+    <div className=" w-full h-full flex justify-center items-center text-white my-10">
+      <div className="biruTua p-12 text-center rounded w-3/4 mx-auto ">
         <form action="" className="mt-5" onSubmit={submitForm}>
           <div className="mb-3 text-left">
             <p>Kode Promo</p>

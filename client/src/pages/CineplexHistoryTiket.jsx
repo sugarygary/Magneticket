@@ -89,7 +89,7 @@ const CineplexHistoryTiket = () => {
   }, [tanggal, kota, cabang]);
 
   return (
-    <div className="p-4">
+    <div className="px-12 py-4">
       <p className="text-2xl font-bold">Informasi Ticket</p>
       <div className="flex gap-3 my-4">
         <div>

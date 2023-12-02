@@ -50,12 +50,12 @@ export default function CineplexCreateMenu() {
     <>
       <div className="biruTua p-5 my-10 rounded w-3/4 mx-auto ">
         <div className="text-center text-white">
-          <div className="flex justify-center items-center">
-            <img src={upload} alt="" className="w-12" />
+          <div className="flex justify-center items-center mt-4 pb-4">
+            <img src={upload} alt="" className="w-12 invert" />
           </div>
           <p>Unggah Foto Produk</p>
           <p>Direkomendasikan 595 x 842 px dan tidak lebih dari 30 MB</p>
-          <div className="ml-12 ">
+          <div className="ml-12 pb-6">
             <input
               type="file"
               name=""

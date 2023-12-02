@@ -19,10 +19,10 @@ export default function CineplexConcession() {
         <p className="mb-2">Nama Menu</p>
         <div className="justify-between flex">
           <div className="flex w-1/2 biruTua rounded">
-            <img src={search} alt="" className="w-7 h-7 mt-3 ml-1 mr-1" />
+            <img src={search} alt="" className="w-7 h-7 mt-2 ml-1 mr-1" />
             <input
               type="text"
-              className="biruTua w-  rounded border-transparent"
+              className="biruTua w-full rounded border-transparent focus:outline-none text-white px-2"
               placeholder="Search"
             />
           </div>

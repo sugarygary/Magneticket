@@ -32,8 +32,8 @@ export default function CineplexListStudios() {
     navigate("/cineplex/login", { replace: true });
   }
   return (
-    <div className=" w-screen h-full justify-center items-center text-white my-10">
-      <div className="biruTua p-5 text-center rounded  w-1/2 mx-auto mb-5">
+    <div className=" w-full h-full justify-center items-center text-white my-10">
+      <div className="biruTua p-5 text-center rounded w-3/4 mx-auto mb-5">
         <div className="flex justify-between">
           <p className="text-2xl font-bold text-left mb-5">
             {matchingBranch.branch_name}

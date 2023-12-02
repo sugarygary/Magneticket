@@ -49,8 +49,8 @@ const CineplexLoginForm = (props) => {
     navigate("/cineplex/home");
   }
   return (
-    <div className=" w-screen h-full flex justify-center text-white my-5">
-      <div className="biruTua p-12 rounded  w-1/2 mx-auto ">
+    <div className=" w-full h-full flex justify-center text-white my-5">
+      <div className="biruTua p-12 rounded w-3/4 mx-auto ">
         <div className="justify-center">
           <img src={logo1} alt="" className="w-96 mx-auto" />
           <p className="font-magneticket text-center text-7xl">MAGNETICKET</p>

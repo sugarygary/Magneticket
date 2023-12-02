@@ -81,7 +81,7 @@ const CineplexRegisterForm = (props) => {
   };
   return (
     <div className=" w-full h-full flex justify-center items-center text-white my-10">
-      <div className="biruTua p-12 text-center rounded  w-1/2 mx-auto ">
+      <div className="biruTua p-12 text-center rounded  w-3/4 mx-auto ">
         <div className="justify-center">
           <img src={logo1} alt="" className="w-96 mx-auto" />
           <p className="font-magneticket text-7xl">MAGNETICKET</p>

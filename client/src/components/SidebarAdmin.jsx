@@ -20,8 +20,6 @@ const SidebarAdmin = (props) => {
             <p className="font-magneticket text-4xl">MAGNETICKET</p>
         </div>
       </div>
-
-      {/* Sidebar Links */}
       <nav className="text-md mt-2">
         <ul>
           <li className="py-2 px-4 hover:bg-gray-700">
@@ -32,7 +30,6 @@ const SidebarAdmin = (props) => {
           </li>
           <li className="py-2 px-4 hover:bg-gray-700">
             <a href="#" className="block" onClick={() => {buttonSales()}}>Sales</a>
-            {/* Nested Links for Sales */}
             {boolSales &&
                 <ul className="pl-4">
               <li className="py-2 px-4 hover:bg-gray-700">

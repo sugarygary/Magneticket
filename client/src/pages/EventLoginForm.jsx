@@ -54,8 +54,8 @@ const EventLoginForm = (props) => {
     navigate("/event-organizer/home");
   }
   return (
-    <div className="w-full h-full flex justify-center text-white mt-24 my-12">
-      <div className="biruTua p-12 rounded w-3/4 sm:w-1/2 mx-auto ">
+    <div className="w-full flex justify-center text-white mt-24 my-12">
+      <div className="biruTua p-12 rounded w-3/4 mx-auto ">
         <div className="justify-center">
           <img src={logo1} alt="" className="w-48 mx-auto" />
           <p className="font-magneticket text-center text-4xl">MAGNETICKET</p>

@@ -88,6 +88,7 @@ import { UserFindFilm, loadFilms } from "./pages/UserFindFilm.jsx";
 import PromotorHistoryTiket from "./pages/PromotorHistoryTicket.jsx";
 import PromotorDetailHistoryTiket from "./pages/PromotorDetailHistoryTiket.jsx";
 import HomeCineplex from "./pages/CineplexHome.jsx"
+import EventOrganizerHome from "./pages/EventOrganizerHome.jsx";
 
 async function coba() {
   let x = loadInTheater();
@@ -361,6 +362,13 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <LoginEventOrganizer />,
+        // loader: loadUsers,
+        // action: loginEventOrganizer,
+        errorElement: <ErrorElement />,
+      },
+      {
+        path: "home",
+        element: <EventOrganizerHome />,
         // loader: loadUsers,
         // action: loginEventOrganizer,
         errorElement: <ErrorElement />,
