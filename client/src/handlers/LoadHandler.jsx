@@ -224,7 +224,27 @@ export const loadCineplexDetailHistory = async (data) => {
     return error.message;
   }
 };
-
+export const loadPromotorHistory = async (data) => {
+  try {
+    const response = await client.get(`api/promotor/event-ticket`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching load history:", error);
+    return error.message;
+  }
+};
+export const loadPromotorDetailHistory = async (data) => {
+  console.log("ehehehehehe", data.params.history_id);
+  try {
+    const response = await client.get(
+      `api/promotor/event-ticket/${data.params.history_id}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching load history:", error);
+    return error.message;
+  }
+};
 export const loadCineplexJadwal = async (data) => {
   try {
     const response = await client.get(`api/cineplex/screenings`);

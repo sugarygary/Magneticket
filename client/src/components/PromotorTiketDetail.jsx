@@ -7,7 +7,7 @@ import openheimer from "../assets/openheimer.jpg";
 import bcaVA from "../assets/bca_va.png";
 import { Link } from "react-router-dom";
 
-const CineplexTiketDetail = (props) => {
+const PromotorTiketDetail = (props) => {
   console.log("ini props", props);
   return (
     <div className="my-5 rounded  shadow-lg p-10 bgCardHistory border border-black">
@@ -17,11 +17,11 @@ const CineplexTiketDetail = (props) => {
           Kembali
         </Link>
       </div>
-      <p className="text-lg font-bold mt-3">{props.screening.movie.title}</p>
+      <p className="text-lg font-bold mt-3">{props.event.event_name}</p>
       <div className="w-full mt-3 flex ">
         <div>
           <img
-            src={props.screening.movie.img}
+            src={`${process.env.BACKEND_URL}/promotor/eventposter-${props.event._id}.jpg`}
             alt=""
             className="w-48 rounded"
           />
@@ -40,48 +40,34 @@ const CineplexTiketDetail = (props) => {
               <tr>
                 <td>ID Jadwal</td>
                 <td> : </td>
-                <td>{props.screening._id}</td>
-              </tr>
-              <tr>
-                <td>Bioskop</td>
-                <td> : </td>
-                <td>{props.screening.branch.branch_name}</td>
-              </tr>
-              <tr>
-                <td>Studio</td>
-                <td> : </td>
-                <td>{props.screening.studio.studio_name}</td>
+                <td>{props.event._id}</td>
               </tr>
               <tr>
                 <td>Kota</td>
                 <td> : </td>
-                <td>{props.screening.branch.city}</td>
+                <td>{props.event.city}</td>
               </tr>
+
               <tr>
-                <td>Tiket</td>
+                <td>Kategori</td>
                 <td> : </td>
-                <td>{props.seats.length} Tiket</td>
-              </tr>
-              <tr>
-                <td>Tempat Duduk</td>
-                <td> : </td>
-                <td>{props.transaction.seats}</td>
-              </tr>
-              <tr>
-                <td>Tipe</td>
-                <td> : </td>
-                <td>{props.screening.studio.type}</td>
+                <td>{props.event_category.category_name}</td>
               </tr>
 
               <tr>
                 <td>Hari/Tanggal</td>
                 <td> : </td>
-                <td>{props.screening.showtime.substring(0, 10)}</td>
+                <td>{props.event.showtime.substring(0, 10)}</td>
               </tr>
               <tr>
                 <td>Waktu</td>
                 <td> : </td>
-                <td>{props.screening.showtime.substring(11, 16)}</td>
+                <td>{props.event.showtime.substring(11, 16)}</td>
+              </tr>
+              <tr>
+                <td>Lokasi</td>
+                <td> : </td>
+                <td>{props.event.venue}</td>
               </tr>
               <tr>
                 <td>Status</td>
@@ -92,7 +78,7 @@ const CineplexTiketDetail = (props) => {
           </div>
           <div className="bg-white rounded-2xl p-2 h-fit border border-[3px] border-black">
             <img
-              src="https://api.qrserver.com/v1/create-qr-code/?data=a&amp;size=100x100"
+              src={`https://api.qrserver.com/v1/create-qr-code/?data=${props._id}a&amp;size=100x100`}
               alt=""
               title=""
               className="w-48"
@@ -102,41 +88,16 @@ const CineplexTiketDetail = (props) => {
       </div>
       <div className="flex justify-between">
         <div className="">
-          <p>{props.screening.studio.type}</p>
-          <p>
-            {props.transaction.foods.length == 0
-              ? ""
-              : props.transaction.foods.map((item) => {
-                  return (
-                    <>
-                      {item.food_name}
-                      <br />
-                    </>
-                  );
-                })}
-          </p>
+          <p>{props.event_category.category_name}</p>
           <p>Biaya Layanan</p>
         </div>
         <div>
           <p>
-            Rp. {props.screening.price}{" "}
-            <span className="abu9CA3AF">x{props.seats.length}</span>
+            Rp. {props.event_category.price} <span className="abu9CA3AF"></span>
           </p>
+
           <p>
-            {props.transaction.foods.length == 0
-              ? ""
-              : props.transaction.foods.map((item) => {
-                  return (
-                    <>
-                      Rp. {item.food_name}{" "}
-                      <span className="abu9CA3AF"> x{item.quantity}</span>
-                      <br />
-                    </>
-                  );
-                })}
-          </p>
-          <p>
-            Rp. 4.000 <span className="abu9CA3AF">x{props.seats.length}</span>
+            Rp. 10.000 <span className="abu9CA3AF"></span>
           </p>
         </div>
       </div>
@@ -147,7 +108,7 @@ const CineplexTiketDetail = (props) => {
       <div className="justify-between flex mt-5">
         <div></div>
         <p className="font-bold">
-          Total Tagihan : Rp.{props.transaction.amounts_paid}
+          Total Tagihan : Rp.{props.event_category.price + 10000}
         </p>
       </div>
       <div className="justify-between flex">
@@ -157,4 +118,4 @@ const CineplexTiketDetail = (props) => {
   );
 };
 
-export default CineplexTiketDetail;
+export default PromotorTiketDetail;
