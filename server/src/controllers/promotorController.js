@@ -17,6 +17,8 @@ const EventCategory = require("../models/EventCategory");
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
+const MovieTicket = require("../models/MovieTicket");
+const EventTicket = require("../models/EventTicket");
 
 const verifyPromotorCookie = async (req, res, next) => {
   try {
@@ -226,7 +228,37 @@ const createEvent = async (req, res) => {
   //   newEvent: newEvent
   // });
 };
+const getEventTicket = async (req, res) => {
+  const eventTickets = await EventTicket.find({ promotor: req.userId })
+  .populate("event")
+  .populate("event_category")
+  .populate("customer")
+  .populate("transaction")
+  
+  res.status(200).json({ eventTickets });
+};
+const getSingleEventTicket = async (req, res) => {
+  try {
+    const eventTicket = await EventTicket.findById(req.params.id)
+      .populate("promotor")
+      .populate("event")
+      .populate("event_category")
+      .populate("customer")
+      .populate("transaction");
+
+    if (!eventTicket) {
+      return res.status(404).json({ error: "EventTicket not found" });
+    }
+    res.status(200).json({ eventTicket });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+module.exports = { getEventTicket };
+
 
 module.exports = {
-  verifyPromotorCookie, createEvent, createEventMulter
+  verifyPromotorCookie, createEvent, createEventMulter, getEventTicket, getSingleEventTicket
 };

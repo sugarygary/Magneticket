@@ -43,6 +43,8 @@ import {
   loadScreeningLengkap,
   loadDetailEvent,
   loadCategoryEvent,
+  loadPromotorHistory,
+  loadPromotorDetailHistory,
 } from "./handlers/LoadHandler.jsx";
 import PendingEmail from "./pages/pendingEmail.jsx";
 import { LayoutUser } from "./pages/LayoutUser.jsx";
@@ -78,6 +80,8 @@ import CineplexDetailHistoryTiket from "./pages/CineplexDetailHistoryTiket.jsx";
 import CineplexJadwal from "./pages/CineplexJadwal.jsx";
 import CineplexCreateScreening from "./pages/CineplexCreateScreening.jsx";
 import EventDetail from "./pages/EventDetail.jsx";
+import PromotorHistoryTiket from "./pages/PromotorHistoryTicket.jsx";
+import PromotorDetailHistoryTiket from "./pages/PromotorDetailHistoryTiket.jsx";
 
 
 async function coba() {
@@ -328,6 +332,18 @@ const router = createBrowserRouter([
         // loader: loadUsers,
         action: createEvent,
         errorElement: <ErrorElement />,
+      },
+      {
+        path: "history",
+        element: <PromotorHistoryTiket></PromotorHistoryTiket>,
+        loader: loadPromotorHistory,
+        // action: createStudio,
+        errorElement: <ErrorElement />,
+      },
+      {
+        path: "history/:history_id",
+        element: <PromotorDetailHistoryTiket />,
+        loader: loadPromotorDetailHistory,
       },
     ],
   },
