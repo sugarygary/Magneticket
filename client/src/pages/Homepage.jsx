@@ -1,8 +1,6 @@
 import { Link, useLoaderData } from "react-router-dom";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
+import { useState } from "react";
 import HomepageCarousel from "../components/HomepageCarousel";
-import UserRegisterForm from "../components/UserRegisterForm";
 import CardHome from "../components/CardHome";
 import CardHomeEvent from "../components/CardHomeEvent";
 
@@ -10,9 +8,36 @@ const Homepage = () => {
   const data = useLoaderData();
   let loadMovie = data.inTheater;
   let loadEvent = data.ongoingEvent;
+
+  const [isScrolling, setIsScrolling] = useState(false);
+  const [scrollStart, setScrollStart] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  const handleMouseDown = (e) => {
+    setIsScrolling(true);
+    setScrollStart(e.pageX - e.currentTarget.offsetLeft);
+    setScrollLeft(e.currentTarget.scrollLeft);
+  };
+
+  const handleMouseLeave = () => {
+    setIsScrolling(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsScrolling(false);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isScrolling) return;
+    e.preventDefault();
+    const x = e.pageX - e.currentTarget.offsetLeft;
+    const scroll = x - scrollStart;
+    e.currentTarget.scrollLeft = scrollLeft - scroll;
+  };
+
   return (
     <>
-      <div className="w-full px-10 mt-24">
+      <div className="w-full px-10 mt-24 overflow-hidden scrollbar-hide" style={{ scrollBehavior: 'smooth' }}>
         <HomepageCarousel></HomepageCarousel>
         <div className="mt-8">
           <div className="flex items-end justify-between">
@@ -24,7 +49,15 @@ const Homepage = () => {
               Lihat selengkapnya
             </Link>
           </div>
-          <div className="flex overflow-x-auto gap-3 snap-x snap-mandatory">
+          <div className="flex overflow-x-auto gap-3 snap-x snap-mandatory" 
+               onMouseDown={handleMouseDown}
+               onMouseLeave={handleMouseLeave}
+               onMouseUp={handleMouseUp}
+               onMouseMove={handleMouseMove}
+               style={{ scrollBehavior: 'smooth',
+                        overflow: 'hidden',
+                        scrollbarWidth: 'none',
+                        msOverflowStyle: 'none', }}>
             {loadMovie.map((movie) => {
               return (
                 <>
@@ -39,8 +72,16 @@ const Homepage = () => {
             })}
           </div>
         </div>
-        <p className="text-xl sm:text-4xl font-bold">KONSER</p>
-        <div className="grid gap-4 justify grid-cols-1 sm:grid-cols-4">
+        <p className="text-xl sm:text-2xl mt-6 font-bold">Konser</p>
+        <div className="flex overflow-x-auto gap-3 snap-x snap-mandatory" 
+             onMouseDown={handleMouseDown}
+             onMouseLeave={handleMouseLeave}
+             onMouseUp={handleMouseUp}
+             onMouseMove={handleMouseMove}
+             style={{ scrollBehavior: 'smooth',
+                      overflow: 'hidden',
+                      scrollbarWidth: 'none',
+                      msOverflowStyle: 'none', }}>
           {loadEvent.map((event) => {
             return event.events.map((event2) => {
               return (
@@ -62,3 +103,5 @@ const Homepage = () => {
 };
 
 export default Homepage;
+
+

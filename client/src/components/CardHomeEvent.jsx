@@ -8,7 +8,7 @@ import openheimer from "../assets/openheimer.jpg";
 
 const CardHomeEvent = (props) => {
   return (
-    <div className="biruTua my-5 w-full text-center mr-8 rounded">
+    <div className="biruTua snap-start w-24 md:w-48 mt-5 mb-2 text-center flex-none rounded">
       <img
         src={`${process.env.BACKEND_URL}/promotor/eventposter-${props.event_id}.jpg`}
         alt=""
@@ -18,7 +18,7 @@ const CardHomeEvent = (props) => {
         <p className="font-bold text-sm sm:text-lg mb-2">{props.event_name}</p>
         <Link
           //   to={`/user/screening/${props.movie._id}`}
-          className="biruCariTiket rounded p-1 px-4 mb-4"
+          className="biruCariTiket text-[.6rem] md:text-lg rounded p-1 px-2 mb-2"
         >
           Cari Tiket ➡
         </Link>

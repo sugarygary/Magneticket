@@ -46,7 +46,7 @@ const CineplexLoginForm = (props) => {
     } else if (retu.request) {
       navigate("/error-page");
     }
-    navigate("/");
+    navigate("/cineplex/home");
   }
   return (
     <div className=" w-screen h-full flex justify-center text-white my-5">
