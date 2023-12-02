@@ -8,7 +8,7 @@ const EventDetail = () => {
     const dataLoader = useLoaderData()
     let data=dataLoader.detailEvent
     let data2=dataLoader.categoryEvent
-    console.log("ini data loader",dataLoader)
+    // console.log("ini data loader",dataLoader)
   return (
     <div className = "px-10 py-5">
         <CardDetailEvent {...data}></CardDetailEvent>
@@ -25,7 +25,7 @@ const EventDetail = () => {
                       <tr key={category.category_name}>
                         <td className="border-t border-b py-2 px-4">{category.category_name}</td>
                         <td className="border-t border-b py-2 px-4">{category.price}</td>
-                        <td className="border-t border-b py-2 px-4">{category.ticketLeft}</td>
+                        <td className="border-t border-b py-2 px-4">{category.ticketLeft>0&&category.ticketLeft}{category.ticketLeft<=0&& "SOLD OUT"}</td>
                       </tr>
                   ))}
               </tbody>

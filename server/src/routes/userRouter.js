@@ -8,6 +8,8 @@ const {
   getHistory,
   getDetailHistory,
   createTicketReal,
+  getSingleEvent,
+  getSingleEventCategory,
 } = require("../controllers/userController");
 const expressAsyncHandler = require("express-async-handler");
 const userRouter = express.Router();
@@ -32,4 +34,12 @@ userRouter.get(
 userRouter.get("/history", expressAsyncHandler(getHistory));
 
 userRouter.get("/history/:history_id", expressAsyncHandler(getDetailHistory));
+userRouter.get(
+  "/event-details/:event_id",
+  expressAsyncHandler(getSingleEvent)
+);
+userRouter.get(
+  "/event-category/:event_id",
+  expressAsyncHandler(getSingleEventCategory)
+);
 module.exports = userRouter;

@@ -45,6 +45,8 @@ import {
   loadCategoryEvent,
   loadPromotorHistory,
   loadPromotorDetailHistory,
+  loadDetailEventWithAuth,
+  loadCategoryEventWithAuth,
 } from "./handlers/LoadHandler.jsx";
 import PendingEmail from "./pages/pendingEmail.jsx";
 import { LayoutUser } from "./pages/LayoutUser.jsx";
@@ -89,6 +91,7 @@ import PromotorHistoryTiket from "./pages/PromotorHistoryTicket.jsx";
 import PromotorDetailHistoryTiket from "./pages/PromotorDetailHistoryTiket.jsx";
 import HomeCineplex from "./pages/CineplexHome.jsx"
 import EventOrganizerHome from "./pages/EventOrganizerHome.jsx";
+import CheckoutEvent from "./pages/CheckoutEvent.jsx";
 
 async function coba() {
   let x = loadInTheater();
@@ -219,6 +222,21 @@ const router = createBrowserRouter([
         },
         errorElement: <ErrorElement />,
       },
+      {
+        path: "event/:event_id/checkout",
+        element: <CheckoutEvent />,
+        loader: async (params) => {
+          console.log("ini params", params);
+          let x = await loadDetailEventWithAuth(params);
+          let y = await loadCategoryEventWithAuth(params);
+          let temp = {
+            detailEvent: x,
+            categoryEvent: y,
+          };
+          return temp;
+        },
+        errorElement: <ErrorElement />,
+      }
     ],
   },
   {

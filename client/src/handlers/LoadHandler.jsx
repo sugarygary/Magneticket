@@ -304,3 +304,26 @@ export const loadCategoryEvent = async (data) => {
     return error.message;
   }
 };
+export const loadDetailEventWithAuth = async (data) => {
+  try {
+    const response = await client.get(
+      `api/user/event-details/${data.params.event_id}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching detail event:", error);
+    return error.message;
+  }
+};
+
+export const loadCategoryEventWithAuth = async (data) => {
+  try {
+    const response = await client.get(
+      `api/user/event-category/${data.params.event_id}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching category event:", error);
+    return error.message;
+  }
+};

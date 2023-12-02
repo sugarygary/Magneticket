@@ -1,7 +1,11 @@
 import React from 'react'
-
+import { useNavigate } from 'react-router-dom'
 import openheimer from "../assets/openheimer.jpg";
 const CardDetailEvent = (props) => {
+    const navigate = useNavigate()
+    const keCheckout = () => {
+        navigate(`/user/event/${props._id}/checkout`)
+    }
     return (
         <div className="my-5 rounded flex shadow-lg">
             <img src={openheimer} alt="" className="w-64 rounded" />
@@ -27,7 +31,7 @@ const CardDetailEvent = (props) => {
                         {props.sale_end_date.substring(0, 10)}
                     </p>
                 </div>
-                <button className='biruTua rounded-full text-white p-2 mt-2'>
+                <button className='biruTua rounded-full text-white p-2 mt-2' onClick={keCheckout}>
                     beli tiket
                 </button>
             </div>
