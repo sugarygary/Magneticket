@@ -94,12 +94,16 @@ import EventOrganizerHome from "./pages/EventOrganizerHome.jsx";
 import CheckoutEvent from "./pages/CheckoutEvent.jsx";
 import {
   acceptVerif,
+  acceptVerifEvent,
   acceptVerifPromotor,
   loadAllCineplex,
+  loadAllEvent,
   loadAllPromotor,
   loadSingleCineplex,
+  loadSingleEvent,
   loadSinglePromotor,
   tolakVerif,
+  tolakVerifEvent,
   tolakVerifPromotor,
 } from "./handlers/AdminHandler.jsx";
 import AdminVerifCineplex from "./pages/AdminVerifCineplex.jsx";
@@ -107,6 +111,8 @@ import { LayoutAdmin } from "./pages/LayoutAdmin.jsx";
 import VerifikasiCineplexPage from "./pages/VerifikasiCineplexPage.jsx";
 import AdminVerifpromotor from "./pages/AdminVerifPromotor.jsx";
 import VerifikasiPromotorPage from "./pages/VerifikasiPromotorPage.jsx";
+import AdminVerifEvent from "./pages/AdminVerifEvent.jsx";
+import VerifikasiEventPage from "./pages/VerifikasiEventPage.jsx";
 
 async function coba() {
   let x = loadInTheater();
@@ -459,6 +465,17 @@ const router = createBrowserRouter([
         action: acceptVerifPromotor,
         tolakVerifPromotor,
       },
+      {
+        path: "event-verif",
+        element: <AdminVerifEvent />,
+        loader: loadAllEvent,
+      },
+      {
+        path:"event-verif/:eventId",
+        element: <VerifikasiEventPage/>,
+        loader:loadSingleEvent,
+        action: acceptVerifEvent, tolakVerifEvent,
+      }
     ],
   },
 

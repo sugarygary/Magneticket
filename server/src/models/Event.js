@@ -41,6 +41,18 @@ eventSchema.methods.verify = async function () {
   this.verified = true;
   await this.save();
 };
+eventSchema.statics.findById = function (eventId) {
+  return this.findOne({ _id: eventId });
+};
+eventSchema.statics.deleteById = async function (eventId) {
+  try {
+    const result = await this.deleteOne({ _id: eventId }).exec();
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 const Event = mongoose.model("Event", eventSchema, "events");
 

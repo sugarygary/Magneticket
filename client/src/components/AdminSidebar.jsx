@@ -144,6 +144,11 @@ const AdminSidebar = (props) => {
                     Verifikasi Event Organizer
                   </Link>
                 </li>
+                <li className="py-2 px-4 hover:bg-gray-700">
+                  <Link to={"/admin/event-verif"} className="block">
+                    Verifikasi Event
+                  </Link>
+                </li>
               </ul>
             )}
           </li>

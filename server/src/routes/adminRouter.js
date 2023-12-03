@@ -9,8 +9,13 @@ const {
   getPromotors,
   getSinglePromotor,
   deletePromotor,
+  getEvents,
+  getSingleEvent,
+  verifyEvent,
+  deleteEvent,
 } = require("../controllers/adminController");
 const expressAsyncHandler = require("express-async-handler");
+
 const adminRouter = express.Router();
 
 adminRouter.post(
@@ -21,6 +26,10 @@ adminRouter.post(
   "/verify-promotor/:email",
   expressAsyncHandler(verifyPromotor)
 );
+adminRouter.post(
+  "/verify-event/:event_id",
+  expressAsyncHandler(verifyEvent)
+);
 adminRouter.get(
   "/list-cineplexs",
   expressAsyncHandler(getCineplexs)
@@ -30,12 +39,20 @@ adminRouter.get(
   expressAsyncHandler(getPromotors)
 )
 adminRouter.get(
+  "/list-events",
+  expressAsyncHandler(getEvents)
+)
+adminRouter.get(
   "/cineplex/:cineplexId",
   expressAsyncHandler(getSingleCineplex)
 )
 adminRouter.get(
   "/promotor/:promotorId",
   expressAsyncHandler(getSinglePromotor)
+)
+adminRouter.get(
+  "/event/:eventId",
+  expressAsyncHandler(getSingleEvent)
 )
 adminRouter.delete(
   "/delete-cineplex/:email",
@@ -44,5 +61,9 @@ adminRouter.delete(
 adminRouter.delete(
   "/delete-promotor/:email",
   expressAsyncHandler(deletePromotor)
+)
+adminRouter.delete(
+  "/delete-event/:eventId",
+  expressAsyncHandler(deleteEvent)
 )
 module.exports = adminRouter;
