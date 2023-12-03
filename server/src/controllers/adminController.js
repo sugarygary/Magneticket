@@ -4,6 +4,9 @@ const { body, validationResult } = require("express-validator");
 const generateToken = require("../util/generateToken");
 const Cineplex = require("../models/Cineplex");
 const Promotor = require("../models/Promotor");
+const MovieTicket = require("../models/MovieTicket");
+const Screening = require("../models/Screening");
+const MovieTransaction = require("../models/MovieTransaction");
 const { GMAIL_ACC, GMAIL_APP_PASSWORD, BACKEND_URL, FRONTEND_URL } =
   process.env;
 const nodemailer = require("nodemailer");
@@ -207,6 +210,16 @@ const deleteEvent = async function (req, res) {
     res.status(500).send({ message: "Internal Server Error" });
   }
 };
+const getMovieTransactions = async (req, res) => {
+  try {
+    const MovieTickets = await MovieTicket.find({}).populate('screening').populate('cineplex').populate({path:"screening",populate:{path:"branch"}}).exec();
+    res.status(200).json({ MovieTickets });
+  } catch (error) {
+    console.error('Error fetching movie transactions:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
+
 module.exports = {
   verifyCineplex,
   verifyPromotor,
@@ -220,4 +233,5 @@ module.exports = {
   getSingleEvent,
   verifyEvent,
   deleteEvent,
+  getMovieTransactions
 };

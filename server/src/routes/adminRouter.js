@@ -13,6 +13,7 @@ const {
   getSingleEvent,
   verifyEvent,
   deleteEvent,
+  getMovieTransactions,
 } = require("../controllers/adminController");
 const expressAsyncHandler = require("express-async-handler");
 
@@ -65,5 +66,9 @@ adminRouter.delete(
 adminRouter.delete(
   "/delete-event/:eventId",
   expressAsyncHandler(deleteEvent)
+)
+adminRouter.get(
+  "/movie-transactions",
+  expressAsyncHandler(getMovieTransactions)
 )
 module.exports = adminRouter;

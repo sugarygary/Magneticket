@@ -301,3 +301,11 @@ export const loadCategoryEventWithAuth = async (data) => {
     return error.message;
   }
 };
+export const loadAllMovieTransactions = async (data) => {
+  try {
+    const response = await client.get(`api/admin/movie-transactions`);
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+};

@@ -46,6 +46,7 @@ import {
   loadPromotorDetailHistory,
   loadDetailEventWithAuth,
   loadCategoryEventWithAuth,
+  loadAllMovieTransactions,
 } from "./handlers/LoadHandler.jsx";
 import PendingEmail from "./pages/pendingEmail.jsx";
 import { LayoutUser } from "./pages/LayoutUser.jsx";
@@ -106,6 +107,7 @@ import {
   tolakVerif,
   tolakVerifEvent,
   tolakVerifPromotor,
+  
 } from "./handlers/AdminHandler.jsx";
 import AdminVerifCineplex from "./pages/AdminVerifCineplex.jsx";
 import { LayoutAdmin } from "./pages/LayoutAdmin.jsx";
@@ -114,6 +116,7 @@ import AdminVerifpromotor from "./pages/AdminVerifPromotor.jsx";
 import VerifikasiPromotorPage from "./pages/VerifikasiPromotorPage.jsx";
 import AdminVerifEvent from "./pages/AdminVerifEvent.jsx";
 import VerifikasiEventPage from "./pages/VerifikasiEventPage.jsx";
+import AdminLaporanPenjualan from "./pages/AdminLaporanPenjualan.jsx";
 
 async function coba() {
   let x = loadInTheater();
@@ -469,7 +472,12 @@ const router = createBrowserRouter([
         element: <VerifikasiEventPage/>,
         loader:loadSingleEvent,
         action: acceptVerifEvent, tolakVerifEvent,
-      }
+      },
+      {
+        path: "laporan-penjualan",
+        element: <AdminLaporanPenjualan />,
+        loader: loadAllMovieTransactions,
+      },
     ],
   },
 

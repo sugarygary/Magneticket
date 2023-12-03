@@ -129,3 +129,4 @@ export const tolakVerifEvent = async (data, alasan, event_id) => {
     return error;
   }
 };
+
