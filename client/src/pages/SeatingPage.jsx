@@ -165,44 +165,56 @@ export default function SeatingPage() {
     } else {
       temp = 0;
     }
-    let bayarTiket = {
+    let snapBody = {
       seats: chooseSeat,
       foods: keranjang,
       screening_id: data.screening_id,
       discount_amount: temp,
     };
-    let checkout;
+    // let checkout;
+    let snapData;
     try {
-      checkout = await client.post("api/user/create-transaction", bayarTiket);
+      snapData = await client.post("/api/user/create-snap", snapBody);
+      // checkout = await client.post("api/user/create-transaction", bayarTiket);
     } catch (error) {
       console.log(error.message);
     }
-    window.snap.pay(checkout.data.token, {
+    let bayarTiket = {
+      order_id: snapData.data.order_id,
+      seats: chooseSeat,
+      foods: keranjang,
+      screening_id: data.screening_id,
+      discount_amount: temp,
+      midtrans_token: snapData.data.token,
+    };
+    window.snap.pay(snapData.data.token, {
       onSuccess: async function (result) {
-        let requestBody = {
-          seats: chooseSeat,
-          foods: keranjang,
-          screening_id: data.screening_id,
-          discount_amount: temp,
-          order_id: checkout.data.order_id,
-          midtrans_token: checkout.data.token,
-        };
-        let ticket = await client.post("api/user/create-ticket", requestBody);
-        alert("masidmaisdm");
-        window.location.replace("localhost:5173/user/history");
+        // let ticket = await client.post("api/user/create-ticket", requestBody);
+        let checkout = await client.post("api/user/create-transaction", {
+          ...bayarTiket,
+          status: "SUCCESS",
+        });
+        console.log(checkout);
       },
       onPending: async function (result) {
+        let checkout = await client.post("api/user/create-transaction", {
+          ...bayarTiket,
+          status: "PENDING",
+        });
         alert("wating your payment!");
-        console.log(result);
       },
       onError: async function (result) {
+        let checkout = await client.post("api/user/create-transaction", {
+          ...bayarTiket,
+          status: "FAILED",
+        });
         alert("payment failed!");
-        console.log(result);
       },
       onClose: async function () {
         alert("you closed the popup without finishing the payment");
       },
     });
+    // navigate("/user/history");
   }
 
   return (

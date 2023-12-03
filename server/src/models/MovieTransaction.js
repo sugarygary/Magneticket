@@ -3,6 +3,9 @@ const Schema = mongoose.Schema;
 
 const movieTransactionSchema = new Schema(
   {
+    _id: {
+      type: String,
+    },
     cineplex_id: {
       type: Schema.ObjectId,
       required: true,

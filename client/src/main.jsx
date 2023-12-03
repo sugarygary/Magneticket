@@ -28,7 +28,6 @@ import Homepage from "./pages/Homepage.jsx";
 import {
   loadInTheater,
   loadMenu,
-  loadScreenByMovie,
   loadSeatInfo,
   loadPromo,
   loadCabang,
@@ -52,7 +51,9 @@ import PendingEmail from "./pages/pendingEmail.jsx";
 import { LayoutUser } from "./pages/LayoutUser.jsx";
 import { LayoutCineplex } from "./pages/LayoutCineplex.jsx";
 import { LayoutEventOrganizer } from "./pages/LayoutEventOrganizer.jsx";
-import ScreeningByMovie from "./pages/ScreeningByMovie.jsx";
+import ScreeningByMovie, {
+  loadScreeningByMovie,
+} from "./pages/ScreeningByMovie.jsx";
 import SeatingPage from "./pages/SeatingPage.jsx";
 import CineplexConcession from "./pages/CineplexConcession.jsx";
 import {
@@ -169,12 +170,6 @@ const router = createBrowserRouter([
         errorElement: <ErrorElement />,
       },
       {
-        path: "screening/:movie_id",
-        element: <ScreeningByMovie></ScreeningByMovie>,
-        loader: loadScreenByMovie,
-        errorElement: <ErrorElement />,
-      },
-      {
         path: "seating/:screening_id",
         element: <SeatingPage></SeatingPage>,
         loader: loadSeatInfo,
@@ -223,7 +218,7 @@ const router = createBrowserRouter([
           {
             path: ":movie_id/screening",
             element: <ScreeningByMovie></ScreeningByMovie>,
-            loader: loadScreenByMovie,
+            loader: loadScreeningByMovie,
             errorElement: <ErrorElement />,
           },
         ],
@@ -232,7 +227,6 @@ const router = createBrowserRouter([
         path: "event/:event_id",
         element: <EventDetail />,
         loader: async (params) => {
-          console.log("ini params", params);
           let x = await loadDetailEvent(params);
           let y = await loadCategoryEvent(params);
           let temp = {

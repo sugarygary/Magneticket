@@ -22,7 +22,7 @@ function HistoryPage() {
     navigate("/user/login", { replace: true });
     return;
   }
-  {
+  return (
     status == "succeeded" && (
       <div className="py-10 text-black">
         {data.map((history, index) => {
@@ -34,8 +34,8 @@ function HistoryPage() {
           );
         })}
       </div>
-    );
-  }
+    )
+  );
 }
 
 export default HistoryPage;

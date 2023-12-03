@@ -90,7 +90,7 @@ const Header = (props) => {
                       onClick={logout}
                       className="cursor-pointer block px-4 py-2 text-sm text-red-500 hover:bg-gray-600"
                     >
-                      Sign out
+                      Keluar
                     </div>
                   </li>
                 </ul>

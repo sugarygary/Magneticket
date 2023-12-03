@@ -40,7 +40,7 @@ export const UserFindBranch = () => {
             defaultValue={
               searchParams.get("cineplex") == null
                 ? ""
-                : searchParams.get("city")
+                : searchParams.get("cineplex")
             }
             onChange={(e) => {
               handleFilterChange("cineplex", e.target.value);
@@ -128,14 +128,13 @@ export const UserFindBranch = () => {
 };
 export async function loadBranches({ request }) {
   let branches, cineplexes;
-  try {
-    const url = new URL(request.url);
-    if (url.searchParams.get("city") != null) {
-      if (!kotaDanKabupaten.includes(url.searchParams.get("city"))) {
-        throw new Response("City not found!", { status: 404 });
-      }
+  const url = new URL(request.url);
+  if (url.searchParams.get("city") != null) {
+    if (!kotaDanKabupaten.includes(url.searchParams.get("city"))) {
+      throw new Response("City not found!", { status: 404 });
     }
-
+  }
+  try {
     let params = {
       city: url.searchParams.get("city"),
       cineplex: url.searchParams.get("cineplex"),

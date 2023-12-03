@@ -37,7 +37,10 @@ const Homepage = () => {
 
   return (
     <>
-      <div className="w-full px-10 mt-24 overflow-hidden scrollbar-hide" style={{ scrollBehavior: 'smooth' }}>
+      <div
+        className="w-full px-10 mt-24 overflow-hidden scrollbar-hide"
+        style={{ scrollBehavior: "smooth" }}
+      >
         <HomepageCarousel></HomepageCarousel>
         <div className="mt-8">
           <div className="flex items-end justify-between">
@@ -49,18 +52,32 @@ const Homepage = () => {
               Lihat selengkapnya
             </Link>
           </div>
-          <div className="flex overflow-x-auto gap-3 snap-x snap-mandatory" 
-               onMouseDown={handleMouseDown}
-               onMouseLeave={handleMouseLeave}
-               onMouseUp={handleMouseUp}
-               onMouseMove={handleMouseMove}
-               style={{ scrollBehavior: 'smooth',
-                        overflow: 'hidden',
-                        scrollbarWidth: 'none',
-                        msOverflowStyle: 'none', }}>
+          <div
+            className="flex relative overflow-x-auto focus:overflow-x-hidden gap-3 snap-x snap-mandatory"
+            onMouseDown={handleMouseDown}
+            onMouseLeave={handleMouseLeave}
+            onMouseUp={handleMouseUp}
+            onMouseMove={handleMouseMove}
+            style={{
+              scrollBehavior: "smooth",
+              // overflow: "hidden", //kalo mobile tidak bisa scroll
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
+          >
             {loadMovie.map((movie) => {
               return (
                 <>
+                  <CardHome {...movie}></CardHome>
+                  <CardHome {...movie}></CardHome>
+                  <CardHome {...movie}></CardHome>
+                  <CardHome {...movie}></CardHome>
+                  <CardHome {...movie}></CardHome>
+                  <CardHome {...movie}></CardHome>
+                  <CardHome {...movie}></CardHome>
+                  <CardHome {...movie}></CardHome>
+                  <CardHome {...movie}></CardHome>
+                  <CardHome {...movie}></CardHome>
                   <CardHome {...movie}></CardHome>
                   <CardHome {...movie}></CardHome>
                   <CardHome {...movie}></CardHome>
@@ -72,30 +89,44 @@ const Homepage = () => {
             })}
           </div>
         </div>
-        <p className="text-xl sm:text-2xl mt-6 font-bold">Konser</p>
-        <div className="flex overflow-x-auto gap-3 snap-x snap-mandatory" 
-             onMouseDown={handleMouseDown}
-             onMouseLeave={handleMouseLeave}
-             onMouseUp={handleMouseUp}
-             onMouseMove={handleMouseMove}
-             style={{ scrollBehavior: 'smooth',
-                      overflow: 'hidden',
-                      scrollbarWidth: 'none',
-                      msOverflowStyle: 'none', }}>
-          {loadEvent.map((event) => {
-            return event.events.map((event2) => {
-              return (
-                <>
-                  <CardHomeEvent {...event2}></CardHomeEvent>
-                  <CardHomeEvent {...event2}></CardHomeEvent>
-                  <CardHomeEvent {...event2}></CardHomeEvent>
-                  <CardHomeEvent {...event2}></CardHomeEvent>
-                  <CardHomeEvent {...event2}></CardHomeEvent>
-                  <CardHomeEvent {...event2}></CardHomeEvent>
-                </>
-              );
-            });
-          })}
+        <div className="mt-8">
+          <div className="flex items-end justify-between">
+            <p className="text-xl sm:text-2xl font-bold">Event</p>
+            <Link
+              to="/user/event"
+              className="text-sm md:text-regular text-blue-600 hover:underline"
+            >
+              Lihat selengkapnya
+            </Link>
+          </div>
+          <div
+            className="flex relative overflow-x-auto focus:overflow-x-hidden gap-3 snap-x snap-mandatory"
+            onMouseDown={handleMouseDown}
+            onMouseLeave={handleMouseLeave}
+            onMouseUp={handleMouseUp}
+            onMouseMove={handleMouseMove}
+            style={{
+              scrollBehavior: "smooth",
+              // overflow: "hidden", //kalo mobile tidak bisa scroll
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
+          >
+            {loadEvent.map((event) => {
+              return event.events.map((event2) => {
+                return (
+                  <>
+                    <CardHomeEvent {...event2}></CardHomeEvent>
+                    <CardHomeEvent {...event2}></CardHomeEvent>
+                    <CardHomeEvent {...event2}></CardHomeEvent>
+                    <CardHomeEvent {...event2}></CardHomeEvent>
+                    <CardHomeEvent {...event2}></CardHomeEvent>
+                    <CardHomeEvent {...event2}></CardHomeEvent>
+                  </>
+                );
+              });
+            })}
+          </div>
         </div>
       </div>
     </>
@@ -103,5 +134,3 @@ const Homepage = () => {
 };
 
 export default Homepage;
-
-

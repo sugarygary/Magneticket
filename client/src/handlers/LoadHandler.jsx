@@ -82,32 +82,6 @@ export const loadStudio = async (data) => {
     return error;
   }
 };
-export const loadScreenByMovie = async (data) => {
-  try {
-    let responseScreening = await client.get(
-      `api/public/screenings-by-movie/${data?.params?.movie_id}`
-    );
-    const responseMovie = await client.get(
-      `api/public/movie-details/${data?.params?.movie_id}`
-    );
-    return {
-      responseScreening: responseScreening.data,
-      responseMovie: responseMovie.data,
-    };
-  } catch (error) {
-    if (error.response) {
-      if (error.response.status == 403) {
-        const logout = await client.get("api/auth/logout");
-      }
-      if (error.response.status == 404) {
-        throw new Response("Not found", { status: 404 });
-      }
-    } else if (error.request) {
-      throw new Response("Internal Server Error", { status: 500 });
-    }
-    return error;
-  }
-};
 export const loadSeatInfo = async (data) => {
   try {
     const currUser = await client.get("api/auth/current-user");

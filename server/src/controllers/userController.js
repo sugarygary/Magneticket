@@ -1,4 +1,5 @@
 require("dotenv").config();
+const { nanoid } = require("nanoid");
 const jwt = require("jsonwebtoken");
 const MovieTicket = require("../models/MovieTicket");
 const Screening = require("../models/Screening");
@@ -112,14 +113,16 @@ const findPromoByScreening = async (req, res) => {
   let findPromo = await Promotion.find({ cineplex: findScreening.cineplex });
   return res.status(200).send(findPromo);
 };
+function generateTransactionId() {
+  const timestamp = new Date().getTime();
+  const transactionId = `CPX${timestamp}${nanoid()}`;
+  return transactionId;
+}
 
-const createTicket = async (req, res) => {
+const createSnap = async (req, res) => {
   const { foods, seats, screening_id, discount_amount } = req.body;
   const findScreening = await Screening.findById(screening_id);
   if (findScreening == null) {
-    return res.status(404).send({ message: "Screening not found" });
-  }
-  if (findScreening.showtime < new Date()) {
     return res.status(404).send({ message: "Screening not found" });
   }
   const findSeats = await Seat.find({
@@ -141,6 +144,88 @@ const createTicket = async (req, res) => {
   if (findTicket.length > 0) {
     return res.status(400).send({ message: "Seats already booked" });
   }
+  let foodTotal = 0;
+  for (let i = 0; i < foods.length; i++) {
+    const element = foods[i];
+    let findFood = await Menu.findOne({
+      _id: element._id,
+      cineplex: findScreening.cineplex,
+    });
+    if (findFood == null) {
+      return res.status(400).send({ message: "Invalid addon input" });
+    }
+    foodTotal += findFood.price * element.quantity;
+  }
+  let customer = await User.findById(req.userId);
+  let amounts_paid = 0;
+  if (discount_amount != 0) {
+    amounts_paid =
+      findScreening.price * seats.length + foodTotal + 4000 - discount_amount;
+  } else {
+    amounts_paid = findScreening.price * seats.length + foodTotal + 4000;
+  }
+  let order_id = generateTransactionId();
+  let midtrans = await axios.post(
+    "https://app.sandbox.midtrans.com/snap/v1/transactions",
+    {
+      transaction_details: {
+        order_id: order_id,
+        gross_amount: amounts_paid,
+      },
+      credit_card: {
+        secure: true,
+      },
+      customer_details: {
+        email: customer.email,
+      },
+    },
+    {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: process.env.MIDTRANS_AUTH_STRING,
+      },
+    }
+  );
+  if (midtrans.data.token) {
+    return res.status(201).send({
+      message: "Order created. Please pay.",
+      order_id: order_id,
+      ...midtrans.data,
+    });
+  }
+  return;
+};
+const createTicket = async (req, res) => {
+  const {
+    foods,
+    seats,
+    screening_id,
+    discount_amount,
+    order_id,
+    status,
+    midtrans_token,
+  } = req.body;
+  const findScreening = await Screening.findById(screening_id);
+  if (findScreening == null) {
+    return res.status(404).send({ message: "Screening not found" });
+  }
+  const findSeats = await Seat.find({
+    studio: findScreening.studio,
+    _id: { $in: seats },
+  });
+  if (findSeats.length != seats.length) {
+    return res.status(400).send({ message: "Invalid seat input" });
+  }
+  const findTicket = await MovieTicket.find({
+    screening: screening_id,
+    seats: { $in: seats },
+  }).populate({
+    path: "transaction",
+    match: {
+      $or: [{ status: "PENDING" }, { status: "SUCCESS" }],
+    },
+  });
   let foodItems = [];
   let foodTotal = 0;
   for (let i = 0; i < foods.length; i++) {
@@ -171,11 +256,87 @@ const createTicket = async (req, res) => {
   if (discount_amount != 0) {
     amounts_paid =
       findScreening.price * seats.length + foodTotal + 4000 - discount_amount;
-    console.log(amounts_paid);
   } else {
     amounts_paid = findScreening.price * seats.length + foodTotal + 4000;
   }
+  if (findTicket.length > 0) {
+    if (status == "SUCCESS") {
+      let refund = await axios.post(
+        `https://api.sandbox.midtrans.com/v2/${order_id}/refund`,
+        {},
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: process.env.MIDTRANS_AUTH_STRING,
+          },
+        }
+      );
+      let newMovieTransaction = new MovieTransaction({
+        _id: order_id,
+        cineplex_brand: findCineplex.brand_name,
+        cineplex_id: findCineplex._id,
+        customer_email: customer.email,
+        customer_id: customer._id,
+        customer_name: customer.full_name,
+        movie_title: movie.title,
+        movie_id: movie._id,
+        movie_img: movie.img,
+        amounts_paid: amounts_paid,
+        branch_name: findBranch.branch_name,
+        studio_name: findStudio.studio_name,
+        seats: displaySeats,
+        foods: foodItems,
+        payment_method: "-",
+        status: "REFUND",
+        midtrans_token: midtrans_token,
+      });
+      await newMovieTransaction.save();
+      return res.status(201).send({
+        message: "Created",
+        order_id: newMovieTransaction._id,
+      });
+    }
+    if (status == "PENDING") {
+      let cancel = await axios.post(
+        `https://api.sandbox.midtrans.com/v2/${order_id}/cancel`,
+        {},
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: process.env.MIDTRANS_AUTH_STRING,
+          },
+        }
+      );
+      let newMovieTransaction = new MovieTransaction({
+        _id: order_id,
+        cineplex_brand: findCineplex.brand_name,
+        cineplex_id: findCineplex._id,
+        customer_email: customer.email,
+        customer_id: customer._id,
+        customer_name: customer.full_name,
+        movie_title: movie.title,
+        movie_id: movie._id,
+        movie_img: movie.img,
+        amounts_paid: amounts_paid,
+        branch_name: findBranch.branch_name,
+        studio_name: findStudio.studio_name,
+        seats: displaySeats,
+        foods: foodItems,
+        payment_method: "-",
+        status: "FAILED",
+        midtrans_token: midtrans_token,
+      });
+      await newMovieTransaction.save();
+      return res.status(201).send({
+        message: "Created",
+        order_id: newMovieTransaction._id,
+      });
+    }
+  }
   let newMovieTransaction = new MovieTransaction({
+    _id: order_id,
     cineplex_brand: findCineplex.brand_name,
     cineplex_id: findCineplex._id,
     customer_email: customer.email,
@@ -190,36 +351,28 @@ const createTicket = async (req, res) => {
     seats: displaySeats,
     foods: foodItems,
     payment_method: "-",
+    status: status,
+    midtrans_token: midtrans_token,
   });
-  let midtrans = await axios.post(
-    "https://app.sandbox.midtrans.com/snap/v1/transactions",
-    {
-      transaction_details: {
-        order_id: newMovieTransaction._id,
-        gross_amount: newMovieTransaction.amounts_paid,
-      },
-      credit_card: {
-        secure: true,
-      },
-      customer_details: {
-        email: customer.email,
-      },
-    },
-    {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: process.env.MIDTRANS_AUTH_STRING,
-      },
-    }
-  );
-  if (midtrans.data.token) {
-    newMovieTransaction.midtrans_token = midtrans.data.token;
+  await newMovieTransaction.save();
+  if (status == "FAILED") {
+    return res.status(201).send({
+      message: "Created",
+      order_id: newMovieTransaction._id,
+    });
   }
+  let newTicket = new MovieTicket({
+    cineplex: findCineplex._id,
+    customer: customer._id,
+    screening: findScreening._id,
+    seats: seats,
+    foods: foods,
+    transaction: newMovieTransaction._id,
+  });
+  await newTicket.save();
   return res.status(201).send({
-    message: "Order created. Please pay.",
+    message: "Created",
     order_id: newMovieTransaction._id,
-    ...midtrans.data,
   });
 };
 const createTicketReal = async (req, res) => {
@@ -248,7 +401,7 @@ const createTicketReal = async (req, res) => {
   }).populate({
     path: "transaction",
     match: {
-      $or: [{ status: "PENDING" }, { status: "SUCCESS" }],
+      status: "SUCCESS",
     },
   });
   let foodItems = [];
@@ -316,7 +469,7 @@ const createTicketReal = async (req, res) => {
       midtrans_token: midtrans_token,
     });
     try {
-      await newMovieTransaction.save();
+      // await newMovieTransaction.save();
     } catch (error) {
       console.log(error);
     }
@@ -343,7 +496,7 @@ const createTicketReal = async (req, res) => {
     status: "SUCCESS",
     midtrans_token: midtrans_token,
   });
-  await newMovieTransaction.save();
+  // await newMovieTransaction.save();
   let newTicket = new MovieTicket({
     cineplex: findCineplex._id,
     customer: customer._id,
@@ -352,12 +505,11 @@ const createTicketReal = async (req, res) => {
     foods: foods,
     transaction: newMovieTransaction._id,
   });
-  await newTicket.save();
+  // await newTicket.save();
   return res.status(201).send({
     message: "Order created. Please pay.",
     order_id: newMovieTransaction._id,
     ticket_id: newTicket._id,
-    ...midtrans.data,
   });
 };
 
@@ -419,6 +571,7 @@ const getAndUpdateTransactions = async (req, res) => {};
 module.exports = {
   verifyUserCookie,
   createTicket,
+  createSnap,
   getSeatsInfo,
   findMenuByScreening,
   findPromoByScreening,

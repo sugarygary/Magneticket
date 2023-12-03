@@ -79,3 +79,13 @@ footer {
 .abuBgInput {
   background-color: #4b5563;
 }
+.scrollbox {
+  overflow: auto;
+  visibility: hidden;
+}
+
+.scrollbox-content,
+.scrollbox:hover,
+.scrollbox:focus {
+  visibility: visible;
+}

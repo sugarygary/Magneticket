@@ -5,13 +5,15 @@ const cineplexRouter = require("./cineplexRouter");
 const publicRouter = require("./publicRouter");
 const userRouter = require("./userRouter");
 const promotorRouter = require("./promotorRouter");
+const notificationsRouter = require("./notificationsRouter");
 
 const router = express.Router();
 router.use("/auth", authRouter);
 router.use("/cineplex", cineplexRouter);
 router.use("/admin", adminRouter);
 router.use("/public", publicRouter);
-router.use("/user", userRouter); 
+router.use("/user", userRouter);
 router.use("/promotor", promotorRouter);
+router.use("/notification", notificationsRouter);
 
 module.exports = router;

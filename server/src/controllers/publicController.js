@@ -87,7 +87,7 @@ const getScreeningByBranch = async (req, res) => {
     {
       $match: {
         showtime: {
-          $gte: moment(date).tz("Asia/Jakarta").startOf("day").toDate(),
+          $gte: moment().tz("Asia/Jakarta").startOf("day").toDate(),
         },
       },
     },
@@ -141,7 +141,13 @@ const getScreeningByMovie = async (req, res) => {
   }
   let result = await Screening.aggregate([
     { $match: { movie: movie_id, ...options } },
-    { $match: { showtime: { $gte: new Date() } } },
+    {
+      $match: {
+        showtime: {
+          $gte: moment().tz("Asia/Jakarta").startOf("day").toDate(),
+        },
+      },
+    },
     {
       $lookup: {
         from: "branches",

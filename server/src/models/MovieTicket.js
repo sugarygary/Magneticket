@@ -15,7 +15,7 @@ const movieTicketSchema = new Schema(
       },
     ],
     transaction: {
-      type: Schema.ObjectId,
+      type: String,
       ref: "MovieTransaction",
     },
     via: {

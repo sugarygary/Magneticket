@@ -10,12 +10,14 @@ const {
   createTicketReal,
   getSingleEvent,
   getSingleEventCategory,
+  createSnap,
 } = require("../controllers/userController");
 const expressAsyncHandler = require("express-async-handler");
 const userRouter = express.Router();
 userRouter.use(verifyUserCookie);
 userRouter.post("/create-transaction", expressAsyncHandler(createTicket));
-userRouter.post("/create-ticket", expressAsyncHandler(createTicketReal));
+userRouter.post("/create-snap", expressAsyncHandler(createSnap));
+// userRouter.post("/create-ticket", expressAsyncHandler(createTicketReal));
 
 userRouter.get(
   "/screening/:screening_id/seat-info",
@@ -34,10 +36,7 @@ userRouter.get(
 userRouter.get("/history", expressAsyncHandler(getHistory));
 
 userRouter.get("/history/:history_id", expressAsyncHandler(getDetailHistory));
-userRouter.get(
-  "/event-details/:event_id",
-  expressAsyncHandler(getSingleEvent)
-);
+userRouter.get("/event-details/:event_id", expressAsyncHandler(getSingleEvent));
 userRouter.get(
   "/event-category/:event_id",
   expressAsyncHandler(getSingleEventCategory)
