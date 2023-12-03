@@ -89,9 +89,24 @@ import client from "./util/client.js";
 import { UserFindFilm, loadFilms } from "./pages/UserFindFilm.jsx";
 import PromotorHistoryTiket from "./pages/PromotorHistoryTicket.jsx";
 import PromotorDetailHistoryTiket from "./pages/PromotorDetailHistoryTiket.jsx";
-import HomeCineplex from "./pages/CineplexHome.jsx"
+import HomeCineplex from "./pages/CineplexHome.jsx";
 import EventOrganizerHome from "./pages/EventOrganizerHome.jsx";
 import CheckoutEvent from "./pages/CheckoutEvent.jsx";
+import {
+  acceptVerif,
+  acceptVerifPromotor,
+  loadAllCineplex,
+  loadAllPromotor,
+  loadSingleCineplex,
+  loadSinglePromotor,
+  tolakVerif,
+  tolakVerifPromotor,
+} from "./handlers/AdminHandler.jsx";
+import AdminVerifCineplex from "./pages/AdminVerifCineplex.jsx";
+import { LayoutAdmin } from "./pages/LayoutAdmin.jsx";
+import VerifikasiCineplexPage from "./pages/VerifikasiCineplexPage.jsx";
+import AdminVerifpromotor from "./pages/AdminVerifPromotor.jsx";
+import VerifikasiPromotorPage from "./pages/VerifikasiPromotorPage.jsx";
 
 async function coba() {
   let x = loadInTheater();
@@ -236,7 +251,7 @@ const router = createBrowserRouter([
           return temp;
         },
         errorElement: <ErrorElement />,
-      }
+      },
     ],
   },
   {
@@ -358,7 +373,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-
   {
     path: "/event-organizer",
     element: <LayoutEventOrganizer />,
@@ -412,6 +426,42 @@ const router = createBrowserRouter([
       },
     ],
   },
+  //
+  {
+    path: "/admin",
+    element: <LayoutAdmin />,
+    children: [
+      {
+        index: true,
+        element: <p>Silahkan pilih menu yang diingingkan</p>,
+      },
+      {
+        path: "cineplex-verif",
+        element: <AdminVerifCineplex />,
+        loader: loadAllCineplex,
+      },
+      {
+        path: "cineplex-verif/:cineplexId",
+        element: <VerifikasiCineplexPage></VerifikasiCineplexPage>,
+        loader: loadSingleCineplex,
+        action: acceptVerif,
+        tolakVerif,
+      },
+      {
+        path: "promotor-verif",
+        element: <AdminVerifpromotor />,
+        loader: loadAllPromotor,
+      },
+      {
+        path: "promotor-verif/:promotorId",
+        element: <VerifikasiPromotorPage></VerifikasiPromotorPage>,
+        loader: loadSinglePromotor,
+        action: acceptVerifPromotor,
+        tolakVerifPromotor,
+      },
+    ],
+  },
+
   //ErrorElement page kalo server down
   {
     path: "/pending-email",

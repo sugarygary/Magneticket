@@ -45,6 +45,10 @@ promotorSchema.pre("save", function (next) {
 promotorSchema.statics.findByEmail = function (email) {
   return this.findOne({ email: email });
 };
+promotorSchema.statics.deleteByEmail = async function (email) {
+  const result = await this.deleteOne({ email: email }).exec();
+  return result;
+};
 promotorSchema.methods.comparePassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };

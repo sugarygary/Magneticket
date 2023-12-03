@@ -71,16 +71,13 @@ export const registerCineplex = async (data, config) => {
     return error.message;
   }
 };
-export const registerEventOrganizer = async (data) => {
+export const registerEventOrganizer = async (data, config) => {
   console.log(data);
+  console.log(config);
   try {
-    const response = await client.post("api/auth/register-promotor", {
-      company_name: data.company_name,
-      email: data.email,
-      password: data.password,
-      brand_name: data.brand_name,
+    const response = await client.post("api/auth/register-promotor", data, {
+      ...config,
     });
-
     return response.data;
   } catch (error) {
     console.error("Error fetching data:", error);

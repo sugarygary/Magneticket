@@ -42,6 +42,11 @@ cineplexSchema.pre("save", function (next) {
     });
   });
 });
+cineplexSchema.statics.deleteByEmail = async function (email) {
+  const result = await this.deleteOne({ email: email }).exec();
+  return result;
+};
+
 cineplexSchema.statics.findByEmail = function (email) {
   return this.findOne({ email: email });
 };

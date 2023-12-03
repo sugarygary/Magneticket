@@ -18,6 +18,7 @@ const {
   loginPromotor,
   currentUser,
   registerCineplexMulter,
+  registerPromotorMulter,
 } = require("../controllers/authController");
 const expressAsyncHandler = require("express-async-handler");
 const multer = require("multer");
@@ -49,7 +50,7 @@ authRouter.get(
 
 authRouter.post(
   "/register-promotor",
-  validateRegisterPromotor,
+  [registerPromotorMulter, validateRegisterPromotor],
   expressAsyncHandler(registerPromotor)
 );
 authRouter.post(

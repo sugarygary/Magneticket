@@ -381,15 +381,82 @@ const loginCineplex = async function (req, res) {
 
 //#endregion
 
+
 //#region promotor
+let storage_promotor = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "../../uploads/promotor"));
+  },
+
+  filename: function (req, file, cb) {
+    let filename = file.fieldname + "_" + file.originalname;
+    cb(null, filename);
+  },
+});
+let upload_promotor = multer({
+  storage: storage_promotor,
+  fileFilter: function (req, file, cb) {
+    if (
+      file.mimetype != "image/jpg" &&
+      file.mimetype != "image/jpeg" &&
+      file.mimetype != "image/png"
+    ) {
+      return cb(new Error("Invalid file format"), null);
+    }
+    cb(null, true);
+  },
+});
+let registerPromotorMulter = upload_promotor.fields([
+  { name: "npwp", maxCount: 1 },
+  { name: "surat", maxCount: 1 },
+])
 const registerPromotor = async function (req, res) {
   const errors = validationResult(req);
+  if (!req.files?.npwp || !req.files?.surat) {
+    fs.unlinkSync(
+      path.join(
+        __dirname,
+        `../../uploads/promotor/${req.files.npwp[0].filename}`
+      )
+    );
+    fs.unlinkSync(
+      path.join(
+        __dirname,
+        `../../uploads/promotor/${req.files.surat[0].filename}`
+      )
+    );
+    return res.status(400).send({ message: "Image must be included" });
+  }
   if (!errors.isEmpty()) {
+    fs.unlinkSync(
+      path.join(
+        __dirname,
+        `../../uploads/promotor/${req.files.npwp[0].filename}`
+      )
+    );
+    fs.unlinkSync(
+      path.join(
+        __dirname,
+        `../../uploads/promotor/${req.files.surat[0].filename}`
+      )
+    );
     return res.status(400).send({ errors: errors.array() });
   }
   let { email, password, company_name, brand_name } = req.body;
   let findPromotor = await Promotor.findByEmail(email);
   if (findPromotor !== null) {
+    fs.unlinkSync(
+      path.join(
+        __dirname,
+        `../../uploads/promotor/${req.files.npwp[0].filename}`
+      )
+    );
+    fs.unlinkSync(
+      path.join(
+        __dirname,
+        `../../uploads/promotor/${req.files.surat[0].filename}`
+      )
+    );
     res.status(409);
     throw new Error("Email already exists");
   }
@@ -399,6 +466,20 @@ const registerPromotor = async function (req, res) {
     company_name: company_name,
     brand_name: brand_name,
   });
+  fs.renameSync(
+    path.join(
+      __dirname,
+      `../../uploads/promotor/${req.files.npwp[0].filename}`
+    ),
+    path.join(__dirname, `../../uploads/promotor/npwp-${newPromotor._id}.jpg`)
+  );
+  fs.renameSync(
+    path.join(
+      __dirname,
+      `../../uploads/promotor/${req.files.surat[0].filename}`
+    ),
+    path.join(__dirname, `../../uploads/promotor/surat-${newPromotor._id}.jpg`)
+  );
   await newPromotor.save();
   const link = `${BACKEND_URL}/api/auth/activate-promotor/${newPromotor._id.toString()}`;
   const result = await transporter.sendMail({
@@ -511,4 +592,5 @@ module.exports = {
   loginPromotor,
   currentUser,
   registerCineplexMulter,
+  registerPromotorMulter,
 };
