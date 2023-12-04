@@ -26,7 +26,7 @@ export const UserFindBranch = () => {
     initFlowbite();
   }, []);
   return (
-    <div className="mt-24 px-4">
+    <div className="mt-24 px-10">
       <div className="font-bold text-2xl mb-4">Bioskop Tersedia</div>
       <div className="font-bold mb-1">Filter</div>
       <div className="flex gap-1">

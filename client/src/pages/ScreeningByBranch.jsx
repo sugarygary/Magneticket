@@ -12,7 +12,7 @@ import CardCineplexStudio from "../components/CardCineplexStudio";
 
 export default function ScreeningByBranch() {
   let { branch_id } = useParams();
-  const navigation = useNavigation();
+  const { state } = useNavigation();
   const [showtimeFilter, setShowtimeFilter] = useState(
     moment(new Date()).tz("Asia/Jakarta").startOf("day").format("yyyy-MM-DD")
   );
@@ -58,7 +58,7 @@ export default function ScreeningByBranch() {
           onChange={(e) => {
             setShowtimeFilter(e.target.value);
           }}
-          className="borde mb-4 text-sm rounded border-s-2 select-none focus:border-blue-500 block w-full md:w-1/4 p-2.5 biruTua border-gray-600 placeholder-gray-400 text-[#f8f8f8] focus:ring-blue-500 focus:border-blue-500"
+          className="border mb-4 text-sm rounded border-s-2 select-none focus:border-blue-500 block w-full md:w-1/4 p-2.5 biruTua border-gray-600 placeholder-gray-400 text-[#f8f8f8] focus:ring-blue-500 focus:border-blue-500"
         />
         <div className="w-full">
           {filteredScreenings.length == 0 && (

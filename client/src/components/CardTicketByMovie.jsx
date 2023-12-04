@@ -40,7 +40,7 @@ const CardTicketByMovie = (props) => {
           </table>
         </div>
       </div>
-      <div className="p-2 bg-[#f8f8f8] mt-1  rounded">
+      <div className="p-2 bg-[#f8f8f8] mt-2 rounded">
         <p className="text-[0.6rem] md:text-base font-bold">Sinopsis</p>
         <p className="text-[0.6rem] text-justify pe-2 md:text-base">
           {props.synopsis}

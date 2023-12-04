@@ -7,7 +7,6 @@ const {
   findPromoByScreening,
   getHistory,
   getDetailHistory,
-  createTicketReal,
   getSingleEvent,
   getSingleEventCategory,
   createSnap,
@@ -17,7 +16,6 @@ const userRouter = express.Router();
 userRouter.use(verifyUserCookie);
 userRouter.post("/create-transaction", expressAsyncHandler(createTicket));
 userRouter.post("/create-snap", expressAsyncHandler(createSnap));
-// userRouter.post("/create-ticket", expressAsyncHandler(createTicketReal));
 
 userRouter.get(
   "/screening/:screening_id/seat-info",

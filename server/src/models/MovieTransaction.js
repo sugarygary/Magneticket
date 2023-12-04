@@ -46,6 +46,10 @@ const movieTransactionSchema = new Schema(
       type: String,
       required: true,
     },
+    price_per_seat: {
+      type: Number,
+      required: true,
+    },
     payment_method: {
       type: String,
       required: true,
@@ -54,7 +58,10 @@ const movieTransactionSchema = new Schema(
       type: Number,
       required: true,
     },
-    promo_code: { type: String, default: null },
+    promo: {
+      promo_code: { type: String },
+      discount_amount: { type: Number },
+    },
     status: {
       type: String,
       default: "PENDING",
@@ -64,6 +71,7 @@ const movieTransactionSchema = new Schema(
     foods: [
       {
         food_name: { type: String },
+        food_price: { type: Number },
         quantity: { type: String },
       },
     ],

@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 // import { joiResolver } from "@hookform/resolvers/joi"
 import sawx from "../assets/sawx.png";
 import moment from "moment-timezone";
+import { Link } from "react-router-dom";
 const CardCineplexStudio = (props) => {
   return (
-    <div className="rounded-md shadow-xl biruTua border border-8 border-[#1f2a37]">
+    <div className="rounded-md mb-3 shadow-xl biruTua border border-8 border-[#1f2a37]">
       <div className="flex">
         <img
           src={props.img}
@@ -44,13 +45,14 @@ const CardCineplexStudio = (props) => {
       </div>
       <div className="py-2 px-2 rounded mt-2 flex flex-wrap gap-2 bg-[#f8f8f8]">
         {props.screenings.map((screening) => {
+          console.log(screening);
           if (
             screening.showtime <
             moment(new Date()).tz("Asia/Jakarta").toISOString()
           ) {
             return (
               <div
-                key={screening._id}
+                key={screening.screening_id}
                 className="font-extrabold cursor-not-allowed select-none bg-[#D4D4D4] text-black border border-black rounded-lg px-2 text-center py-1"
               >
                 {moment(screening.showtime).tz("Asia/Jakarta").format("HH:mm")}
@@ -58,12 +60,13 @@ const CardCineplexStudio = (props) => {
             );
           }
           return (
-            <div
-              key={screening._id}
+            <Link
+              to={`/user/seating/${screening.screening_id}`}
+              key={screening.screening_id}
               className="font-extrabold cursor-pointer select-none hover:bg-[#1c64f2] hover:text-white hover:border-[#1c64f2] bg-[#F8f8f8] text-black border border-black rounded-lg px-2 text-center py-1"
             >
               {moment(screening.showtime).tz("Asia/Jakarta").format("HH:mm")}
-            </div>
+            </Link>
           );
         })}
       </div>

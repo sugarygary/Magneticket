@@ -11,6 +11,9 @@ const UserLoginForm = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState(null);
+  useEffect(() => {
+    setErrorMsg(null);
+  }, [email, password]);
   async function submitForm(e) {
     e.preventDefault();
     setErrorMsg(null);
@@ -20,24 +23,21 @@ const UserLoginForm = (props) => {
       password: password,
     };
     if (email == "" || password == "") {
-      setErrorMsg("All field must be filled");
+      setErrorMsg("Semua input harus diisi!");
       return;
     }
     if (!email.match(emailPattern)) {
-      setErrorMsg("Email is not valid");
+      setErrorMsg("Email tidak valid");
       return;
     }
 
     let retu = await loginUser(data);
-    console.log(retu);
     if (retu.response) {
       if (retu.response.status == 400) {
-        console.log("HAHALAOL");
         setErrorMsg(retu.response.data.message);
         return;
       }
       if (retu.response.status == 403) {
-        //navigate ke email belum aktif
         navigate("/user/pending-email", {
           state: { pending_email: data.email },
         });
@@ -51,7 +51,7 @@ const UserLoginForm = (props) => {
   }
   return (
     <div className="w-full h-full flex justify-center text-white mt-24 my-12">
-      <div className="biruTua p-12 rounded w-3/4 sm:w-1/2 mx-auto ">
+      <div className="biruTua p-12 rounded-lg w-3/4 sm:w-1/2 mx-auto ">
         <div className="justify-center">
           <img src={logo1} alt="" className="w-48 mx-auto" />
           <p className="font-magneticket text-center text-4xl">MAGNETICKET</p>

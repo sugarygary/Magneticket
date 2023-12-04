@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { nanoid } = require("nanoid");
+const { nanoid, customAlphabet } = require("nanoid");
 const jwt = require("jsonwebtoken");
 const MovieTicket = require("../models/MovieTicket");
 const Screening = require("../models/Screening");
@@ -115,7 +115,10 @@ const findPromoByScreening = async (req, res) => {
 };
 function generateTransactionId() {
   const timestamp = new Date().getTime();
-  const transactionId = `CPX${timestamp}${nanoid()}`;
+  const transactionId = `CPX${timestamp}-${customAlphabet(
+    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    8
+  )()}`;
   return transactionId;
 }
 
@@ -239,6 +242,7 @@ const createTicket = async (req, res) => {
     }
     foodItems.push({
       food_name: findFood.item_name,
+      food_price: findFood.price,
       quantity: element.quantity,
     });
     foodTotal += findFood.price * element.quantity;
@@ -255,9 +259,13 @@ const createTicket = async (req, res) => {
   let amounts_paid = 0;
   if (discount_amount != 0) {
     amounts_paid =
-      findScreening.price * seats.length + foodTotal + (4000*findSeats.length) - discount_amount;
+      findScreening.price * seats.length +
+      foodTotal +
+      4000 * findSeats.length -
+      discount_amount;
   } else {
-    amounts_paid = findScreening.price * seats.length + foodTotal + (4000*findSeats.length);
+    amounts_paid =
+      findScreening.price * seats.length + foodTotal + 4000 * findSeats.length;
   }
   if (findTicket.length > 0) {
     if (status == "SUCCESS") {
@@ -290,6 +298,7 @@ const createTicket = async (req, res) => {
         payment_method: "-",
         status: "REFUND",
         midtrans_token: midtrans_token,
+        price_per_seat: findScreening.price,
       });
       await newMovieTransaction.save();
       return res.status(201).send({
@@ -375,143 +384,6 @@ const createTicket = async (req, res) => {
     order_id: newMovieTransaction._id,
   });
 };
-const createTicketReal = async (req, res) => {
-  const {
-    foods,
-    seats,
-    screening_id,
-    discount_amount,
-    order_id,
-    midtrans_token,
-  } = req.body;
-  const findScreening = await Screening.findById(screening_id);
-  if (findScreening == null) {
-    return res.status(404).send({ message: "Screening not found" });
-  }
-  const findSeats = await Seat.find({
-    studio: findScreening.studio,
-    _id: { $in: seats },
-  });
-  if (findSeats.length != seats.length) {
-    return res.status(400).send({ message: "Invalid seat input" });
-  }
-  const findTicket = await MovieTicket.find({
-    screening: screening_id,
-    seats: { $in: seats },
-  }).populate({
-    path: "transaction",
-    match: {
-      status: "SUCCESS",
-    },
-  });
-  let foodItems = [];
-  let foodTotal = 0;
-  for (let i = 0; i < foods.length; i++) {
-    const element = foods[i];
-    let findFood = await Menu.findOne({
-      _id: element._id,
-      cineplex: findScreening.cineplex,
-    });
-    if (findFood == null) {
-      return res.status(400).send({ message: "Invalid addon input" });
-    }
-    foodItems.push({
-      food_name: findFood.item_name,
-      quantity: element.quantity,
-    });
-    foodTotal += findFood.price * element.quantity;
-  }
-  let displaySeats = [];
-  findSeats.forEach((seat) => {
-    displaySeats.push(seat.seat_number);
-  });
-  let findCineplex = await Cineplex.findById(findScreening.cineplex);
-  let findBranch = await Branch.findById(findScreening.branch);
-  let findStudio = await Studio.findById(findScreening.studio);
-  let customer = await User.findById(req.userId);
-  let movie = await Movie.findById(findScreening.movie);
-  let amounts_paid = 0;
-  if (discount_amount != 0) {
-    amounts_paid =
-      findScreening.price * seats.length + foodTotal + 4000 - discount_amount;
-  } else {
-    amounts_paid = findScreening.price * seats.length + foodTotal + 4000;
-  }
-  if (findTicket.length > 0) {
-    let refund = await axios.post(
-      `https://api.sandbox.midtrans.com/v2/${order_id}/refund`,
-      {},
-      {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: process.env.MIDTRANS_AUTH_STRING,
-        },
-      }
-    );
-    let newMovieTransaction = new MovieTransaction({
-      _id: order_id,
-      cineplex_brand: findCineplex.brand_name,
-      cineplex_id: findCineplex._id,
-      customer_email: customer.email,
-      customer_id: customer._id,
-      customer_name: customer.full_name,
-      movie_title: movie.title,
-      movie_id: movie._id,
-      movie_img: movie.img,
-      amounts_paid: amounts_paid,
-      branch_name: findBranch.branch_name,
-      studio_name: findStudio.studio_name,
-      seats: displaySeats,
-      foods: foodItems,
-      payment_method: "-",
-      status: "REFUND",
-      midtrans_token: midtrans_token,
-    });
-    try {
-      // await newMovieTransaction.save();
-    } catch (error) {
-      console.log(error);
-    }
-    return res
-      .status(201)
-      .send({ message: "Seats already booked. Transaction refunded" });
-  }
-  let newMovieTransaction = new MovieTransaction({
-    _id: order_id,
-    cineplex_brand: findCineplex.brand_name,
-    cineplex_id: findCineplex._id,
-    customer_email: customer.email,
-    customer_id: customer._id,
-    customer_name: customer.full_name,
-    movie_title: movie.title,
-    movie_id: movie._id,
-    movie_img: movie.img,
-    amounts_paid: amounts_paid,
-    branch_name: findBranch.branch_name,
-    studio_name: findStudio.studio_name,
-    seats: displaySeats,
-    foods: foodItems,
-    payment_method: "-",
-    status: "SUCCESS",
-    midtrans_token: midtrans_token,
-  });
-  // await newMovieTransaction.save();
-  let newTicket = new MovieTicket({
-    cineplex: findCineplex._id,
-    customer: customer._id,
-    screening: findScreening._id,
-    seats: seats,
-    foods: foods,
-    transaction: newMovieTransaction._id,
-  });
-  // await newTicket.save();
-  return res.status(201).send({
-    message: "Order created. Please pay.",
-    order_id: newMovieTransaction._id,
-    ticket_id: newTicket._id,
-  });
-};
 
 const getHistory = async (req, res) => {
   let findHistory = await MovieTransaction.find({ customer_id: req.userId });
@@ -577,7 +449,6 @@ module.exports = {
   findPromoByScreening,
   getHistory,
   getDetailHistory,
-  createTicketReal,
   getSingleEvent,
   getSingleEventCategory,
 };
