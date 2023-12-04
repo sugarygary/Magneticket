@@ -210,7 +210,7 @@ export default function CineplexJadwal() {
                   </tr>
                 </table>
 
-                <div className="mt-9 flex justify-between">
+                {/* <div className="mt-9 flex justify-between">
                   <div></div>
                   <Link
                     className="biruCariTiket p-2 text-white rounded"
@@ -218,7 +218,7 @@ export default function CineplexJadwal() {
                   >
                     Lihat Detail
                   </Link>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

@@ -49,11 +49,11 @@ const CineplexLoginForm = (props) => {
     navigate("/cineplex/home");
   }
   return (
-    <div className=" w-full h-full flex justify-center text-white my-5">
-      <div className="biruTua p-12 rounded w-3/4 mx-auto ">
+    <div className=" w-full flex justify-center text-white my-10">
+      <div className="biruTua p-12 rounded w-1/2 mx-auto ">
         <div className="justify-center">
-          <img src={logo1} alt="" className="w-96 mx-auto" />
-          <p className="font-magneticket text-center text-7xl">MAGNETICKET</p>
+          <img src={logo1} alt="" className="w-48 mx-auto" />
+          <p className="font-magneticket text-center text-4xl">MAGNETICKET</p>
         </div>
         <form onSubmit={submitForm} className="mt-5">
           <div className="mb-3 text-left">
@@ -84,8 +84,8 @@ const CineplexLoginForm = (props) => {
           </div>
           <div className="mb-3 text-left flex">
             <p>Belum punya akun?</p>
-            <Link to="/register" className="biruDaftarSekarang ml-1">
-              Daftar sekarang{" "}
+            <Link to="/cineplex/register" className="biruDaftarSekarang ml-1">
+              Daftar sekarang{""}
             </Link>
           </div>
         </form>

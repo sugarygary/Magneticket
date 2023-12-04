@@ -7,6 +7,7 @@ import { kotaDanKabupaten } from "../util/kotaDanKabupaten";
 
 const CineplexHistoryTiket = () => {
   const data = useLoaderData();
+  console.log(data)
   const navigate = useNavigate();
   const [filteredScreenings, setFilteredScreenings] = useState([]);
   const [tanggal, setTanggal] = useState(null);

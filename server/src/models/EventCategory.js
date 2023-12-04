@@ -12,7 +12,17 @@ const eventCategorySchema = new Schema(
   { timestamps: true }
 );
 
-const EventCategory = mongoose.model(
+eventCategorySchema.statics.findByEvent = async function (eventId) {
+  try {
+    const categories = await this.find({ event: eventId });
+
+    return categories;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const EventCategory = mongoose.model( 
   "EventCategory",
   eventCategorySchema,
   "event_categories"

@@ -255,9 +255,9 @@ const createTicket = async (req, res) => {
   let amounts_paid = 0;
   if (discount_amount != 0) {
     amounts_paid =
-      findScreening.price * seats.length + foodTotal + 4000 - discount_amount;
+      findScreening.price * seats.length + foodTotal + (4000*findSeats.length) - discount_amount;
   } else {
-    amounts_paid = findScreening.price * seats.length + foodTotal + 4000;
+    amounts_paid = findScreening.price * seats.length + foodTotal + (4000*findSeats.length);
   }
   if (findTicket.length > 0) {
     if (status == "SUCCESS") {

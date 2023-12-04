@@ -118,7 +118,7 @@ const PromotorHistoryTiket = () => {
           </tr>
         </thead>
         <tbody className="biruTua">
-          {filteredEvents &&
+          {filteredEvents.length > 0 &&
             filteredEvents.map((sale) => (
               <tr key={sale._id}>
                 <td className="border-t border-b py-2 px-4">
@@ -134,10 +134,10 @@ const PromotorHistoryTiket = () => {
                   {sale.createdAt.substring(0, 10)}
                 </td>
                 <td className="border-t border-b py-2 px-4">
-                  {sale.createdAt.substring(0, 10)}
+                {sale.event_category.category_name}
                 </td>
                 <td className="border-t border-b py-2 px-4">
-                  {sale.event_category.category_name}
+                  {sale.transaction.amounts_paid}
                 </td>
                 <td className="border-t border-b py-2 px-4">
                   {sale.claimed == true ? "CLAIMED" : "UNCLAIMED"}

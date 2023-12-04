@@ -256,9 +256,52 @@ const getSingleEventTicket = async (req, res) => {
   }
 };
 
-module.exports = { getEventTicket };
+const getAllEvents = async (req, res) => {
+  const promotorId = req.userId;
+  try {
+    const eventsByPromotor = await Event.find({ promotor: promotorId });
+    res.status(200).json({ events: eventsByPromotor });
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 
+const getSingleEvent = async (req, res) => {
+  try {
+    const eventTicket = await Event.findById(req.params.id)
+
+
+    if (!eventTicket) {
+      return res.status(404).json({ error: "EventTicket not found" });
+    }
+    res.status(200).json({ eventTicket });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+const getKategoriEvent = async (req, res) => {
+  try {
+    const eventId = req.params.id;
+    const kategoriTickets = await EventCategory.findByEvent(eventId);
+
+    if (kategoriTickets.length === 0) {
+      return res.status(404).json({ error: "No categories found for the event" });
+    }
+
+    res.status(200).json({ kategoriTickets });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+module.exports = { getEventTicket };
+ 
 
 module.exports = {
-  verifyPromotorCookie, createEvent, createEventMulter, getEventTicket, getSingleEventTicket
+  verifyPromotorCookie, createEvent, createEventMulter, getEventTicket, getSingleEventTicket, getAllEvents, getSingleEvent, getKategoriEvent
 };

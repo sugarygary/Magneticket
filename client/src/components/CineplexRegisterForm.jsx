@@ -4,7 +4,7 @@ import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
 import logo1 from "../assets/logo1.png";
 import { registerCineplex, registerUser } from "../handlers/LoginHandler";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const CineplexRegisterForm = (props) => {
   const navigate = useNavigate();
@@ -81,10 +81,10 @@ const CineplexRegisterForm = (props) => {
   };
   return (
     <div className=" w-full h-full flex justify-center items-center text-white my-10">
-      <div className="biruTua p-12 text-center rounded  w-3/4 mx-auto ">
+      <div className="biruTua p-12 text-center rounded w-3/4 mx-auto ">
         <div className="justify-center">
-          <img src={logo1} alt="" className="w-96 mx-auto" />
-          <p className="font-magneticket text-7xl">MAGNETICKET</p>
+          <img src={logo1} alt="" className="w-60 mx-auto" />
+          <p className="font-magneticket text-6xl">MAGNETICKET</p>
         </div>
         <form onSubmit={submitForm} className="mt-5">
           <div className="mb-3 text-left">
@@ -202,6 +202,10 @@ const CineplexRegisterForm = (props) => {
             <button className="biruMuda w-full rounded p-1 pl-2">Daftar</button>
           </div>
         </form>
+        <div className="flex">
+          <div>Sudah memiliki akun? </div>
+          <Link to={"/cineplex/login"} className="px-2 text-blue-500">Login sekarang</Link>
+        </div>
       </div>
     </div>
   );

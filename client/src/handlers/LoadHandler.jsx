@@ -309,3 +309,22 @@ export const loadAllMovieTransactions = async (data) => {
     return error;
   }
 };
+
+export const loadAllEvents = async (data) => {
+  try {
+    const response = await client.get(`api/promotor/allEvent`);
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const loadDetailEventJadwal = async (data) => {
+  try {
+    const event = await client.get(`api/promotor/allEvent/${data.params.event_id}`);
+    const kategori = await client.get(`api/promotor/allEvent/${data.params.event_id}/kategori`);
+    return {event, kategori};
+  } catch (error) {
+    return error;
+  }
+};

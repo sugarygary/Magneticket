@@ -47,6 +47,8 @@ import {
   loadDetailEventWithAuth,
   loadCategoryEventWithAuth,
   loadAllMovieTransactions,
+  loadAllEvents,
+  loadDetailEventJadwal
 } from "./handlers/LoadHandler.jsx";
 import PendingEmail from "./pages/pendingEmail.jsx";
 import { LayoutUser } from "./pages/LayoutUser.jsx";
@@ -91,6 +93,8 @@ import client from "./util/client.js";
 import { UserFindFilm, loadFilms } from "./pages/UserFindFilm.jsx";
 import PromotorHistoryTiket from "./pages/PromotorHistoryTicket.jsx";
 import PromotorDetailHistoryTiket from "./pages/PromotorDetailHistoryTiket.jsx";
+import PromotorJadwalEvent from "./pages/PromotorJadwalEvent.jsx";
+import PromotorDetailEvent from "./pages/PromotorDetailEvent.jsx"
 import HomeCineplex from "./pages/CineplexHome.jsx";
 import EventOrganizerHome from "./pages/EventOrganizerHome.jsx";
 import CheckoutEvent from "./pages/CheckoutEvent.jsx";
@@ -413,6 +417,20 @@ const router = createBrowserRouter([
         element: <EventOrganizerCreateEvent />,
         // loader: loadUsers,
         action: createEvent,
+        errorElement: <ErrorElement />,
+      },
+      {
+        path: "jadwal",
+        element: <PromotorJadwalEvent></PromotorJadwalEvent>,
+        loader: loadAllEvents,
+        // action: createStudio,
+        errorElement: <ErrorElement />,
+      },
+      {
+        path: "jadwal/:event_id",
+        element: <PromotorDetailEvent></PromotorDetailEvent>,
+        loader: loadDetailEventJadwal,
+        // action: createStudio,
         errorElement: <ErrorElement />,
       },
       {

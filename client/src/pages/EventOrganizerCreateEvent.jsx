@@ -156,36 +156,36 @@ export default function EventOrganizerCreateEvent() {
         <div className="flex px-12 w-full">
           <div className="biruTua p-10 my-10 rounded w-3/12">
             <div className="text-center text-white">
-              <div className="flex justify-center items-center">
-                <img src={upload} alt="" className="w-12" />
+              <div className="flex justify-center my-2 items-center">
+                <img src={upload} alt="" className="w-10 invert" />
               </div>
               <p>Unggah Poster</p>
-              <p>Direkomendasikan 595 x 842 px dan tidak lebih dari 30 MB</p>
-              <div className="flex w-full justify-center bg-gray-900">
+              <p className="text-xs">Direkomendasikan 595 x 842 px dan tidak lebih dari 30 MB</p>
+              <div className="flex w-full justify-center bg-gray-900 my-2">
                 <input
                   type="file"
                   name=""
                   id=""
-                  className=""
+                  className="font-sm"
                   onChange={((e)=> {handlePoster(e.target.files[0])})}
                 />
               </div>
             </div>
           </div>
-          <div className="biruTua p-10 my-10 rounded ml-12 w-9/12">
+          <div className="biruTua p-10 my-10 rounded ml-12 w-9/12 flex items-center justify-center">
             <div className="text-center text-white">
-              <div className="flex justify-center items-center">
-                <img src={upload} alt="" className="w-12" />
+              <div className="flex justify-center items-center my-2">
+                <img src={upload} alt="" className="w-10 invert" />
               </div>
               <p>Unggah Banner</p>
-              <p>Direkomendasikan 595 x 842 px dan tidak lebih dari 30 MB</p>
-              <div className="flex ml-72 w-5/12 bg-gray-900">
+              <p className="font-xs">Direkomendasikan 595 x 842 px dan tidak lebih dari 30 MB</p>
+              <div className="flex ml-48 w-5/12 bg-gray-900 my-2">
                 <input
                   type="file"
                   name=""
                   id=""
                   className=""
-                  onChange={((e)=> {handleBanner(e.target.files[0])})}
+                  onChange={(e) => { handleBanner(e.target.files[0]) }}
                 />
               </div>
             </div>
