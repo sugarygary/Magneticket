@@ -7,10 +7,13 @@ const Promotor = require("../models/Promotor");
 const MovieTicket = require("../models/MovieTicket");
 const Screening = require("../models/Screening");
 const MovieTransaction = require("../models/MovieTransaction");
+const EventTransaction = require("../models/EventTransaction");
+const EventTicket = require("../models/EventTicket");
+const Event = require("../models/Event");
+const EventCategory = require("../models/EventCategory");
 const { GMAIL_ACC, GMAIL_APP_PASSWORD, BACKEND_URL, FRONTEND_URL } =
   process.env;
 const nodemailer = require("nodemailer");
-const Event = require("../models/Event");
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -219,6 +222,16 @@ const getMovieTransactions = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+const getEventTransactions = async (req, res) => {
+  try {
+    const EventTransactions = await EventTicket.find({}).populate('event').populate({path:"event",populate:{path:"promotor"}}).populate("transaction").populate("event_category").exec();
+    const EventCategories = await EventCategory.find({}).exec();
+    res.status(200).json({ EventTransactions,EventCategories });
+  } catch (error) {
+    console.error('Error fetching event transactions:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+};
 
 module.exports = {
   verifyCineplex,
@@ -233,5 +246,6 @@ module.exports = {
   getSingleEvent,
   verifyEvent,
   deleteEvent,
-  getMovieTransactions
+  getMovieTransactions,
+  getEventTransactions
 };

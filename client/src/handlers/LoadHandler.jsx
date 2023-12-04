@@ -309,6 +309,14 @@ export const loadAllMovieTransactions = async (data) => {
     return error;
   }
 };
+export const loadAllEventTransactions = async (data) => {
+  try {
+    const response = await client.get(`api/admin/event-transactions`);
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+}
 
 export const loadAllEvents = async (data) => {
   try {
@@ -328,3 +336,4 @@ export const loadDetailEventJadwal = async (data) => {
     return error;
   }
 };
+

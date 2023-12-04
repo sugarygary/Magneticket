@@ -152,16 +152,10 @@ const AdminLaporanPenjualan = () => {
         console.log("ini filtered4", filtered4);
     }, [tanggal1, tanggal2, kota, cabang, studio]); 
 
-    useEffect(() => {
-        //join filtered based on .screening.branch
-        
-        
 
-
-    },[filteredScreenings]);
   return (
       <div className="px-12 py-4">
-          <p className="text-2xl font-bold">Informasi Ticket</p>
+          <p className="text-2xl font-bold">Laporan Penjualan Bioskop</p>
           <div className="flex gap-3 my-4">
               <div>
                   <p>Tanggal Awal</p>
@@ -213,11 +207,11 @@ const AdminLaporanPenjualan = () => {
                   </select>
               </div>
               <div>
-                  <label htmlFor="city" className="">
+                  <label htmlFor="cabang" className="">
                       Cabang
                   </label>
                   <select
-                      id="city"
+                      id="cabang"
                       defaultValue={""}
                       autoFocus
                       className="border text-sm rounded border-s-2 focus:border-blue-500 block w-full p-2.5 biruTua border-gray-600 placeholder-gray-400 text-[#f8f8f8] focus:ring-blue-500 focus:border-blue-500"
