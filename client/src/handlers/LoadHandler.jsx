@@ -337,3 +337,12 @@ export const loadDetailEventJadwal = async (data) => {
   }
 };
 
+export const loadMovieReport = async (data) => {
+  try {
+    const response = await client.get(`api/admin/movie-report`);
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+}
+

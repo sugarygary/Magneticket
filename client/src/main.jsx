@@ -50,6 +50,7 @@ import {
   loadAllEvents,
   loadDetailEventJadwal,
   loadAllEventTransactions,
+  loadMovieReport
 } from "./handlers/LoadHandler.jsx";
 import PendingEmail from "./pages/pendingEmail.jsx";
 import { LayoutUser } from "./pages/LayoutUser.jsx";
@@ -123,6 +124,7 @@ import AdminVerifEvent from "./pages/AdminVerifEvent.jsx";
 import VerifikasiEventPage from "./pages/VerifikasiEventPage.jsx";
 import AdminLaporanPenjualan from "./pages/AdminLaporanPenjualan.jsx";
 import AdminLaporanPenjualanKonser from "./pages/AdminLaporanPenjualanKonser.jsx";
+import AdminLaporanFilm from "./pages/AdminLaporanFilm.jsx";
 
 async function coba() {
   let x = loadInTheater();
@@ -502,6 +504,11 @@ const router = createBrowserRouter([
         path: "laporan-penjualan-event",
         element: <AdminLaporanPenjualanKonser />,
         loader: loadAllEventTransactions,
+      },
+      {
+        path: "laporan-film",
+        element: <AdminLaporanFilm />,
+        loader: loadMovieReport,
       }
     ],
   },
