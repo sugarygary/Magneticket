@@ -18,7 +18,7 @@ const eventTicketSchema = new Schema(
       required: true,
     },
     transaction: {
-      type: Schema.ObjectId,
+      type: String,
       ref: "EventTransaction",
     },
     claimed: { type: Boolean, default: false },

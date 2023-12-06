@@ -172,7 +172,6 @@ export default function SeatingPage() {
       screening_id: data.screening_id,
       discount_amount: temp,
     };
-    // let checkout;
     let snapData;
     try {
       snapData = await client.post("/api/user/create-snap", snapBody);

@@ -3,6 +3,9 @@ const Schema = mongoose.Schema;
 
 const eventTransactionSchema = new Schema(
   {
+    _id: {
+      type: String,
+    },
     promotor: {
       type: Schema.ObjectId,
       required: true,
@@ -44,6 +47,7 @@ const eventTransactionSchema = new Schema(
       default: "PENDING",
       enum: ["PENDING", "FAILED", "SUCCESS"],
     },
+    midtrans_token: { type: String, required: true },
   },
   { timestamps: true }
 );

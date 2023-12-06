@@ -18,6 +18,8 @@ const EventCategory = require("../models/EventCategory");
 const EventTicket = require("../models/EventTicket");
 const Review = require("../models/Review");
 const { ObjectId } = require("mongodb");
+const EventTransaction = require("../models/EventTransaction");
+const Promotor = require("../models/Promotor");
 
 const verifyUserCookie = async (req, res, next) => {
   try {
@@ -123,6 +125,14 @@ function generateTransactionId() {
   )()}`;
   return transactionId;
 }
+function generateTransactionIdEvent() {
+  const timestamp = new Date().getTime();
+  const transactionId = `EVX${timestamp}-${customAlphabet(
+    "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    8
+  )()}`;
+  return transactionId;
+}
 
 const createSnap = async (req, res) => {
   const { foods, seats, screening_id, discount_amount } = req.body;
@@ -170,6 +180,60 @@ const createSnap = async (req, res) => {
     amounts_paid = findScreening.price * seats.length + foodTotal + 4000;
   }
   let order_id = generateTransactionId();
+  let midtrans = await axios.post(
+    "https://app.sandbox.midtrans.com/snap/v1/transactions",
+    {
+      transaction_details: {
+        order_id: order_id,
+        gross_amount: amounts_paid,
+      },
+      credit_card: {
+        secure: true,
+      },
+      customer_details: {
+        email: customer.email,
+      },
+    },
+    {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: process.env.MIDTRANS_AUTH_STRING,
+      },
+    }
+  );
+  if (midtrans.data.token) {
+    return res.status(201).send({
+      message: "Order created. Please pay.",
+      order_id: order_id,
+      ...midtrans.data,
+    });
+  }
+  return;
+};
+const createSnapEvent = async (req, res) => {
+  const { event_category, quantity } = req.body;
+  const findEventCategory = await EventCategory.findById(event_category);
+  if (findEventCategory == null) {
+    return res.status(404).send({ message: "Category not found" });
+  }
+  const findEvent = await Event.findOne({
+    _id: findEventCategory.event,
+    verified: true,
+  });
+  if (findEvent == null) {
+    return res.status(404).send({ message: "Event not found" });
+  }
+  if (findEvent.sale_end_date < new Date()) {
+    return res.status(404).send({ message: "Event not found" });
+  }
+  if (findEventCategory.slot < quantity) {
+    return res.status(400).send({ message: "Not enough slot" });
+  }
+  let customer = await User.findById(req.userId);
+  let amounts_paid = 0;
+  amounts_paid = findEventCategory.price * quantity + 4000;
+  let order_id = generateTransactionIdEvent();
   let midtrans = await axios.post(
     "https://app.sandbox.midtrans.com/snap/v1/transactions",
     {
@@ -400,6 +464,128 @@ const createTicket = async (req, res) => {
     order_id: newMovieTransaction._id,
   });
 };
+const createTicketEvent = async (req, res) => {
+  const { quantity, event_category, order_id, status, midtrans_token } =
+    req.body;
+  const findEventCategory = await EventCategory.findById(event_category);
+  if (findEventCategory == null) {
+    console.log("saiundiuasn2");
+    return res.status(404).send({ message: "Category not found" });
+  }
+  const findEvent = await Event.findOne({
+    _id: findEventCategory.event,
+  });
+  let customer = await User.findById(req.userId);
+  let amounts_paid = 0;
+  amounts_paid = findEventCategory.price * quantity + 4000;
+  let findPromotor = await Promotor.findById(findEvent.promotor);
+  if (findEventCategory.slot < quantity) {
+    if (status == "SUCCESS") {
+      let refund = await axios.post(
+        `https://api.sandbox.midtrans.com/v2/${order_id}/refund`,
+        {},
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: process.env.MIDTRANS_AUTH_STRING,
+          },
+        }
+      );
+      let newEventTransaction = new EventTransaction({
+        _id: order_id,
+        promotor: findEvent.promotor,
+        promotor_brand: findPromotor.brand_name,
+        event_name: findEvent.event_name,
+        event_category_name: findEventCategory.category_name,
+        customer_email: customer.email,
+        customer_id: customer._id,
+        customer_name: customer.full_name,
+        amounts_paid: amounts_paid,
+        payment_method: "-",
+        status: "REFUND",
+        midtrans_token: midtrans_token,
+      });
+      await newEventTransaction.save();
+      return res.status(201).send({
+        message: "Created",
+        order_id: newEventTransaction._id,
+      });
+    }
+    if (status == "PENDING") {
+      let cancel = await axios.post(
+        `https://api.sandbox.midtrans.com/v2/${order_id}/cancel`,
+        {},
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: process.env.MIDTRANS_AUTH_STRING,
+          },
+        }
+      );
+      let newEventTransaction = new EventTransaction({
+        _id: order_id,
+        promotor: findEvent.promotor,
+        promotor_brand: findPromotor.brand_name,
+        event_name: findEvent.event_name,
+        event_category_name: findEventCategory.category_name,
+        customer_email: customer.email,
+        customer_id: customer._id,
+        customer_name: customer.full_name,
+        amounts_paid: amounts_paid,
+        payment_method: "-",
+        status: "FAILED",
+        midtrans_token: midtrans_token,
+      });
+      await newEventTransaction.save();
+      return res.status(201).send({
+        message: "Created",
+        order_id: newEventTransaction._id,
+      });
+    }
+  }
+  let newEventTransaction = new EventTransaction({
+    _id: order_id,
+    promotor: findEvent.promotor,
+    promotor_brand: findPromotor.brand_name,
+    event_name: findEvent.event_name,
+    event_category_name: findEventCategory.category_name,
+    customer_email: customer.email,
+    customer_id: customer._id,
+    customer_name: customer.full_name,
+    amounts_paid: amounts_paid,
+    payment_method: "-",
+    status: status,
+    midtrans_token: midtrans_token,
+  });
+  await newEventTransaction.save();
+  if (status == "FAILED") {
+    console.log("saiundiuasn2");
+    return res.status(201).send({
+      message: "Created",
+      order_id: newEventTransaction._id,
+    });
+  }
+
+  for (let i = 0; i < quantity; i++) {
+    let newTicket = new EventTicket({
+      promotor: findPromotor._id,
+      customer: customer._id,
+      event: findEvent._id,
+      event_category: findEventCategory._id,
+      transaction: newEventTransaction._id,
+    });
+    await newTicket.save();
+  }
+  findEventCategory.slot -= quantity;
+  await findEventCategory.save();
+  console.log("saiundiuasn");
+  return res.status(201).send({
+    message: "Created",
+    order_id: newEventTransaction._id,
+  });
+};
 
 const getHistory = async (req, res) => {
   let findHistory = await MovieTransaction.find({ customer_id: req.userId });
@@ -520,7 +706,9 @@ const getReviews = async (req, res) => {
 module.exports = {
   verifyUserCookie,
   createTicket,
+  createTicketEvent,
   createSnap,
+  createSnapEvent,
   getSeatsInfo,
   findMenuByScreening,
   findPromoByScreening,
