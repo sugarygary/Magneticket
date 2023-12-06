@@ -12,6 +12,7 @@ const {
   createSnap,
   createReview,
   getReviews,
+  getTickets,
 } = require("../controllers/userController");
 const expressAsyncHandler = require("express-async-handler");
 const userRouter = express.Router();
@@ -27,16 +28,14 @@ userRouter.get(
   "/screening/:screening_id/menu",
   expressAsyncHandler(findMenuByScreening)
 );
-userRouter.get(
-  "/reviews",
-  expressAsyncHandler(getReviews)
-);
+userRouter.get("/reviews", expressAsyncHandler(getReviews));
 userRouter.get(
   "/screening/:screening_id/promotion",
   expressAsyncHandler(findPromoByScreening)
 );
 
 userRouter.get("/history", expressAsyncHandler(getHistory));
+userRouter.get("/tickets", expressAsyncHandler(getTickets));
 
 userRouter.get("/history/:history_id", expressAsyncHandler(getDetailHistory));
 userRouter.get("/event-details/:event_id", expressAsyncHandler(getSingleEvent));

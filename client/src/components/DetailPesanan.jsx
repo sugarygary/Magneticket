@@ -133,14 +133,6 @@ const DetailPesanan = (props) => {
               </tr>
             </table>
           </div>
-          <div className="bg-white rounded-2xl p-2 h-fit border border-[3px] border-black">
-            <img
-              src={`https://api.qrserver.com/v1/create-qr-code/?data=${props.responseHistory._id}&amp;size=100x100`}
-              alt=""
-              title=""
-              className="w-48"
-            />
-          </div>
         </div>
       </div>
       <div className="flex justify-between">

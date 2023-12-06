@@ -78,12 +78,12 @@ const Header = (props) => {
                     </Link>
                   </li>
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to={"/user/tickets"}
                       className="block px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-[#f8f8f8]"
                     >
                       Tiket Saya
-                    </a>
+                    </Link>
                   </li>
                   <li>
                     <div

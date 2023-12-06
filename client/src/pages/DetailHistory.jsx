@@ -9,7 +9,6 @@ function DetailHistory() {
   const navigate = useNavigate();
   const { current_user, status } = useSelector((state) => state.user);
   useEffect(() => {
-    console.log(data);
     if (
       (current_user.userId == null || current_user.role != "USER") &&
       status == "succeeded"

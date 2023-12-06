@@ -72,7 +72,7 @@ const movieTransactionSchema = new Schema(
       {
         food_name: { type: String },
         food_price: { type: Number },
-        quantity: { type: String },
+        quantity: { type: Number },
       },
     ],
     midtrans_token: { type: String, required: true },

@@ -17,6 +17,7 @@ const Event = require("../models/Event");
 const EventCategory = require("../models/EventCategory");
 const EventTicket = require("../models/EventTicket");
 const Review = require("../models/Review");
+const { ObjectId } = require("mongodb");
 
 const verifyUserCookie = async (req, res, next) => {
   try {
@@ -224,6 +225,7 @@ const createTicket = async (req, res) => {
   }
 
   let foodItems = [];
+  let foodTickets = [];
   let foodTotal = 0;
   for (let i = 0; i < foods.length; i++) {
     const element = foods[i];
@@ -237,6 +239,10 @@ const createTicket = async (req, res) => {
     foodItems.push({
       food_name: findFood.item_name,
       food_price: findFood.price,
+      quantity: element.quantity,
+    });
+    foodTickets.push({
+      food_id: element._id,
       quantity: element.quantity,
     });
     foodTotal += findFood.price * element.quantity;
@@ -263,6 +269,15 @@ const createTicket = async (req, res) => {
     amounts_paid =
       findScreening.price * seats.length + foodTotal + 4000 * findSeats.length;
   }
+  const findTicket = await MovieTicket.find({
+    screening: screening_id,
+    seats: { $in: seats },
+  }).populate({
+    path: "transaction",
+    match: {
+      $or: [{ status: "PENDING" }, { status: "SUCCESS" }],
+    },
+  });
   if (findTicket.length > 0) {
     if (status == "SUCCESS") {
       let refund = await axios.post(
@@ -376,7 +391,7 @@ const createTicket = async (req, res) => {
     customer: customer._id,
     screening: findScreening._id,
     seats: seats,
-    foods: foods,
+    foods: foodTickets,
     transaction: newMovieTransaction._id,
   });
   await newTicket.save();
@@ -389,6 +404,35 @@ const createTicket = async (req, res) => {
 const getHistory = async (req, res) => {
   let findHistory = await MovieTransaction.find({ customer_id: req.userId });
   return res.status(200).send(findHistory);
+};
+const getTickets = async (req, res) => {
+  let findTickets = await MovieTicket.aggregate()
+    .match({
+      customer: new ObjectId(req.userId),
+      claimed: false,
+    })
+    .lookup({
+      from: "movie_transactions",
+      localField: "transaction",
+      foreignField: "_id",
+      as: "transaction",
+    })
+    .lookup({
+      from: "seats",
+      localField: "seats",
+      foreignField: "_id",
+      as: "seats",
+    })
+    .lookup({
+      from: "screenings",
+      localField: "screening",
+      foreignField: "_id",
+      as: "screening",
+    })
+    .unwind("$transaction")
+    .unwind("$screening")
+    .match({ "transaction.status": "SUCCESS" });
+  return res.status(200).send(findTickets);
 };
 
 const getDetailHistory = async (req, res) => {
@@ -445,9 +489,7 @@ const createReview = async (req, res) => {
   const userId = req.userId;
   const movieId = req.params.movieId;
   const { rating } = req.body;
-  console.log("ini userId " +userId)
-  console.log("ini movieId "+ movieId)
-  console.log("ini rating "+ rating)
+
   try {
     // Check if the movie exists
     const findMovie = await Movie.findById(movieId);
@@ -462,7 +504,9 @@ const createReview = async (req, res) => {
     });
     // Save the review to the database
     const savedReview = await newReview.save();
-    return res.status(201).json({ message: "Review created successfully", review: savedReview });
+    return res
+      .status(201)
+      .json({ message: "Review created successfully", review: savedReview });
   } catch (error) {
     console.error("Error creating review:", error);
     return res.status(500).send({ message: "Internal server error" });
@@ -486,4 +530,5 @@ module.exports = {
   getSingleEventCategory,
   createReview,
   getReviews,
+  getTickets,
 };

@@ -10,6 +10,9 @@
   .font-magneticket {
     font-family: "VT323";
   }
+  .font-biasa {
+    font-family: "Plus Jakarta Sans";
+  }
   body {
     min-height: 100vh;
     display: flex;
@@ -88,4 +91,14 @@ footer {
 .scrollbox:hover,
 .scrollbox:focus {
   visibility: visible;
+}
+
+.ticket {
+  background: radial-gradient(20px at right, #0000 97%, #f8f8f8) right,
+    radial-gradient(20px at left, #0000 97%, #f8f8f8) left;
+  background-size: 51% 100%;
+  background-repeat: no-repeat;
+  height: fit-content;
+  border-radius: 10px;
+  filter: drop-shadow(0 0.1rem 0.1rem rgb(0 0 0 / 50%));
 }

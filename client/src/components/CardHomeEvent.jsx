@@ -17,7 +17,7 @@ const CardHomeEvent = (props) => {
       <div className="text-white py-3 px-2">
         <p className="font-bold text-sm sm:text-lg mb-2">{props.event_name}</p>
         <Link
-          //   to={`/user/screening/${props.movie._id}`}
+          to={`/user/event/${props.event_id}`}
           className="biruCariTiket text-[.6rem] md:text-lg rounded p-1 px-2 mb-2"
         >
           Cari Tiket ➡

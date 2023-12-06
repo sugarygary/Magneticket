@@ -124,6 +124,7 @@ import VerifikasiEventPage from "./pages/VerifikasiEventPage.jsx";
 import AdminLaporanPenjualan from "./pages/AdminLaporanPenjualan.jsx";
 import AdminLaporanPenjualanKonser from "./pages/AdminLaporanPenjualanKonser.jsx";
 import AdminLaporanFilm from "./pages/AdminLaporanFilm.jsx";
+import { UserTickets, loadTickets } from "./pages/UserTickets.jsx";
 import UserCreateReview from "./pages/UserCreateReview.jsx";
 import { createReview } from "./handlers/UserHandler.jsx";
 
@@ -194,6 +195,12 @@ const router = createBrowserRouter([
         errorElement: <ErrorElement />,
       },
       {
+        path: "tickets",
+        element: <UserTickets></UserTickets>,
+        loader: loadTickets,
+        errorElement: <ErrorElement />,
+      },
+      {
         path: "history/:history_id",
         element: <DetailHistory></DetailHistory>,
         loader: loadDetailHistory,
@@ -260,7 +267,6 @@ const router = createBrowserRouter([
         path: "event/:event_id/checkout",
         element: <CheckoutEvent />,
         loader: async (params) => {
-          console.log("ini params", params);
           let x = await loadDetailEventWithAuth(params);
           let y = await loadCategoryEventWithAuth(params);
           let temp = {
@@ -503,6 +509,8 @@ const router = createBrowserRouter([
         loader: loadSingleEvent,
         action: acceptVerifEvent,
         tolakVerifEvent,
+        action: acceptVerifEvent,
+        tolakVerifEvent,
       },
       {
         path: "laporan-penjualan",
@@ -519,6 +527,7 @@ const router = createBrowserRouter([
         element: <AdminLaporanFilm />,
         loader: loadMovieReport,
       },
+      ,
     ],
   },
 
