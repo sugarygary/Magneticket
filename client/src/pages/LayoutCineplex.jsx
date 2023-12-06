@@ -22,10 +22,10 @@ export const LayoutCineplex = () => {
       {shouldDisplayHeader && <CineplexHeader />}
       <div className="mt-12 pb-12 min-h-[100vh] min-w-[80vw] mx-auto">
         <Outlet></Outlet>
+        <Footer></Footer>
       </div>
     </div>
     
-    <Footer></Footer>
   </>
   );
 };
