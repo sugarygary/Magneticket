@@ -15,14 +15,17 @@ export default function ScreeningByMovie() {
   let [searchParams, setSearchParams] = useSearchParams();
   const { state } = useNavigation();
   function handleFilterChange(key, value) {
-    setSearchParams((prevParams) => {
-      if (value === "") {
-        prevParams.delete(key);
-      } else {
-        prevParams.set(key, value);
-      }
-      return prevParams;
-    });
+    setSearchParams(
+      (prevParams) => {
+        if (value === "") {
+          prevParams.delete(key);
+        } else {
+          prevParams.set(key, value);
+        }
+        return prevParams;
+      },
+      { replace: true }
+    );
   }
   return (
     <>
@@ -142,7 +145,7 @@ export const loadScreeningByMovie = async ({ params, request }) => {
   const url = new URL(request.url);
   if (url.searchParams.get("city") != null) {
     if (!kotaDanKabupaten.includes(url.searchParams.get("city"))) {
-      // throw new Response("City not found!", { status: 404 });
+      throw new Response("City not found!", { status: 404 });
     }
   }
   if (url.searchParams.get("date") != null) {
@@ -155,7 +158,7 @@ export const loadScreeningByMovie = async ({ params, request }) => {
           ">" +
           url.searchParams.get("date")
       );
-      // throw new Response("Date not found!", { status: 404 });
+      throw new Response("Date not found!", { status: 404 });
     }
   }
   try {
@@ -163,6 +166,7 @@ export const loadScreeningByMovie = async ({ params, request }) => {
       city: url.searchParams.get("city"),
       date: url.searchParams.get("date"),
     };
+    // console.log(queryParams);
     let responseScreening = await client.get(
       `api/public/screenings-by-movie/${params?.movie_id}`,
       { params: queryParams }

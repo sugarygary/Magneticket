@@ -72,18 +72,6 @@ const Homepage = () => {
                   <CardHome {...movie}></CardHome>
                   <CardHome {...movie}></CardHome>
                   <CardHome {...movie}></CardHome>
-                  <CardHome {...movie}></CardHome>
-                  <CardHome {...movie}></CardHome>
-                  <CardHome {...movie}></CardHome>
-                  <CardHome {...movie}></CardHome>
-                  <CardHome {...movie}></CardHome>
-                  <CardHome {...movie}></CardHome>
-                  <CardHome {...movie}></CardHome>
-                  <CardHome {...movie}></CardHome>
-                  <CardHome {...movie}></CardHome>
-                  <CardHome {...movie}></CardHome>
-                  <CardHome {...movie}></CardHome>
-                  <CardHome {...movie}></CardHome>
                 </>
               );
             })}

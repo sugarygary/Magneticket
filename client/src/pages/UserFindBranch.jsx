@@ -13,14 +13,17 @@ export const UserFindBranch = () => {
   let [searchParams, setSearchParams] = useSearchParams();
   const { state } = useNavigation();
   function handleFilterChange(key, value) {
-    setSearchParams((prevParams) => {
-      if (value === "") {
-        prevParams.delete(key);
-      } else {
-        prevParams.set(key, value);
-      }
-      return prevParams;
-    });
+    setSearchParams(
+      (prevParams) => {
+        if (value === "") {
+          prevParams.delete(key);
+        } else {
+          prevParams.set(key, value);
+        }
+        return prevParams;
+      },
+      { replace: true }
+    );
   }
   useEffect(() => {
     initFlowbite();

@@ -136,6 +136,11 @@ const getScreeningByMovie = async (req, res) => {
     let end = moment(date).tz("Asia/Jakarta").endOf("day").toDate();
     options = { showtime: { $gte: start, $lte: end } };
   }
+  if (date == null) {
+    let start = moment(new Date()).tz("Asia/Jakarta").startOf("day").toDate();
+    let end = moment(new Date()).tz("Asia/Jakarta").endOf("day").toDate();
+    options = { showtime: { $gte: start, $lte: end } };
+  }
   if (city) {
     optionsCity = { city: city };
   }
