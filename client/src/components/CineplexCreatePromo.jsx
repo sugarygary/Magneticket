@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import upload from "../assets/upload.png";
 import { createKodePromo } from "../handlers/CineplexHandler";
 import logo1 from "../assets/logo1.png";
@@ -21,7 +21,6 @@ const CineplexCreatePromo = (props) => {
     ) {
       navigate("/cineplex/login", { replace: true });
     }
-    
   }, []);
   if (
     (current_user.userId == null || current_user.role != "CINEPLEX") &&
@@ -57,9 +56,17 @@ const CineplexCreatePromo = (props) => {
     createKodePromo(data);
     navigate("/cineplex/kode-promo");
   }
+
   return (
     <div className=" w-full h-full flex justify-center items-center text-white my-10">
       <div className="biruTua p-12 text-center rounded w-3/4 mx-auto ">
+        <div className="flex justify-between">
+          <div></div>
+          <Link to={-1} className="p-2 bg-red-500">
+            {" "}
+            Kembali{" "}
+          </Link>
+        </div>
         <form action="" className="mt-5" onSubmit={submitForm}>
           <div className="mb-3 text-left">
             <p>Kode Promo</p>

@@ -1,48 +1,112 @@
 import moment from "moment-timezone";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { createReview } from "../handlers/UserHandler";
 // import { useForm } from "react-hook-form"
 // import Joi from "joi"
 // import { joiResolver } from "@hookform/resolvers/joi"
 
 const DetailPesanan = (props) => {
+  const navigate = useNavigate();
   console.log(props);
+  const { current_user, status } = useSelector((state) => state.user);
+  const [canReview, setCanReview] = useState(true);
+  const [rating, setRating] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [movieIdReview, setMovieIdReview] = useState(
+    props.responseHistory.movie_id
+  );
+  useEffect(() => {
+    if (
+      (current_user.userId == null || current_user.role != "USER") &&
+      status == "succeeded"
+    ) {
+      navigate("/user/login", { replace: true });
+    }
+    // Check if the current user's ID and movie ID are in the reviews
+    const hasReviewed = props.responseReview.some(
+      (review) =>
+        review.reviewer === current_user.userId &&
+        review.movie === props.responseHistory.movie_id
+    );
+
+    setCanReview(!hasReviewed);
+  }, []);
+  if (
+    (current_user.userId == null || current_user.role != "USER") &&
+    status == "succeeded"
+  ) {
+    navigate("/user/login", { replace: true });
+  }
+  async function submitForm(e) {
+    e.preventDefault();
+    setErrorMsg(null);
+
+    if (rating == null) {
+      setErrorMsg("Please select a rating");
+      return;
+    }
+
+    const reviewData = {
+      movieId: movieIdReview,
+      rating: rating,
+    };
+
+    createReview(reviewData);
+    navigate("/user/history");
+  }
+  const handleStarClick = (selectedRating) => {
+    // Set the rating to the clicked star
+    console.log("Star clicked:", selectedRating);
+    setRating(selectedRating);
+  };
   return (
     <div className="my-5 rounded  shadow-lg p-10 bgCardHistory border border-black">
       <div className="flex items-center justify-between">
         <p className="font-bold text-2xl">Ringkasan Pemesanan</p>
-        <span className="float-right">Nomor Pemesanan: {props._id}</span>
+        <span className="float-right">
+          Nomor Pemesanan: {props.responseHistory._id}
+        </span>
       </div>
+
       <div className="w-full mt-6 flex ">
         <div>
-          <img src={props.movie_img} alt="" className="w-48 rounded" />
+          <img
+            src={props.responseHistory.movie_img}
+            alt=""
+            className="w-48 rounded"
+          />
           <p className="text-left text-xl font-bold underline underline-offset-4">
             Detail Transaksi
           </p>
         </div>
         <div className="p-5 flex w-full justify-between ">
           <div>
-            <p className="text-lg font-bold mb-5">{props.movie_title}</p>
+            <p className="text-lg font-bold mb-5">
+              {props.responseHistory.movie_title}
+            </p>
             <table>
               <tr>
                 <td>Bioskop</td>
                 <td> : </td>
-                <td>{props.branch_name}</td>
+                <td>{props.responseHistory.branch_name}</td>
               </tr>
 
               <tr>
                 <td>Tiket</td>
                 <td> : </td>
-                <td>{props.seats.length} Tiket</td>
+                <td>{props.responseHistory.seats.length} Tiket</td>
               </tr>
               <tr>
                 <td>Tempat Duduk</td>
                 <td> : </td>
-                <td>{props.seats.join(", ")}</td>
+                <td>{props.responseHistory.seats.join(", ")}</td>
               </tr>
               <tr>
                 <td>Studio</td>
                 <td> : </td>
-                <td>{props.studio_name}</td>
+                <td>{props.responseHistory.studio_name}</td>
               </tr>
               <tr>
                 <td>Hari/Tanggal</td>
@@ -50,7 +114,7 @@ const DetailPesanan = (props) => {
                 <td>
                   <p className="font-bold">
                     {" "}
-                    {moment(props.createdAt)
+                    {moment(props.responseHistory.createdAt)
                       .tz("Asia/Jakarta")
                       .format("dddd, DD-MM-YYYY")}
                   </p>
@@ -61,7 +125,9 @@ const DetailPesanan = (props) => {
                 <td> : </td>
                 <td>
                   <p className="font-bold">
-                    {moment(props.createdAt).tz("Asia/Jakarta").format("HH:mm")}
+                    {moment(props.responseHistory.createdAt)
+                      .tz("Asia/Jakarta")
+                      .format("HH:mm")}
                   </p>
                 </td>
               </tr>
@@ -69,7 +135,7 @@ const DetailPesanan = (props) => {
           </div>
           <div className="bg-white rounded-2xl p-2 h-fit border border-[3px] border-black">
             <img
-              src={`https://api.qrserver.com/v1/create-qr-code/?data=${props._id}&amp;size=100x100`}
+              src={`https://api.qrserver.com/v1/create-qr-code/?data=${props.responseHistory._id}&amp;size=100x100`}
               alt=""
               title=""
               className="w-48"
@@ -99,8 +165,40 @@ const DetailPesanan = (props) => {
           {new Intl.NumberFormat("id-ID", {
             style: "currency",
             currency: "IDR",
-          }).format(props.amounts_paid)}
+          }).format(props.responseHistory.amounts_paid)}
         </p>
+      </div>
+      <div className="justify-between flex mt-5">
+        <div></div>
+
+        {canReview && props.responseHistory.status == "SUCCESS" && (
+          <form action="" className="mt-5" onSubmit={submitForm}>
+            <div className="mb-3 text-left">
+              <p>Rating Movie:</p>
+              <div className="flex">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span
+                    key={star}
+                    className={rating >= star ? "star-filled" : "star"}
+                    onClick={() => handleStarClick(star)}
+                  >
+                    {rating >= star ? "★" : "☆"}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {errorMsg && <span className="text-red-500">{errorMsg}</span>}
+            <div className="mb-3 text-left mt-5">
+              <button className="biruMuda w-full rounded p-1 pl-2">
+                Submit Review
+              </button>
+            </div>
+          </form>
+        )}
+        {!canReview && (
+          <p className="p-2 bg-red-500 text-white">C an only review once</p>
+        )}
       </div>
     </div>
   );

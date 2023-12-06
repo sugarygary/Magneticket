@@ -24,7 +24,7 @@ function DetailHistory() {
     navigate("/user/login", { replace: true });
   }
   return (
-    <div className="py-10 text-black">
+    <div className="py-10 text-black px-10">
       <DetailPesanan {...data}></DetailPesanan>
     </div>
   );

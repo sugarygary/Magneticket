@@ -50,7 +50,7 @@ import {
   loadAllEvents,
   loadDetailEventJadwal,
   loadAllEventTransactions,
-  loadMovieReport
+  loadMovieReport,
 } from "./handlers/LoadHandler.jsx";
 import PendingEmail from "./pages/pendingEmail.jsx";
 import { LayoutUser } from "./pages/LayoutUser.jsx";
@@ -96,7 +96,7 @@ import { UserFindFilm, loadFilms } from "./pages/UserFindFilm.jsx";
 import PromotorHistoryTiket from "./pages/PromotorHistoryTicket.jsx";
 import PromotorDetailHistoryTiket from "./pages/PromotorDetailHistoryTiket.jsx";
 import PromotorJadwalEvent from "./pages/PromotorJadwalEvent.jsx";
-import PromotorDetailEvent from "./pages/PromotorDetailEvent.jsx"
+import PromotorDetailEvent from "./pages/PromotorDetailEvent.jsx";
 import HomeCineplex from "./pages/CineplexHome.jsx";
 import EventOrganizerHome from "./pages/EventOrganizerHome.jsx";
 import CheckoutEvent from "./pages/CheckoutEvent.jsx";
@@ -113,7 +113,6 @@ import {
   tolakVerif,
   tolakVerifEvent,
   tolakVerifPromotor,
-
 } from "./handlers/AdminHandler.jsx";
 import AdminVerifCineplex from "./pages/AdminVerifCineplex.jsx";
 import { LayoutAdmin } from "./pages/LayoutAdmin.jsx";
@@ -125,6 +124,8 @@ import VerifikasiEventPage from "./pages/VerifikasiEventPage.jsx";
 import AdminLaporanPenjualan from "./pages/AdminLaporanPenjualan.jsx";
 import AdminLaporanPenjualanKonser from "./pages/AdminLaporanPenjualanKonser.jsx";
 import AdminLaporanFilm from "./pages/AdminLaporanFilm.jsx";
+import UserCreateReview from "./pages/UserCreateReview.jsx";
+import { createReview } from "./handlers/UserHandler.jsx";
 
 async function coba() {
   let x = loadInTheater();
@@ -196,6 +197,13 @@ const router = createBrowserRouter([
         path: "history/:history_id",
         element: <DetailHistory></DetailHistory>,
         loader: loadDetailHistory,
+        errorElement: <ErrorElement />,
+      },
+      {
+        path: "history/:history_id/create-review/:movie_id",
+        element: <UserCreateReview />,
+        loader: loadDetailHistory,
+        action: createReview,
         errorElement: <ErrorElement />,
       },
       {
@@ -493,7 +501,8 @@ const router = createBrowserRouter([
         path: "event-verif/:eventId",
         element: <VerifikasiEventPage />,
         loader: loadSingleEvent,
-        action: acceptVerifEvent, tolakVerifEvent,
+        action: acceptVerifEvent,
+        tolakVerifEvent,
       },
       {
         path: "laporan-penjualan",
@@ -509,7 +518,7 @@ const router = createBrowserRouter([
         path: "laporan-film",
         element: <AdminLaporanFilm />,
         loader: loadMovieReport,
-      }
+      },
     ],
   },
 

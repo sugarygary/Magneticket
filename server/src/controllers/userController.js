@@ -468,6 +468,11 @@ const createReview = async (req, res) => {
     return res.status(500).send({ message: "Internal server error" });
   }
 };
+const getReviews = async (req, res) => {
+  let findReviews = await Review.find({ reviewer: req.userId });
+  return res.status(200).send(findReviews);
+};
+
 module.exports = {
   verifyUserCookie,
   createTicket,
@@ -480,4 +485,5 @@ module.exports = {
   getSingleEvent,
   getSingleEventCategory,
   createReview,
+  getReviews,
 };

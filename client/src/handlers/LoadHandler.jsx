@@ -159,10 +159,15 @@ export const loadHistory = async (data) => {
 
 export const loadDetailHistory = async (data) => {
   try {
-    const response = await client.get(
+    const responseHistory = await client.get(
       `api/user/history/${data.params.history_id}`
     );
-    return response.data;
+    const responseReview = await client.get(`api/user/reviews`);
+    let response = {
+      responseHistory: responseHistory.data,
+      responseReview: responseReview.data,
+    };
+    return response;
   } catch (error) {
     if (error.response) {
       if (error.response.status == 403) {
@@ -316,7 +321,7 @@ export const loadAllEventTransactions = async (data) => {
   } catch (error) {
     return error;
   }
-}
+};
 
 export const loadAllEvents = async (data) => {
   try {
@@ -326,12 +331,24 @@ export const loadAllEvents = async (data) => {
     return error;
   }
 };
-
+export const loadReviews = async (data) => {
+  try {
+    const response = await client.get(`api/user/reviews`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching load history:", error);
+    return error.message;
+  }
+};
 export const loadDetailEventJadwal = async (data) => {
   try {
-    const event = await client.get(`api/promotor/allEvent/${data.params.event_id}`);
-    const kategori = await client.get(`api/promotor/allEvent/${data.params.event_id}/kategori`);
-    return {event, kategori};
+    const event = await client.get(
+      `api/promotor/allEvent/${data.params.event_id}`
+    );
+    const kategori = await client.get(
+      `api/promotor/allEvent/${data.params.event_id}/kategori`
+    );
+    return { event, kategori };
   } catch (error) {
     return error;
   }
@@ -344,5 +361,4 @@ export const loadMovieReport = async (data) => {
   } catch (error) {
     return error;
   }
-}
-
+};

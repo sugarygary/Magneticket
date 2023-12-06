@@ -16,3 +16,16 @@ import client from "../util/client";
 //     return error.message;
 //   }
 // };
+
+export const createReview = async (data) => {
+  console.log(data);
+  try {
+    const response = await client.post(`api/user/create-review/${data.movieId}`, {
+      rating: data.rating,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error creating review:", error);
+    return error.message;
+  }
+};

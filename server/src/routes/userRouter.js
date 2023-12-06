@@ -11,6 +11,7 @@ const {
   getSingleEventCategory,
   createSnap,
   createReview,
+  getReviews,
 } = require("../controllers/userController");
 const expressAsyncHandler = require("express-async-handler");
 const userRouter = express.Router();
@@ -26,7 +27,10 @@ userRouter.get(
   "/screening/:screening_id/menu",
   expressAsyncHandler(findMenuByScreening)
 );
-
+userRouter.get(
+  "/reviews",
+  expressAsyncHandler(getReviews)
+);
 userRouter.get(
   "/screening/:screening_id/promotion",
   expressAsyncHandler(findPromoByScreening)
