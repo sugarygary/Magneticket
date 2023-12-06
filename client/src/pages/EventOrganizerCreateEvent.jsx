@@ -151,7 +151,7 @@ export default function EventOrganizerCreateEvent() {
   }
   return (
     <>
-    <form onSubmit={submitForm}>
+    <form className="pb-24" onSubmit={submitForm}>
       <div>
         <div className="flex px-12 w-full">
           <div className="biruTua p-10 my-10 rounded w-3/12">

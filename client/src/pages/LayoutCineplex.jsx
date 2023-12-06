@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Footer from "../components/Footer";
+import Footer from "../components/FooterCineplexEO";
 import Header from "../components/Header";
 import { Outlet, useLocation } from "react-router-dom";
 import CineplexHeader from "../components/CineplexHeader";
@@ -23,7 +23,7 @@ export const LayoutCineplex = () => {
     <>
       <ScrollToTop />
       {shouldDisplayHeader && <CineplexHeader />}
-      <div className="mt-12 pb-12 sm:ml-64 mx-auto">
+      <div className={`mt-12 pb-12 min-h-[100vh] min-w-[80vw] ${shouldDisplayHeader ? "ml-60" : ""} mx-auto relative`}>
         <Outlet></Outlet>
         <Footer></Footer>
       </div>

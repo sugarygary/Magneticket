@@ -80,10 +80,10 @@ const EventRegisterForm = (props) => {
     setSurat(file);
   };
   return (
-    <div className=" w-full h-full flex justify-center items-center text-white my-10">
-      <div className="biruTua p-12 text-center rounded  w-3/4 mx-auto ">
+    <div className=" w-3/4 mx-auto h-full flex justify-center items-center text-white my-10">
+    <div className="biruTua p-12 text-center rounded w-3/4 mx-auto ">
         <div className="justify-center">
-          <img src={logo1} alt="" className="w-60 mx-auto" />
+          <img src={logo1} alt="" className="w-48 mx-auto" />
           <p className="font-magneticket text-6xl">MAGNETICKET</p>
         </div>
         <form onSubmit={submitForm} className="mt-5">

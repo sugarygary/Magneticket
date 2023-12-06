@@ -7,20 +7,29 @@ import client from "../util/client";
 import { initFlowbite } from "flowbite";
 import "flowbite";
 
-const EventOrganizerHeader = (props) => {
+const CineplexHeader = (props) => {
   const { current_user } = useSelector((state) => state.user);
-  const [boolMenu, setBoolMenu] = useState(false)
+  const [boolMenu, setBoolMenu] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
     initFlowbite();
     dispatch(fetchCurrentUser());
   }, []);
 
-    async function logout() {
-      await client.get("api/auth/logout");
-      navigate("/event-organizer/login")
+  const [boolSales, setBoolSales] = useState(false);
+  function buttonSales() {
+    if (boolSales) {
+      setBoolSales(false);
+    } else {
+      setBoolSales(true);
     }
+  }
+
+  async function logout() {
+    await client.get("api/auth/logout");
+    navigate("/cineplex/login");
+  }
 
   return (
     <>
@@ -60,14 +69,14 @@ const EventOrganizerHeader = (props) => {
           <div className="flex justify-between">
             <div></div>
             <div className="text-sm italic text-white">
-              <p>FOR EVENTS</p>
+              <p>FOR CINEPLEX</p>
             </div>
           </div>
         </div>
           <ul class="space-y-2 font-medium">
             <li>
               <Link
-                to={'/event-organizer/home'}
+                to={'/cineplex/home'}
                 class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <span class="ms-3">Home</span>
@@ -102,25 +111,41 @@ const EventOrganizerHeader = (props) => {
               <ul id="dropdown-example" class="hidden py-2 space-y-2">
                 <li>
                   <Link
-                    to={'/event-organizer/create-event'}
+                    to={'/cineplex/jadwal'}
                     class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
-                    Event
+                    Movie
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                  to={'/cineplex/concession'}
+                    class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  >
+                    Menu
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to={'/cineplex/create-branch'}
+                    class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  >
+                    Cabang
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to={'/cineplex/kode-promo'}
+                    class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  >
+                    Promo
                   </Link>
                 </li>
               </ul>
             </li>
             <li>
               <Link
-                to={'/event-organizer/jadwal'}
-                class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <span class="flex-1 ms-3 whitespace-nowrap">Jadwal</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to={'/event-organizer/history'}
+                to={'/cineplex/history'}
                 class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <span class="flex-1 ms-3 whitespace-nowrap">History</span>
@@ -186,4 +211,4 @@ const EventOrganizerHeader = (props) => {
   );
 };
 
-export default EventOrganizerHeader;
+export default CineplexHeader;

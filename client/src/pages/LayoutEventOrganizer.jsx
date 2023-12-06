@@ -1,5 +1,5 @@
 import React from "react";
-import Footer from "../components/Footer";
+import Footer from "../components/FooterCineplexEO";
 import Header from "../components/Header";
 import { Outlet, useLocation } from "react-router-dom";
 import EventOrganizerHeader from "../components/EventOrganizerHeader";
@@ -18,14 +18,11 @@ export const LayoutEventOrganizer = () => {
   return (
     <>
     <ScrollToTop />
-    <div className="flex">
-      {shouldDisplayHeader && <EventOrganizerHeader />}
-      <div className="mt-12 pb-12 min-h-[100vh] min-w-[80vw] mx-auto">
-        <Outlet></Outlet>
-      </div>
+    {shouldDisplayHeader && <EventOrganizerHeader />}
+    <div className={`mt-12 pb-12 min-h-[100vh] min-w-[80vw] ${shouldDisplayHeader ? "ml-60" : ""} mx-auto relative`}>
+      <Outlet></Outlet>
+      <Footer></Footer>
     </div>
-    
-    <Footer></Footer>
   </>
   );
 };
