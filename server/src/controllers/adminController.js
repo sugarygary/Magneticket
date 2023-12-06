@@ -218,7 +218,7 @@ const deleteEvent = async function (req, res) {
 };
 const getMovieTransactions = async (req, res) => {
   try {
-    const MovieTickets = await MovieTicket.find({}).populate('screening').populate('cineplex').populate({path:"screening",populate:{path:"branch"}}).exec();
+    const MovieTickets = await MovieTicket.find({}).populate('screening').populate('cineplex').populate({path:"screening",populate:{path:"branch"}}).populate("customer").populate("transaction").exec();
     res.status(200).json({ MovieTickets });
   } catch (error) {
     console.error('Error fetching movie transactions:', error);
@@ -247,6 +247,15 @@ const getMovieReport = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+const getSingleMovieTicket = async (req, res) => {
+  try {
+    const MovieTickets = await MovieTicket.findById(req.params.id).populate("screening").populate("customer").populate("transaction").populate({path:"screening",populate:{path:"branch"}}).populate({path:"screening",populate:{path:"movie"}}).populate({path:"screening",populate:{path:"studio"}}).populate({path:"transaction.foods",populate:{path:"menu"}}).exec();
+    res.status(200).json({ MovieTickets });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 module.exports = {
   verifyCineplex,
   verifyPromotor,
@@ -262,5 +271,6 @@ module.exports = {
   deleteEvent,
   getMovieTransactions,
   getEventTransactions,
-  getMovieReport
+  getMovieReport,
+  getSingleMovieTicket
 };

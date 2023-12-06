@@ -362,3 +362,14 @@ export const loadMovieReport = async (data) => {
     return error;
   }
 };
+
+export const loadMovieReportDetail = async (data) => {
+  try {
+    const response = await client.get(
+      `api/admin/movie-ticket/${data.params.history_id}`
+    );
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+};

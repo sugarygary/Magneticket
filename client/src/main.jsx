@@ -51,6 +51,7 @@ import {
   loadDetailEventJadwal,
   loadAllEventTransactions,
   loadMovieReport,
+  loadMovieReportDetail,
 } from "./handlers/LoadHandler.jsx";
 import PendingEmail from "./pages/pendingEmail.jsx";
 import { LayoutUser } from "./pages/LayoutUser.jsx";
@@ -127,6 +128,9 @@ import AdminLaporanFilm from "./pages/AdminLaporanFilm.jsx";
 import { UserTickets, loadTickets } from "./pages/UserTickets.jsx";
 import UserCreateReview from "./pages/UserCreateReview.jsx";
 import { createReview } from "./handlers/UserHandler.jsx";
+import AdminLaporanKeuntungan from "./pages/AdminLaporanKeuntungan.jsx";
+import AdminHistoryTransaksi from "./pages/AdminHistoryTransaksi.jsx";
+import AdminDetailHistoryTransaksi from "./pages/AdminDetailHistoryTransaksi.jsx";
 
 async function coba() {
   let x = loadInTheater();
@@ -527,7 +531,30 @@ const router = createBrowserRouter([
         element: <AdminLaporanFilm />,
         loader: loadMovieReport,
       },
-      ,
+      {
+        path: "laporan-keuntungan",
+        element: <AdminLaporanKeuntungan />,
+        loader: async (params) => {
+          let x = await loadAllMovieTransactions(params);
+          let y = await loadAllEventTransactions(params);
+          let temp = {
+            movieTransactions: x,
+            eventTransactions: y,
+          };
+          return temp;
+        },
+      },
+      {
+        path: "history-transaksi",
+        element: <AdminHistoryTransaksi />,
+        loader: loadAllMovieTransactions,
+      },
+      {
+        path: "history-transaksi/:history_id",
+        element: <AdminDetailHistoryTransaksi></AdminDetailHistoryTransaksi>,
+        loader: loadMovieReportDetail,
+        errorElement: <ErrorElement />,
+      }
     ],
   },
 

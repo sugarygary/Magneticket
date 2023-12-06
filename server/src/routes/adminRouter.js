@@ -15,7 +15,8 @@ const {
   deleteEvent,
   getMovieTransactions,
   getEventTransactions,
-  getMovieReport
+  getMovieReport,
+  getSingleMovieTicket,
 } = require("../controllers/adminController");
 const expressAsyncHandler = require("express-async-handler");
 
@@ -80,5 +81,9 @@ adminRouter.get(
 adminRouter.get(
   "/movie-report",
   expressAsyncHandler(getMovieReport)
+)
+adminRouter.get(
+  "/movie-ticket/:id",
+  expressAsyncHandler(getSingleMovieTicket)
 )
 module.exports = adminRouter;
