@@ -16,6 +16,7 @@ const Promotion = require("../models/Promotion");
 const Event = require("../models/Event");
 const EventCategory = require("../models/EventCategory");
 const EventTicket = require("../models/EventTicket");
+const Review = require("../models/Review");
 
 const verifyUserCookie = async (req, res, next) => {
   try {
@@ -440,6 +441,33 @@ const getSingleEventCategory = async (req, res) => {
 
 const getAndUpdateTransactions = async (req, res) => {};
 
+const createReview = async (req, res) => {
+  const userId = req.userId;
+  const movieId = req.params.movieId;
+  const { rating } = req.body;
+  console.log("ini userId " +userId)
+  console.log("ini movieId "+ movieId)
+  console.log("ini rating "+ rating)
+  try {
+    // Check if the movie exists
+    const findMovie = await Movie.findById(movieId);
+    if (!findMovie) {
+      return res.status(404).send({ message: "Movie not found" });
+    }
+    // Create a new review
+    const newReview = new Review({
+      reviewer: userId,
+      movie: movieId,
+      rating: rating,
+    });
+    // Save the review to the database
+    const savedReview = await newReview.save();
+    return res.status(201).json({ message: "Review created successfully", review: savedReview });
+  } catch (error) {
+    console.error("Error creating review:", error);
+    return res.status(500).send({ message: "Internal server error" });
+  }
+};
 module.exports = {
   verifyUserCookie,
   createTicket,
@@ -451,4 +479,5 @@ module.exports = {
   getDetailHistory,
   getSingleEvent,
   getSingleEventCategory,
+  createReview,
 };

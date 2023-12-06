@@ -25,6 +25,9 @@ const movieSchema = new Schema(
   { timestamps: true }
 );
 
+movieSchema.statics.findById = function (movieId) {
+  return this.findOne({ _id: movieId });
+};
 const Movie = mongoose.model("Movie", movieSchema, "movies");
 
 module.exports = Movie;

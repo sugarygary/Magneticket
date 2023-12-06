@@ -10,13 +10,14 @@ const {
   getSingleEvent,
   getSingleEventCategory,
   createSnap,
+  createReview,
 } = require("../controllers/userController");
 const expressAsyncHandler = require("express-async-handler");
 const userRouter = express.Router();
 userRouter.use(verifyUserCookie);
 userRouter.post("/create-transaction", expressAsyncHandler(createTicket));
 userRouter.post("/create-snap", expressAsyncHandler(createSnap));
-
+userRouter.post("/create-review/:movieId", expressAsyncHandler(createReview));
 userRouter.get(
   "/screening/:screening_id/seat-info",
   expressAsyncHandler(getSeatsInfo)
