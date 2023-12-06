@@ -120,6 +120,7 @@ export default function SeatingPage() {
 
   const handlePromo = (data) => {
     setChoosedPromo(data);
+    console.log(data);
     setBoolPromo(false);
   };
 
@@ -175,7 +176,6 @@ export default function SeatingPage() {
     let snapData;
     try {
       snapData = await client.post("/api/user/create-snap", snapBody);
-      // checkout = await client.post("api/user/create-transaction", bayarTiket);
     } catch (error) {
       console.log(error.message);
     }
@@ -186,6 +186,7 @@ export default function SeatingPage() {
       screening_id: data.screening_id,
       discount_amount: temp,
       midtrans_token: snapData.data.token,
+      promo_code: choosedPromo == null ? null : choosedPromo.promo_code,
     };
     window.snap.pay(snapData.data.token, {
       onSuccess: async function (result) {

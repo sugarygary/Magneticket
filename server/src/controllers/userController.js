@@ -209,6 +209,7 @@ const createTicket = async (req, res) => {
     order_id,
     status,
     midtrans_token,
+    promo_code,
   } = req.body;
   const findScreening = await Screening.findById(screening_id);
   if (findScreening == null) {
@@ -221,15 +222,7 @@ const createTicket = async (req, res) => {
   if (findSeats.length != seats.length) {
     return res.status(400).send({ message: "Invalid seat input" });
   }
-  const findTicket = await MovieTicket.find({
-    screening: screening_id,
-    seats: { $in: seats },
-  }).populate({
-    path: "transaction",
-    match: {
-      $or: [{ status: "PENDING" }, { status: "SUCCESS" }],
-    },
-  });
+
   let foodItems = [];
   let foodTotal = 0;
   for (let i = 0; i < foods.length; i++) {
@@ -258,7 +251,9 @@ const createTicket = async (req, res) => {
   let customer = await User.findById(req.userId);
   let movie = await Movie.findById(findScreening.movie);
   let amounts_paid = 0;
+  let promo = null;
   if (discount_amount != 0) {
+    promo = { promo_code, discount_amount };
     amounts_paid =
       findScreening.price * seats.length +
       foodTotal +
@@ -300,6 +295,7 @@ const createTicket = async (req, res) => {
         status: "REFUND",
         midtrans_token: midtrans_token,
         price_per_seat: findScreening.price,
+        promo,
       });
       await newMovieTransaction.save();
       return res.status(201).send({
@@ -337,6 +333,8 @@ const createTicket = async (req, res) => {
         payment_method: "-",
         status: "FAILED",
         midtrans_token: midtrans_token,
+        price_per_seat: findScreening.price,
+        promo,
       });
       await newMovieTransaction.save();
       return res.status(201).send({
@@ -363,6 +361,8 @@ const createTicket = async (req, res) => {
     payment_method: "-",
     status: status,
     midtrans_token: midtrans_token,
+    price_per_seat: findScreening.price,
+    promo,
   });
   await newMovieTransaction.save();
   if (status == "FAILED") {

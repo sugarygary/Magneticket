@@ -17,6 +17,9 @@ notificationsRouter.post(
       return res.sendStatus(401);
     }
     console.log(req.body);
+    if (req.body.status_code == 201) {
+      return res.sendStatus(200);
+    }
     if (req.body.transaction_status == "capture") {
       if (req.body.fraud_status == "accept") {
         console.log("MASUK ACCEPT");

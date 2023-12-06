@@ -24,7 +24,8 @@ function HistoryPage() {
   }
   return (
     status == "succeeded" && (
-      <div className="py-10 text-black">
+      <div className="py-10 px-10 text-black">
+        <div className="text-xl font-bold mb-2">Riwayat Transaksi</div>
         {data.map((history, index) => {
           return (
             <CardHistoryTransaksi
