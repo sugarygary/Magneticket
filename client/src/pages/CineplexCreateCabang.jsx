@@ -12,8 +12,8 @@ const CineplexCreateCabang = () => {
   const [kotaKabupaten, setKotaKabupaten] = useState(null);
   const [alamat, setAlamat] = useState(null);
   const data = useLoaderData();
-  if(data.response&&data.response.status == 401){
-    throw new Response('', { status: 401 })
+  if (data.response && data.response.status == 401) {
+    throw new Response("", { status: 401 });
   }
   console.log(data.branches);
   const { current_user, status } = useSelector((state) => state.user);
@@ -54,10 +54,17 @@ const CineplexCreateCabang = () => {
           <p className="text-2xl font-bold text-left mb-5">Daftar Cabang </p>
           {data.branches.map((branch, index) => {
             return (
-              <Link to={`/cineplex/studios/${branch._id}`} className="text-left">
-                <p>{branch.branch_name}</p>
-                <hr />
-              </Link>
+              <div className="mb-1 p-2 abuInput rounded">
+                <div className="flex justfiy-between">
+                  <p className="">{branch.branch_name}</p>
+                  <Link
+                    to={`/cineplex/studios/${branch._id}`}
+                    className="bg-blue-700 rounded ml-auto px-2 py-1"
+                  >
+                    Detail Cabang
+                  </Link>
+                </div>
+              </div>
             );
           })}
         </div>

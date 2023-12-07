@@ -7,8 +7,8 @@ import { createScreening } from "../handlers/CineplexHandler";
 export default function CineplexCreateScreening() {
   const data = useLoaderData();
   const navigate = useNavigate();
-  console.log(data.studios);
-  const [studioId, setStudioId] = useState(null);
+  console.log(data);
+  const [studioId, setStudioId] = useState(data.currentStudio);
   const [movieId, setMovieId] = useState(null);
   const [price, setPrice] = useState(null);
   const [showTime, setShowTime] = useState(null);
@@ -29,11 +29,11 @@ export default function CineplexCreateScreening() {
   ) {
     navigate("/", { replace: true });
   }
-  const findStudio = (studio_id) => {
-    const foundStudio = data.studios.find((studio) => studio._id === studio_id);
-    console.log(foundStudio);
-    return foundStudio;
-  };
+  // const findStudio = (studio_id) => {
+  //   const foundStudio = data.studios.find((studio) => studio._id === studio_id);
+  //   console.log(foundStudio);
+  //   return foundStudio;
+  // };
   let foundStudio = null;
   const submitForm = (e) => {
     e.preventDefault();
@@ -47,12 +47,12 @@ export default function CineplexCreateScreening() {
       setErrorMsg("Input ada yang kosong");
       return;
     }
-    foundStudio = findStudio(studioId);
+    // foundStudio = findStudio(studioId);
 
-    if (foundStudio == null || foundStudio == undefined) {
-      setErrorStudio("Studio Id tidak valid / Studio Id kamu tidak terdaftar");
-      return;
-    }
+    // if (foundStudio == null || foundStudio == undefined) {
+    //   setErrorStudio("Studio Id tidak valid / Studio Id kamu tidak terdaftar");
+    //   return;
+    // }
     let showtime_date = new Date(showTime).getTime();
     let end = moment().tz("Asia/Jakarta").add(1, "days").endOf("day").toDate();
     if (showtime_date <= end.getTime()) {
@@ -81,7 +81,7 @@ export default function CineplexCreateScreening() {
       </div>
 
       <form onSubmit={submitForm}>
-        <div className="mb-5">
+        {/* <div className="mb-5">
           <p>Studio Id</p>
           <input
             type="text"
@@ -92,7 +92,7 @@ export default function CineplexCreateScreening() {
             }}
           />
           {errorStudio && <span className="text-red-500">{errorStudio}</span>}
-        </div>
+        </div> */}
         <div className="mb-5">
           <p>Movie Id</p>
           <input

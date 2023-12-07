@@ -82,6 +82,32 @@ export const loadStudio = async (data) => {
     return error;
   }
 };
+export const loadStudioCreateScreening = async (data) => {
+  try {
+    const response = await client.get(
+      `api/cineplex/studios/${data.params.branch_id}`
+    );
+    const responseCabang = await client.get("api/cineplex/branches");
+    return {
+      responseStudio: response.data,
+      responseCabang: responseCabang.data,
+      currentCabang: data.params.branch_id,
+      currentStudio: data.params.studio_id,
+    };
+  } catch (error) {
+    if (error.response) {
+      if (error.response.status == 403) {
+        const logout = await client.get("api/auth/logout");
+      }
+      if (error.response.status == 404) {
+        throw new Response("Not found", { status: 404 });
+      }
+    } else if (error.request) {
+      throw new Response("Internal Server Error", { status: 500 });
+    }
+    return error;
+  }
+};
 export const loadSeatInfo = async (data) => {
   try {
     const currUser = await client.get("api/auth/current-user");

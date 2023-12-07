@@ -7,8 +7,9 @@ import { Link } from "react-router-dom";
 export default function CineplexListStudios() {
   const navigate = useNavigate();
   const data = useLoaderData();
-  if(data.response&&data.response.status == 401){
-    throw new Response('', { status: 401 })
+  console.log(data);
+  if (data.response && data.response.status == 401) {
+    throw new Response("", { status: 401 });
   }
   console.log(data.responseStudio.studios);
   const matchingBranch = data.responseCabang.branches.find(
@@ -38,7 +39,9 @@ export default function CineplexListStudios() {
           <p className="text-2xl font-bold text-left mb-5">
             {matchingBranch.branch_name}
           </p>
-          <Link to={`create-studio`} className="biruMuda h-fit  rounded  p-2">Tambah Studio</Link>
+          <Link to={`create-studio`} className="biruMuda h-fit  rounded  p-2">
+            Tambah Studio
+          </Link>
         </div>
 
         {data.responseStudio.studios.map((studio, index) => {
@@ -51,12 +54,20 @@ export default function CineplexListStudios() {
           console.log(temp);
           let totalKursiBaris = studio.row * temp;
           return (
-            <Link to={``} className="text-left">
-              <p>
-                {studio.studio_name} - {studio.type} ({totalKursiBaris} Seats)
-              </p>
-              <hr />
-            </Link>
+            <div className="mb-1 p-2 abuInput rounded">
+              <div className="flex justify-between">
+                <p className=" p-2 ">
+                  {studio.studio_name} - {studio.type} ({totalKursiBaris} Seats)
+                </p>
+                <Link
+                  to={`/cineplex/studios/${data.currentCabang}/create-screening/${studio._id}`}
+                  className="bg-blue-900 rounded ml-auto px-2 py-1"
+                >
+                  {" "}
+                  Create Screening
+                </Link>
+              </div>
+            </div>
           );
         })}
       </div>

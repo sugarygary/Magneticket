@@ -52,6 +52,7 @@ import {
   loadAllEventTransactions,
   loadMovieReport,
   loadMovieReportDetail,
+  loadStudioCreateScreening,
 } from "./handlers/LoadHandler.jsx";
 import PendingEmail from "./pages/pendingEmail.jsx";
 import { LayoutUser } from "./pages/LayoutUser.jsx";
@@ -368,6 +369,12 @@ const router = createBrowserRouter([
         errorElement: <ErrorElement />,
       },
       {
+        path: "studios/:branch_id/create-screening/:studio_id",
+        element: <CineplexCreateScreening />,
+        loader: loadStudioCreateScreening,
+        errorElement: <ErrorElement />,
+      },
+      {
         path: "studios/:branch_id/create-studio",
         element: <CineplexCreateStudio />,
         loader: loadStudio,
@@ -554,7 +561,7 @@ const router = createBrowserRouter([
         element: <AdminDetailHistoryTransaksi></AdminDetailHistoryTransaksi>,
         loader: loadMovieReportDetail,
         errorElement: <ErrorElement />,
-      }
+      },
     ],
   },
 

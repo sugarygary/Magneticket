@@ -140,14 +140,14 @@ export default function CineplexJadwal() {
             </select>
           </div>
         </div>
-        <div className="mt-8">
+        {/* <div className="mt-8">
           <Link
             to="/cineplex/jadwal/create-screening"
             className="p-2 biruCariTiket  text-white rounded"
           >
             Tambah Screening
           </Link>
-        </div>
+        </div> */}
       </div>
       {/* kalo mau pake filter by tanggal  pake filteredScreening, kalo default pake data.jadwal.screenings*/}
 
