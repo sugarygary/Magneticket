@@ -13,14 +13,32 @@ const AdminLaporanPenjualanKonser = () => {
     const [tanggal1, setTanggal1] = useState(null);
     const [eventOrganizer, setEventOrganizer] = useState(null);
     const [filteredData, setFilteredData] = useState(null);
+    const [dataPromotor, setDataPromotor] = useState(null);
+    const [summary, setSummary] = useState(null);
     const downloadPDFRef = useRef();
     useEffect(() => {
-        let filteredData2=data.EventTransactions;
+        let filteredData2 = data.EventTransactions;
+        let tempDataPromotor = [];
+        filteredData2.map((item) => {
+            if (item && item.event) {
+                let sudahada = false;
+                tempDataPromotor.map((item2) => {
+                    if (item2._id == item.event.promotor._id) {
+                        sudahada = true;
+                    }
+                })
+                if (!sudahada) {
+                    tempDataPromotor.push(item.event.promotor);
+                }
+            }
+        });
+        setDataPromotor(tempDataPromotor);
+        console.log(tempDataPromotor);
         if (tanggal1 && eventOrganizer) {
             filteredData2 = data.EventTransactions.filter((item) => {
-                if(item.event){
+                if (item.event) {
                     return (
-                        item.event.showtime.toString().substring(0,10) == tanggal1 &&
+                        item.event.showtime.toString().substring(0, 10) == tanggal1 &&
                         item.event.promotor._id == eventOrganizer
                     );
                 }
@@ -28,8 +46,8 @@ const AdminLaporanPenjualanKonser = () => {
             // setFilteredData(filteredData2);
         } else if (tanggal1) {
             filteredData2 = data.EventTransactions.filter((item) => {
-                if(item.event){
-                    return item.event.showtime.toString().substring(0,10) == tanggal1;
+                if (item.event) {
+                    return item.event.showtime.toString().substring(0, 10) == tanggal1;
                 }
             }
             );
@@ -37,7 +55,7 @@ const AdminLaporanPenjualanKonser = () => {
         }
         else if (eventOrganizer) {
             filteredData2 = data.EventTransactions.filter((item) => {
-                if(item.event){
+                if (item.event) {
                     return item.event.promotor._id == eventOrganizer;
                 }
             }
@@ -47,35 +65,39 @@ const AdminLaporanPenjualanKonser = () => {
         let eventList = [];
         // console.log(filteredData2);
         filteredData2.map((item) => {
-            if(item.event){
-                if (eventList.includes(item.event)) {
-                    return;
-                }else{
+            if (item.event) {
+                let sudahada = false;
+                eventList.map((item2) => {
+                    if (item2._id == item.event._id) {
+                        sudahada = true;
+                    }
+                })
+                if (!sudahada) {
                     eventList.push(item.event);
                 }
             }
         });
-        let filteredData3 = []; 
+        let filteredData3 = [];
         eventList.map((item) => {
             let totalTicket = 0;
             let totalAmount = 0;
             filteredData2.map((item2) => {
-                if(item2.event){
+                if (item2.event) {
                     if (item2.event._id == item._id) {
                         totalTicket += 1;
                         totalAmount += item2.event_category.price;
                     }
                 }
             });
-            let allTicketQty=0;
-            let allTicket=data.EventCategories.filter((item2) => {
-                if(item2.event){
+            let allTicketQty = 0;
+            let allTicket = data.EventCategories.filter((item2) => {
+                if (item2.event) {
                     return item2.event == item._id;
                 }
             }
             );
             allTicket.map((item2) => {
-                allTicketQty+=item2.slot
+                allTicketQty += item2.slot
             });
             let temp = {
                 event: item,
@@ -85,6 +107,15 @@ const AdminLaporanPenjualanKonser = () => {
             };
             filteredData3.push(temp);
         });
+        let tempSummary = {
+            totalTicket: 0,
+            totalAmount: 0
+        };
+        filteredData3.map((item) => {
+            tempSummary.totalTicket += item.totalTicket;
+            tempSummary.totalAmount += item.totalAmount;
+        });
+        setSummary(tempSummary);
         setFilteredData(filteredData3);
         // console.log(filteredData3);
     }, [tanggal1, eventOrganizer])
@@ -136,82 +167,98 @@ const AdminLaporanPenjualanKonser = () => {
         });
     }
 
-  return (
-      <div className="px-12 py-4">
-          <div className="flex justify-between">
-          <p className="text-2xl font-bold">Laporan Penjualan Event</p>
-          <button onClick={downloadPDF} className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center'>Download PDF</button>
-        </div>
-          <div className="flex gap-3 my-4">
-              <div>
-                  <p>Tanggal</p>
-                  <input
-                      className="border text-sm rounded border-s-2 focus:border-blue-500 block w-full p-2.5 biruTua border-gray-600 placeholder-gray-400 text-[#f8f8f8] focus:ring-blue-500 focus:border-blue-500"
-                      type="date"
-                      value={tanggal1}
-                      onChange={(e) => {
-                          setTanggal1(e.target.value);
-                      }}
-                      onBlur={(e) => {
-                          setTanggal1(e.target.value);
-                      }}
-                  />
-              </div>
-              <div>
-                  <label htmlFor="eventOrganizer" className="">
-                      Event Organizer
-                  </label>
-                  <select
-                      id="eventOrganizer"
-                      defaultValue={""}
-                      autoFocus
-                      className="border text-sm rounded border-s-2 focus:border-blue-500 block w-full p-2.5 biruTua border-gray-600 placeholder-gray-400 text-[#f8f8f8] focus:ring-blue-500 focus:border-blue-500"
-                      onChange={(e) => {
-                          setEventOrganizer(e.target.value);
-                      }}
-                  >
-                      <option value="">Pilih Event Organizer</option>
-                      {/* {uniqueBranchNames.map((branchName, index) => (
-                          <option key={index} value={branchName}>
-                              {branchName}
-                          </option>
-                      ))} */}
-                  </select>
-              </div>
-          </div>
-          <div className="" ref={downloadPDFRef}>
+    return (
+        <div className="px-12 py-4">
+            <div className="flex justify-between">
+                <p className="text-2xl font-bold">Laporan Penjualan Event</p>
+                <button onClick={downloadPDF} className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center'>Download PDF</button>
+            </div>
+            <div className="flex gap-3 my-4">
+                <div>
+                    <p>Tanggal</p>
+                    <input
+                        className="border text-sm rounded border-s-2 focus:border-blue-500 block w-full p-2.5 biruTua border-gray-600 placeholder-gray-400 text-[#f8f8f8] focus:ring-blue-500 focus:border-blue-500"
+                        type="date"
+                        value={tanggal1}
+                        onChange={(e) => {
+                            setTanggal1(e.target.value);
+                        }}
+                        onBlur={(e) => {
+                            setTanggal1(e.target.value);
+                        }}
+                    />
+                </div>
+                <div>
+                    <label htmlFor="eventOrganizer" className="">
+                        Event Organizer
+                    </label>
+                    <select
+                        id="eventOrganizer"
+                        defaultValue={""}
+                        autoFocus
+                        className="border text-sm rounded border-s-2 focus:border-blue-500 block w-full p-2.5 biruTua border-gray-600 placeholder-gray-400 text-[#f8f8f8] focus:ring-blue-500 focus:border-blue-500"
+                        onChange={(e) => {
+                            setEventOrganizer(e.target.value);
+                        }}
+                    >
+                        <option value="">Pilih Event Organizer</option>
+                        {dataPromotor && dataPromotor.map((promotor, index) => (
+                            <option key={index} value={promotor._id}>
+                                {promotor.brand_name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            </div>
+            <div className="" ref={downloadPDFRef}>
 
-            <table className="min-w-full text-white table-auto" >
-                <thead>
-                    <tr className="bg-gray-200 text-left bg-gray-700">
-                        <th className="py-2 px-4">Nama</th>
-                        <th className="py-2 px-4">Tanggal</th>
-                        <th className="py-2 px-4">Qty</th>
-                        <th className="py-2 px-4">Amount</th>
-                    </tr>
-                </thead>
-                <tbody className="biruTua">
-                    {filteredData &&
-                        filteredData.map((item, index) => (
+                <table className="min-w-full text-white table-auto" >
+                    <thead>
+                        <tr className="bg-gray-200 text-left bg-gray-700">
+                            <th className="py-2 px-4">Nama</th>
+                            <th className="py-2 px-4">Tanggal</th>
+                            <th className="py-2 px-4">Qty</th>
+                            <th className="py-2 px-4">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody className="biruTua">
+                        {filteredData &&
+                            filteredData.map((item, index) => (
                                 <tr
                                     key={index}
                                     className="hover:bg-gray-600 cursor-pointer"
                                 >
-                                <td className="border-t border-b py-2 px-4">{item.event.event_name}</td>
-                                <td className="border-t border-b py-2 px-4">{item.event.showtime.toString().substring(0,10)}</td>
-                                <td className="border-t border-b py-2 px-4">{item.totalTicket} tickets / {item.allTicketQty} tickets</td>
-                                <td className="border-t border-b py-2 px-4">Rp. {item.totalAmount}</td>
+                                    <td className="border-t border-b py-2 px-4">{item.event.event_name}</td>
+                                    <td className="border-t border-b py-2 px-4">{item.event.showtime.toString().substring(0, 10)}</td>
+                                    <td className="border-t border-b py-2 px-4">{item.totalTicket} tickets / {item.allTicketQty} tickets</td>
+                                    <td className="border-t border-b py-2 px-4">Rp. {item.totalAmount}</td>
                                 </tr>
                             )
-                        )}
-                </tbody>
-            </table>
-          </div>
-          {/* {filteredScreenings.length == 0 && (
+                            )}
+                    </tbody>
+                </table>
+            </div>
+            {summary && (
+                <div className="">
+                    {console.log(summary)}
+                    <div className="flex justify-between">
+                        <p className='text-xl'><u><b>Ringkasan Event </b>{tanggal1 && ('(' + tanggal1 + ')')}</u></p>
+                    </div>
+                    <div className="flex justify-between">
+                        <p className='text-m'>Jumlah tiket terjual</p>
+                        <p className='text-m'>{summary.totalTicket} Tiket</p>
+                    </div>
+                    <div className="flex justify-between">
+                        <p className='text-m'>total transaksi</p>
+                        <p className='text-m'>Rp. {summary.totalAmount}</p>
+                    </div>
+                </div>
+            )}
+            {/* {filteredScreenings.length == 0 && (
               <>Tidak ada data yang tercatat sesuai dengan filter</>
           )} */}
-      </div>
-  )
+        </div>
+    )
 }
 
 export default AdminLaporanPenjualanKonser

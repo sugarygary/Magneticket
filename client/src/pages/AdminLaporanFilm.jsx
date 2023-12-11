@@ -13,6 +13,7 @@ const AdminLaporanFilm = () => {
     const [tanggal1, setTanggal1] = useState(null);
     const [tanggal2, setTanggal2] = useState(null);
     const [filteredData, setFilteredData] = useState(null);
+    const [summary, setSummary] = useState(null);
     const downloadPDFRef = useRef();
     const downloadPDF = () => {}
     useEffect(() => {
@@ -44,6 +45,31 @@ const AdminLaporanFilm = () => {
             });
             item.rating=temp/item.Reviews.length;
         });
+        let tempSummary={
+            jumlahFilmTerlaris:0,
+            filmTerlaris:0,
+            filmRatingTertinggi:0,
+            filmRatingTerrendah:0,
+            ratingTertinggi:0,
+            ratingTerrendah:6
+        };
+        dataMovies.map((item) => {
+            console.log("ini rating",item.totalTicket);
+            if(item.totalTicket>=tempSummary.jumlahFilmTerlaris){
+                tempSummary.filmTerlaris=item.title;
+                tempSummary.jumlahFilmTerlaris=item.totalTicket;
+            }
+            if(!isNaN(item.rating)&&item.rating>=tempSummary.ratingTertinggi){
+                tempSummary.ratingTertinggi=item.rating;
+                tempSummary.filmRatingTertinggi=item.title;
+            }
+            if (!isNaN(item.rating) && item.rating<=tempSummary.ratingTerrendah){
+                tempSummary.ratingTerrendah=item.rating;
+                tempSummary.filmRatingTerrendah=item.title;
+            }
+        }
+        );
+        setSummary(tempSummary);
         setFilteredData(dataMovies);
     }, [tanggal1, tanggal2]);
 
@@ -110,6 +136,26 @@ const AdminLaporanFilm = () => {
                           )}
                   </tbody>
               </table>
+              {summary && (
+                  <div className="">
+                      {console.log(summary)}
+                      <div className="flex justify-between">
+                          <p className='text-xl'><u><b>Ringkasan Film</b></u></p>
+                      </div>
+                      <div className="flex justify-between">
+                          <p className='text-m'>Film Terlaris</p>
+                          <p className='text-m'>{summary.filmTerlaris} ({summary.jumlahFilmTerlaris} tiket)</p>
+                      </div>
+                      <div className="flex justify-between">
+                          <p className='text-m'>Film Dengan rating tertinggi</p>
+                          <p className='text-m'>{summary.filmRatingTertinggi}({summary.ratingTertinggi}⭐)</p>
+                      </div>
+                      <div className="flex justify-between">
+                          <p className='text-m'>Film Dengan Rating Paling rendah</p>
+                          <p className='text-m'>{summary.filmRatingTerrendah}({summary.ratingTerrendah}⭐)</p>
+                      </div>
+                  </div>
+              )}
           </div>
           {/* {filteredScreenings.length == 0 && (
               <>Tidak ada data yang tercatat sesuai dengan filter</>
