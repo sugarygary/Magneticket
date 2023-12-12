@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { useRef } from 'react';
+import logo1 from "../assets/logo1.png";
 
 const AdminLaporanFilm = () => {
     const data = useLoaderData();

@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { useRef } from 'react';
+import logo2 from "../assets/logo2.png";
+
 
 const AdminLaporanPenjualanKonser = () => {
     const data = useLoaderData();
@@ -16,6 +18,35 @@ const AdminLaporanPenjualanKonser = () => {
     const [dataPromotor, setDataPromotor] = useState(null);
     const [summary, setSummary] = useState(null);
     const downloadPDFRef = useRef();
+    const summaryRef = useRef();
+    // let logo = null;
+
+    // getDataUri("../assets/logo2.png", function (dataUri) {
+    //     logo = dataUri;
+    //     console.log("logo=" + logo);
+    // });
+
+    // function getDataUri(url, cb) {
+    //     var image = new Image();
+    //     image.setAttribute('crossOrigin', 'anonymous'); //getting images from external domain
+
+    //     image.onload = function () {
+    //         var canvas = document.createElement('canvas');
+    //         canvas.width = this.naturalWidth;
+    //         canvas.height = this.naturalHeight;
+
+    //         //next three lines for white background in case png has a transparent background
+    //         var ctx = canvas.getContext('2d');
+    //         ctx.fillStyle = '#fff';  /// set white fill style
+    //         ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    //         canvas.getContext('2d').drawImage(this, 0, 0);
+
+    //         cb(canvas.toDataURL('image/jpeg'));
+    //     };
+
+    //     image.src = url;
+    // }
     useEffect(() => {
         let filteredData2 = data.EventTransactions;
         let tempDataPromotor = [];
@@ -141,19 +172,37 @@ const AdminLaporanPenjualanKonser = () => {
     const downloadPDF = () => {
         const input = downloadPDFRef.current;
         html2canvas(input).then((canvas) => {
+            console.log(canvas)
             const imgData = canvas.toDataURL("image/png");
             const pdf = new jsPDF('p', 'mm', 'a4', true);
+            // pdf.setFont("hevaltica", "normal")
             pdf.setTextColor(0, 0, 0);
+            var temp=10;
             pdf.setFontSize(25);
-            pdf.text(10, 25, 'LAPORAN PENJUALAN EVENT');
+            pdf.addImage(logo2, "png", 10, temp, 50, 20);
+            pdf.setFont(undefined, 'bold')
+            pdf.text(65, temp+10, 'Magneticket');
+            pdf.setFont(undefined, 'normal')
+            pdf.setFontSize(15);
+            pdf.text(65, temp+20, 'Jl. Ngagel Jaya Tengah No.73, Surabaya, Jawa Timur');
+            pdf.line(10, temp+25, 200, temp+25);
+            pdf.line(10, temp+26, 200, temp+26);
+            temp += 38;
+
+            pdf.text(10, temp, 'LAPORAN PENJUALAN EVENT');
+            temp+=10;
+            pdf.setFontSize(13);
+            pdf.text(10, temp, 'Tanggal Dicetak : ' + new Date().toLocaleDateString());
+            
 
             // Define margins and dimensions
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = pdf.internal.pageSize.getHeight();
             const marginx = 10; // Adjust the margin size as needed
-            const marginy = 35; // Adjust the margin size as needed
+            const marginy = 35 + 35; // Adjust the margin size as needed
             const usableWidth = pdfWidth - (marginx * 2);
             const usableHeight = pdfHeight - (marginy * 2);
+
 
             // Calculate image dimensions and position with margins
             const imgWidth = canvas.width;
@@ -161,8 +210,44 @@ const AdminLaporanPenjualanKonser = () => {
             const ratio = imgWidth / imgHeight >= usableWidth / usableHeight ? usableWidth / imgWidth : usableHeight / imgHeight;
             const imgX = (pdfWidth - (imgWidth * ratio)) / 2;
             const imgY = marginy;
+            console.log("rasio", ratio)
 
             pdf.addImage(imgData, "png", imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+
+            // html2canvas(summaryRef.current).then((canvas2) => {
+            //     console.log(canvas2);
+            //     const imgData2 = canvas2.toDataURL("image/png");
+            //     const imgWidth2 = canvas2.width;
+            //     const imgHeight2 = canvas2.height;
+            //     const ratio2 = imgWidth2 / imgHeight2 >= usableWidth / usableHeight ? usableWidth / imgWidth2 : usableHeight / imgHeight2;
+            //     console.log("rasio2", ratio2)
+            //     const imgX2 = (pdfWidth - (imgWidth2 * ratio2)) / 2;
+            //     const imgY2 = (imgHeight * ratio) + imgY + 10;
+            //     pdf.addImage(imgData2, "png", imgX2, imgY2, imgWidth2 * ratio2, imgHeight2 * ratio2);
+            // });
+            let koorX = 10;
+            let koorY = (imgHeight * ratio) + imgY + 15;
+            // let tempcanvas
+            // html2canvas(summaryRef.current).then((canvas2) => {
+            //     console.log(canvas2);
+            //     tempcanvas=canvas2;
+            //     koorX=usableWidth-canvas2.width*ratio;
+            //     koorY+=5;
+            //     pdf.text(koorX, koorY, 'Ringkasan Event');
+            //     pdf.save("download.pdf");
+            // })
+            pdf.setFontSize(20);
+            if (tanggal1) {
+                pdf.text(koorX, koorY, `Ringkasan Penjualan Event (${tanggal1})`);
+            }
+            else {
+                pdf.text(koorX, koorY, 'Ringkasan Penjualan Event');
+            }
+            koorY += 10;
+            pdf.setFontSize(15);
+            pdf.text(koorX, koorY, `Jumlah Tiket Terjual : ${summary.totalTicket} tiket`);
+            koorY += 10;
+            pdf.text(koorX, koorY, `Total Transaksi         : Rp. ${summary.totalAmount},-`);
             pdf.save("download.pdf");
         });
     }
@@ -238,22 +323,24 @@ const AdminLaporanPenjualanKonser = () => {
                     </tbody>
                 </table>
             </div>
-            {summary && (
-                <div className="">
-                    {console.log(summary)}
-                    <div className="flex justify-between">
-                        <p className='text-xl'><u><b>Ringkasan Event </b>{tanggal1 && ('(' + tanggal1 + ')')}</u></p>
+            <div className="" ref={summaryRef}>
+                {summary && (
+                    <div className="">
+                        {console.log(summary)}
+                        <div className="flex justify-between">
+                            <p className='text-xl'><u><b>Ringkasan Penjualan Event </b>{tanggal1 && ('(' + tanggal1 + ')')}</u></p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p className='text-m'>Jumlah tiket terjual</p>
+                            <p className='text-m'>{summary.totalTicket} Tiket</p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p className='text-m'>total transaksi</p>
+                            <p className='text-m'>Rp. {summary.totalAmount}</p>
+                        </div>
                     </div>
-                    <div className="flex justify-between">
-                        <p className='text-m'>Jumlah tiket terjual</p>
-                        <p className='text-m'>{summary.totalTicket} Tiket</p>
-                    </div>
-                    <div className="flex justify-between">
-                        <p className='text-m'>total transaksi</p>
-                        <p className='text-m'>Rp. {summary.totalAmount}</p>
-                    </div>
-                </div>
-            )}
+                )}
+            </div>
             {/* {filteredScreenings.length == 0 && (
               <>Tidak ada data yang tercatat sesuai dengan filter</>
           )} */}
