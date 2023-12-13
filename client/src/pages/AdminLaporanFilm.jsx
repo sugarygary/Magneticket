@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { useRef } from 'react';
-import logo1 from "../assets/logo1.png";
+import logo2 from "../assets/logo2.png";
 
 const AdminLaporanFilm = () => {
     const data = useLoaderData();
@@ -16,7 +16,85 @@ const AdminLaporanFilm = () => {
     const [filteredData, setFilteredData] = useState(null);
     const [summary, setSummary] = useState(null);
     const downloadPDFRef = useRef();
-    const downloadPDF = () => {}
+    const downloadPDF = () => {
+        const input = downloadPDFRef.current;
+        html2canvas(input).then((canvas) => {
+            console.log(canvas)
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPDF('p', 'mm', 'a4', true);
+            // pdf.setFont("hevaltica", "normal")
+            pdf.setTextColor(0, 0, 0);
+            var temp = 10;
+            pdf.setFontSize(25);
+            pdf.addImage(logo2, "png", 10, temp, 50, 20);
+            pdf.setFont(undefined, 'bold')
+            pdf.text(65, temp + 10, 'Magneticket');
+            pdf.setFont(undefined, 'normal')
+            pdf.setFontSize(15);
+            pdf.text(65, temp + 20, 'Jl. Ngagel Jaya Tengah No.73, Surabaya, Jawa Timur');
+            pdf.line(10, temp + 25, 200, temp + 25);
+            pdf.line(10, temp + 26, 200, temp + 26);
+            temp += 38;
+
+            pdf.text(10, temp, 'LAPORAN FILM');
+            temp += 10;
+            pdf.setFontSize(13);
+            pdf.text(10, temp, 'Tanggal Dicetak : ' + new Date().toLocaleDateString());
+
+
+            // Define margins and dimensions
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const marginx = 10; // Adjust the margin size as needed
+            const marginy = 35 + 35; // Adjust the margin size as needed
+            const usableWidth = pdfWidth - (marginx * 2);
+            const usableHeight = pdfHeight - (marginy * 2);
+
+
+            // Calculate image dimensions and position with margins
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
+            const ratio = imgWidth / imgHeight >= usableWidth / usableHeight ? usableWidth / imgWidth : usableHeight / imgHeight;
+            const imgX = (pdfWidth - (imgWidth * ratio)) / 2;
+            const imgY = marginy;
+            console.log("rasio", ratio)
+
+            pdf.addImage(imgData, "png", imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+
+            // html2canvas(summaryRef.current).then((canvas2) => {
+            //     console.log(canvas2);
+            //     const imgData2 = canvas2.toDataURL("image/png");
+            //     const imgWidth2 = canvas2.width;
+            //     const imgHeight2 = canvas2.height;
+            //     const ratio2 = imgWidth2 / imgHeight2 >= usableWidth / usableHeight ? usableWidth / imgWidth2 : usableHeight / imgHeight2;
+            //     console.log("rasio2", ratio2)
+            //     const imgX2 = (pdfWidth - (imgWidth2 * ratio2)) / 2;
+            //     const imgY2 = (imgHeight * ratio) + imgY + 10;
+            //     pdf.addImage(imgData2, "png", imgX2, imgY2, imgWidth2 * ratio2, imgHeight2 * ratio2);
+            // });
+            let koorX = 10;
+            let koorY = (imgHeight * ratio) + imgY + 15;
+            // let tempcanvas
+            // html2canvas(summaryRef.current).then((canvas2) => {
+            //     console.log(canvas2);
+            //     tempcanvas=canvas2;
+            //     koorX=usableWidth-canvas2.width*ratio;
+            //     koorY+=5;
+            //     pdf.text(koorX, koorY, 'Ringkasan Event');
+            //     pdf.save("download.pdf");
+            // })
+            pdf.setFontSize(20);
+            pdf.text(koorX, koorY, `Ringkasan Film`);
+            koorY += 10;
+            pdf.setFontSize(15);
+            pdf.text(koorX, koorY, `Film Terlaris                                     : ${summary.filmTerlaris} (${summary.jumlahFilmTerlaris} tiket)`);
+            koorY += 10;
+            pdf.text(koorX, koorY, `Film Dengan rating tertinggi             : ${summary.filmRatingTertinggi} (${summary.ratingTertinggi} bintang)`);
+            koorY += 10;
+            pdf.text(koorX, koorY, `Film Dengan Rating Paling rendah  : ${summary.filmRatingTerrendah} (${summary.ratingTerrendah} bintang)`);
+            pdf.save("download.pdf");
+        });
+    }
     useEffect(() => {
         let dataMovies=data.Movies;
         let dataTickets=data.Tickets;
@@ -137,6 +215,7 @@ const AdminLaporanFilm = () => {
                           )}
                   </tbody>
               </table>
+          </div>
               {summary && (
                   <div className="">
                       {console.log(summary)}
@@ -157,7 +236,6 @@ const AdminLaporanFilm = () => {
                       </div>
                   </div>
               )}
-          </div>
           {/* {filteredScreenings.length == 0 && (
               <>Tidak ada data yang tercatat sesuai dengan filter</>
           )} */}

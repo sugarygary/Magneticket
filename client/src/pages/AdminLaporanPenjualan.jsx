@@ -3,6 +3,10 @@ import { useLoaderData, useNavigate } from 'react-router-dom'
 import { useState } from "react";
 import { useEffect } from "react";
 import { set } from 'react-hook-form';
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import { useRef } from 'react';
+import logo2 from "../assets/logo2.png";
 
 const AdminLaporanPenjualan = () => {
     const data = useLoaderData();
@@ -17,6 +21,8 @@ const AdminLaporanPenjualan = () => {
     const [dataAll, setDataAll] = useState(data);
     const [dataCabang, setDataCabang] = useState(null);
     const [summary, setSummary] = useState(null);
+    const downloadPDFRef = useRef();
+    const summaryRef = useRef();
     useEffect(() => {
         //filter dataAll
         let filtered = dataAll.MovieTickets;
@@ -212,10 +218,96 @@ const AdminLaporanPenjualan = () => {
         console.log("ini filtered4", filtered4);
     }, [tanggal1, tanggal2, kota, cabang, studio]);
 
+    const downloadPDF = () => {
+        const input = downloadPDFRef.current;
+        html2canvas(input).then((canvas) => {
+            console.log(canvas)
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPDF('p', 'mm', 'a4', true);
+            // pdf.setFont("hevaltica", "normal")
+            pdf.setTextColor(0, 0, 0);
+            var temp = 10;
+            pdf.setFontSize(25);
+            pdf.addImage(logo2, "png", 10, temp, 50, 20);
+            pdf.setFont(undefined, 'bold')
+            pdf.text(65, temp + 10, 'Magneticket');
+            pdf.setFont(undefined, 'normal')
+            pdf.setFontSize(15);
+            pdf.text(65, temp + 20, 'Jl. Ngagel Jaya Tengah No.73, Surabaya, Jawa Timur');
+            pdf.line(10, temp + 25, 200, temp + 25);
+            pdf.line(10, temp + 26, 200, temp + 26);
+            temp += 38;
+
+            pdf.text(10, temp, 'LAPORAN PENJUALAN BIOSKOP');
+            temp += 10;
+            pdf.setFontSize(13);
+            pdf.text(10, temp, 'Tanggal Dicetak : ' + new Date().toLocaleDateString());
+
+
+            // Define margins and dimensions
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const marginx = 10; // Adjust the margin size as needed
+            const marginy = 35 + 35; // Adjust the margin size as needed
+            const usableWidth = pdfWidth - (marginx * 2);
+            const usableHeight = pdfHeight - (marginy * 2);
+
+
+            // Calculate image dimensions and position with margins
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
+            const ratio = imgWidth / imgHeight >= usableWidth / usableHeight ? usableWidth / imgWidth : usableHeight / imgHeight;
+            const imgX = (pdfWidth - (imgWidth * ratio)) / 2;
+            const imgY = marginy;
+            console.log("rasio", ratio)
+
+            pdf.addImage(imgData, "png", imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+
+            // html2canvas(summaryRef.current).then((canvas2) => {
+            //     console.log(canvas2);
+            //     const imgData2 = canvas2.toDataURL("image/png");
+            //     const imgWidth2 = canvas2.width;
+            //     const imgHeight2 = canvas2.height;
+            //     const ratio2 = imgWidth2 / imgHeight2 >= usableWidth / usableHeight ? usableWidth / imgWidth2 : usableHeight / imgHeight2;
+            //     console.log("rasio2", ratio2)
+            //     const imgX2 = (pdfWidth - (imgWidth2 * ratio2)) / 2;
+            //     const imgY2 = (imgHeight * ratio) + imgY + 10;
+            //     pdf.addImage(imgData2, "png", imgX2, imgY2, imgWidth2 * ratio2, imgHeight2 * ratio2);
+            // });
+            let koorX = 10;
+            let koorY = (imgHeight * ratio) + imgY + 15;
+            // let tempcanvas
+            // html2canvas(summaryRef.current).then((canvas2) => {
+            //     console.log(canvas2);
+            //     tempcanvas=canvas2;
+            //     koorX=usableWidth-canvas2.width*ratio;
+            //     koorY+=5;
+            //     pdf.text(koorX, koorY, 'Ringkasan Event');
+            //     pdf.save("download.pdf");
+            // })
+            pdf.setFontSize(20);
+            if (tanggal1&&tanggal2) {
+                pdf.text(koorX, koorY, `Ringkasan Penjualan Bioskop (${tanggal1} - ${tanggal2})`);
+            }
+            else {
+                pdf.text(koorX, koorY, 'Ringkasan Penjualan Event');
+            }
+            koorY += 10;
+            pdf.setFontSize(15);
+            pdf.text(koorX, koorY, `Jumlah Tiket Terjual : ${summary.totalTicket} tiket`);
+            koorY += 10;
+            pdf.text(koorX, koorY, `Total Transaksi         : Rp. ${summary.totalAmount},-`);
+            koorY += 10;
+            pdf.text(koorX, koorY, `Transaksi Per Hari    : Rp. ${Math.round(summary.summaryDaily * 100) / 100},-`);
+            pdf.save("download.pdf");
+        });
+    }
+
 
     return (
         <div className="px-12 py-4">
             <p className="text-2xl font-bold">Laporan Penjualan Bioskop</p>
+            <button onClick={downloadPDF} className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center'>Download PDF</button>
             <div className="flex gap-3 my-4">
                 <div>
                     <p>Tanggal Awal</p>
@@ -288,39 +380,42 @@ const AdminLaporanPenjualan = () => {
                     </select>
                 </div>
             </div>
-            <table className="min-w-full text-white table-auto">
-                <thead>
-                    <tr className="bg-gray-200 text-left bg-gray-700">
-                        <th className="py-2 px-4">Cabang</th>
-                        <th className="py-2 px-4">Bioskop</th>
-                        <th className="py-2 px-4">Tanggal</th>
-                        <th className="py-2 px-4">Qty</th>
-                        <th className="py-2 px-4">Amount</th>
-                    </tr>
-                </thead>
-                <tbody className="biruTua">
-                    {filteredScreenings &&
-                        filteredScreenings.map((sale) => (
-                            <tr>
-                                <td className="border-t border-b py-2 px-4">
-                                    {sale.branch.branch_name}
-                                </td>
-                                <td className="border-t border-b py-2 px-4">
-                                    {sale.cineplex.brand_name}
-                                </td>
-                                <td className="border-t border-b py-2 px-4">
-                                    {tanggal1}-{tanggal2}
-                                </td>
-                                <td className="border-t border-b py-2 px-4">
-                                    {sale.totaltickets} Tickets
-                                </td>
-                                <td className="border-t border-b py-2 px-4">
-                                    Rp {sale.totalamount}
-                                </td>
-                            </tr>
-                        ))}
-                </tbody>
-            </table>
+            <div className="" ref={downloadPDFRef}>
+
+                <table className="min-w-full text-white table-auto">
+                    <thead>
+                        <tr className="bg-gray-200 text-left bg-gray-700">
+                            <th className="py-2 px-4">Cabang</th>
+                            <th className="py-2 px-4">Bioskop</th>
+                            <th className="py-2 px-4">Tanggal</th>
+                            <th className="py-2 px-4">Qty</th>
+                            <th className="py-2 px-4">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody className="biruTua">
+                        {filteredScreenings &&
+                            filteredScreenings.map((sale) => (
+                                <tr>
+                                    <td className="border-t border-b py-2 px-4">
+                                        {sale.branch.branch_name}
+                                    </td>
+                                    <td className="border-t border-b py-2 px-4">
+                                        {sale.cineplex.brand_name}
+                                    </td>
+                                    <td className="border-t border-b py-2 px-4">
+                                        {tanggal1}-{tanggal2}
+                                    </td>
+                                    <td className="border-t border-b py-2 px-4">
+                                        {sale.totaltickets} Tickets
+                                    </td>
+                                    <td className="border-t border-b py-2 px-4">
+                                        Rp {sale.totalamount}
+                                    </td>
+                                </tr>
+                            ))}
+                    </tbody>
+                </table>
+            </div>
             {summary && (
 
                 <div className="">
