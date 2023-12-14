@@ -54,7 +54,7 @@ import {
   loadMovieReportDetail,
   loadStudioCreateScreening,
 } from "./handlers/LoadHandler.jsx";
-import PendingEmail from "./pages/pendingEmail.jsx";
+import PendingEmail from "./pages/PendingEmail.jsx";
 import { LayoutUser } from "./pages/LayoutUser.jsx";
 import { LayoutCineplex } from "./pages/LayoutCineplex.jsx";
 import { LayoutEventOrganizer } from "./pages/LayoutEventOrganizer.jsx";
