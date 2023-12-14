@@ -100,22 +100,22 @@ const AdminSidebar = (props) => {
             {boolLaporan && (
               <ul className="pl-4">
                 <li className="py-2 px-4 hover:bg-gray-700">
-                  <Link to={""} className="block">
+                  <Link to={"/admin/laporan-penjualan"} className="block">
                     Penjualan Bioskop
                   </Link>
                 </li>
                 <li className="py-2 px-4 hover:bg-gray-700">
-                  <Link to={""} className="block">
+                  <Link to={"/admin/laporan-penjualan-event"} className="block">
                     Penjualan Konser
                   </Link>
                 </li>
                 <li className="py-2 px-4 hover:bg-gray-700">
-                  <Link to={""} className="block">
+                  <Link to={"/admin/laporan-film"} className="block">
                     Laporan Film
                   </Link>
                 </li>
                 <li className="py-2 px-4 hover:bg-gray-700">
-                  <Link to={""} className="block">
+                  <Link to={"/admin/laporan-keuntungan"} className="block">
                     Laporan Keuntungan
                   </Link>
                 </li>
