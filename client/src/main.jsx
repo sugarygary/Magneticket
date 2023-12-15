@@ -132,6 +132,7 @@ import { createReview } from "./handlers/UserHandler.jsx";
 import AdminLaporanKeuntungan from "./pages/AdminLaporanKeuntungan.jsx";
 import AdminHistoryTransaksi from "./pages/AdminHistoryTransaksi.jsx";
 import AdminDetailHistoryTransaksi from "./pages/AdminDetailHistoryTransaksi.jsx";
+import { Redirector } from "./pages/Redirector.jsx";
 
 async function coba() {
   let x = loadInTheater();
@@ -146,7 +147,7 @@ async function coba() {
 const router = createBrowserRouter([
   {
     index: true,
-    element: <Navigate to="/user" />, //REDIRECTOR CHECK COOKIE
+    element: <Redirector></Redirector>, //REDIRECTOR CHECK COOKIE
     errorElement: <ErrorElement />,
   },
   {

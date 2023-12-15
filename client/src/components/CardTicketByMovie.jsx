@@ -11,21 +11,9 @@ const CardTicketByMovie = (props) => {
           <p className="font-bold text-[#f8f8f8] text-[.75rem] md:text-lg">
             {props.title}
           </p>
-          <div className="flex my-1">
-            <div className="px-3 py-1 mt-2 bg-[#f8f8f8] rounded">
-              <p className="text-black text-[0.6rem] md:text-base">
-                {props.age_rating}
-              </p>
-            </div>
-          </div>
+          <div className="flex my-1"></div>
           <table className="text-[0.6rem] mt-2 md:text-base">
             <tbody>
-              <tr>
-                <td className="abu9CA3AF">Sutradara</td>
-                <td className="text-[#f8f8f8] ml-4">
-                  : {props.director.director_name}
-                </td>
-              </tr>
               <tr>
                 <td className="abu9CA3AF">Durasi</td>
                 <td className="text-[#f8f8f8] ml-4">
@@ -34,6 +22,16 @@ const CardTicketByMovie = (props) => {
                     <>{Math.floor(props.runtime_minutes / 60)} jam </>
                   )}
                   {Math.floor(props.runtime_minutes) % 60} menit
+                </td>
+              </tr>
+              <tr>
+                <td className="abu9CA3AF">Usia</td>
+                <td className="text-[#f8f8f8] ml-4">: {props.age_rating}</td>
+              </tr>
+              <tr>
+                <td className="abu9CA3AF">Sutradara</td>
+                <td className="text-[#f8f8f8] ml-4">
+                  : {props.director.director_name}
                 </td>
               </tr>
             </tbody>

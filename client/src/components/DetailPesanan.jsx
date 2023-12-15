@@ -142,7 +142,8 @@ const DetailPesanan = (props) => {
         </div>
         <div>
           <p>
-            Rp. 50.000 <span className="abu9CA3AF">x2</span>
+            Rp. {props.responseHistory.price_per_seat}{" "}
+            <span className="abu9CA3AF">x2</span>
           </p>
           <p>
             Rp. 4.000 <span className="abu9CA3AF">x2</span>
