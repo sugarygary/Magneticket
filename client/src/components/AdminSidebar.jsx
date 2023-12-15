@@ -57,7 +57,7 @@ const AdminSidebar = (props) => {
               Home
             </Link>
           </li>
-          <li className="py-2 px-4 hover:bg-gray-700">
+          {/* <li className="py-2 px-4 hover:bg-gray-700">
             <a
               href="#"
               className="block"
@@ -86,7 +86,7 @@ const AdminSidebar = (props) => {
                 </li>
               </ul>
             )}
-          </li>
+          </li> */}
           <li className="py-2 px-4 hover:bg-gray-700">
             <a
               href="#"
@@ -152,11 +152,11 @@ const AdminSidebar = (props) => {
               </ul>
             )}
           </li>
-          <li className="py-2 px-4 hover:bg-gray-700">
+          {/* <li className="py-2 px-4 hover:bg-gray-700">
             <Link to={""} className="block">
               Messages
             </Link>
-          </li>
+          </li> */}
         </ul>
       </nav>
     </aside>
