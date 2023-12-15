@@ -449,29 +449,121 @@ const getSingleMenu = async (req, res) => {
   return res.status(200).json({ menu });
 };
 const editMenu = async (req, res) => {
-  const menu = await Menu.findById(req.params.id);
-  
-  if (menu == null) {
+  const menu = await Menu.findById(req.params.id).lean();
+
+  if (!req.files?.thumbnail) {
+    return res.status(400).send({ message: "Image must be included" });
+  }
+
+  // Assuming you have some validation library, for example express-validator
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array() });
+  }
+
+  if (!menu) {
     return res.status(404).send({ message: "Menu not found" });
   }
+
   if (menu.cineplex != req.userId) {
     return res.status(403).send({ message: "Forbidden" });
   }
+
   const { item_name, item_description, price } = req.body;
-  let temp=menu;
-  
-  if(item_name!=null){
-    temp.item_name = item_name;
+  console.log(item_name)
+  console.log(item_description)
+  console.log(price)
+  let updatedMenu = { ...menu }; // Create a copy of the menu
+
+  if (item_name !== undefined) {
+    updatedMenu.item_name = item_name;
   }
-  if(item_description!=null){
-    temp.item_description = item_description;
+  if (item_description !== undefined) {
+    updatedMenu.item_description = item_description;
   }
-  if(price!=null){
-    temp.price = price;
+  if (price !== undefined) {
+    updatedMenu.price = price;
   }
-  await Menu.updateOne({ _id: menu._id }, temp);
-  res.status(200).json({ temp });
+
+  // Update the image filename
+  if (req.files.thumbnail) {
+    fs.renameSync(
+      path.join(
+        __dirname,
+        `../../uploads/cineplex/${req.files.thumbnail[0].filename}`
+      ),
+      path.join(
+        __dirname,
+        `../../uploads/cineplex/menu-${menu._id}.jpg`
+      )
+    );
+    // Assuming your menu model has a property like 'thumbnail' to store the filename
+    updatedMenu.thumbnail = `menu-${menu._id}.jpg`;
+  }
+  console.log(menu._id)
+  try {
+    await Menu.updateOne({ _id: menu._id }, updatedMenu);
+    res.status(200).json({ message: "Menu updated successfully", menu: updatedMenu });
+  } catch (error) {
+    console.error("Error updating menu:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 };
+
+// const editMenu = async (req, res) => {
+//   const menu = await Menu.findById(req.params.id);
+//   if (!req.files?.thumbnail ) {
+//     fs.unlinkSync(
+//       path.join(
+//         __dirname,
+//         `../../uploads/cineplex/${req.files.thumbnail[0].filename}`
+//       )
+//     );
+//     return res.status(400).send({ message: "Image must be included" });
+//   }
+//   if (!errors.isEmpty()) {
+//     fs.unlinkSync(
+//       path.join(
+//         __dirname,
+//         `../../uploads/cineplex/${req.files.thumbnail[0].filename}`
+//       )
+//     );
+//     return res.status(400).send({ errors: errors.array() });
+//   }
+//   if (!errors.isEmpty()) {
+//     return res.status(400).send({ errors: errors.array() });
+//   }
+//   if (menu == null) {
+//     return res.status(404).send({ message: "Menu not found" });
+//   }
+//   if (menu.cineplex != req.userId) {
+//     return res.status(403).send({ message: "Forbidden" });
+//   }
+//   const { item_name, item_description, price } = req.body;
+//   let temp=menu;
+  
+//   if(item_name!=null){
+//     temp.item_name = item_name;
+//   }
+//   if(item_description!=null){
+//     temp.item_description = item_description;
+//   }
+//   if(price!=null){
+//     temp.price = price;
+//   }
+//   fs.renameSync(
+//     path.join(
+//       __dirname,
+//       `../../uploads/cineplex/${req.files.thumbnail[0].filename}`
+//     ),
+//     path.join(
+//       __dirname,
+//       `../../uploads/cineplex/menu-${newMenu._id}.jpg`
+//     )
+//   );
+//   await Menu.updateOne({ _id: menu._id }, temp);
+//   res.status(200).json({ temp });
+// };
 const getMovieTicket = async (req, res) => {
   const movieTickets = await MovieTicket.find({ cineplex: req.userId }).populate("screening").populate("customer").populate("transaction").populate({path:"screening",populate:{path:"branch"}});
   res.status(200).json({ movieTickets });

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import client from "../util/client";
 
 export const createMenu = async (data, config) => {
-  console.log(data);
+  console.log(...data.entries());
   console.log(config);
   try {
     const response = await client.post("api/cineplex/create-menu", data, {
@@ -14,7 +14,26 @@ export const createMenu = async (data, config) => {
     return error.message;
   }
 };
-
+export const editMenu = async (data, config) => {
+  const formDataEntries = [...data.entries()];
+  console.log(formDataEntries);
+  try {
+    // const response = await client.post("api/cineplex/create-menu", data, {
+    //   ...config,
+    // });
+    const response = await client.post(
+      `api/cineplex/edit-menu/${formDataEntries[0][1]}`,
+      data,
+      {
+        ...config,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return error.message;
+  }
+};
 export const createKodePromo = async (data) => {
   // console.log(data);
   try {
@@ -73,20 +92,7 @@ export const deleteKodePromo = async (data) => {
     return error.message;
   }
 };
-export const editMenu = async (data) => {
-  console.log("ini datanyaa", data);
-  try {
-    const response = await client.post(`api/cineplex/edit-menu/${data._id}`, {
-      item_name: data.item_name,
-      item_description: data.item_description,
-      price: data.price,
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    return error.message;
-  }
-};
+
 export const createScreening = async (data) => {
   console.log(data);
   try {

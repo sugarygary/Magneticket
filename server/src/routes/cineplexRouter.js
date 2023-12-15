@@ -48,7 +48,7 @@ cineplexRouter.get("/studios", expressAsyncHandler(getStudioAll));
 cineplexRouter.get("/studios/:branchId", expressAsyncHandler(getStudio));
 cineplexRouter.post("/delete-promo/:id", expressAsyncHandler(deletePromo));
 cineplexRouter.get("/menus/:id", expressAsyncHandler(getSingleMenu));
-cineplexRouter.post("/edit-menu/:id", expressAsyncHandler(editMenu));
+cineplexRouter.post("/edit-menu/:id", [registerMenuMulter],expressAsyncHandler(editMenu));
 cineplexRouter.get("/movie-ticket",expressAsyncHandler(getMovieTicket));
 cineplexRouter.get("/movie-ticket/:id",expressAsyncHandler(getSingleMovieTicket));
 
