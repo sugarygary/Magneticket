@@ -105,7 +105,11 @@ const CheckoutEvent = () => {
             <h2 className="text-2xl font-semibold mb-4">Checkout</h2>
             <div className="flex mb-5">
               <div className="me-5">
-                <img src={openheimer} alt="" className="w-48 rounded" />
+                <img
+                  src={`${process.env.BACKEND_URL}/promotor/eventposter-${data._id}.jpg`}
+                  alt=""
+                  className="w-64"
+                />
               </div>
               <div className="">
                 <div className="mb-4">

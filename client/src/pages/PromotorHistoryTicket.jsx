@@ -136,9 +136,9 @@ const PromotorHistoryTiket = () => {
                 <td className="border-t border-b py-2 px-4">
                   {sale.event_category.category_name}
                 </td>
-                {/* <td className="border-t border-b py-2 px-4">
+                <td className="border-t border-b py-2 px-4">
                   {sale.transaction.amounts_paid}
-                </td> */}
+                </td>
                 <td className="border-t border-b py-2 px-4">
                   {sale.claimed == true ? "CLAIMED" : "UNCLAIMED"}
                 </td>
