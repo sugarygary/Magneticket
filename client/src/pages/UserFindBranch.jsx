@@ -107,12 +107,26 @@ export const UserFindBranch = () => {
       {state == "idle" && branches.length > 0 && (
         <div className="mt-4">
           {branches.map((b) => (
-            <Link to={b._id} key={b._id}>
+            <Link className="" to={b._id} key={b._id}>
               <div
                 key={b._id}
-                className="w-full shadow mb-px rounded biruTua text-[#f8f8f8] py-2.5 px-4 cursor-pointer hover:bg-gray-700"
+                className="w-full items-center flex justify-between shadow mb-px rounded biruTua text-[#f8f8f8] py-2.5 px-4 cursor-pointer hover:bg-gray-700"
               >
-                {b.branch_name}
+                <div>{b.branch_name}</div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                  />
+                </svg>
               </div>
             </Link>
           ))}

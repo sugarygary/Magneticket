@@ -214,7 +214,6 @@ export default function SeatingPage() {
         alert("you closed the popup without finishing the payment");
       },
     });
-    // navigate("/user/history");
   }
 
   return (
@@ -268,7 +267,7 @@ export default function SeatingPage() {
                                     seat_number: seatPtr.seat_number,
                                   });
                                 }}
-                                className="bg-yellow-500 select-none font-mono py-2 px-2 text-sm rounded-sm select-none cursor-pointer"
+                                className="bg-amber-500 select-none font-mono py-2 px-2 text-sm rounded-sm select-none cursor-pointer"
                               >
                                 {seatPtr.seat_number}
                               </div>
@@ -301,38 +300,90 @@ export default function SeatingPage() {
             LAYAR
           </div>
           <div className="mt-4 font-bold">
-            {chooseSeat.length} Tiket{" "}
-            {chooseSeat.length > 0 &&
-              "(" +
-                chooseSeat.reduce((accumulator, seat, index) => {
-                  if (index == 0) {
-                    return accumulator + seat.seat_number;
-                  } else {
-                    return accumulator + ", " + seat.seat_number;
-                  }
-                }, "") +
-                ")"}
-          </div>
-          <div className="sm:flex items-center w-full justify-between">
-            <div className="font-bold">
-              Total :{" "}
-              {new Intl.NumberFormat("id-ID", {
-                style: "currency",
-                currency: "IDR",
-              }).format(data.screening_data.price * chooseSeat.length)}
-            </div>
-            <div>
-              {chooseSeat.length > 0 && (
-                <button
-                  className="biruCariTiket px-4 py-2 text-white rounded"
-                  onClick={() => {
-                    setBoolCekout(true);
-                  }}
-                >
-                  Lanjutkan ke Pembayaran
-                </button>
-              )}
-            </div>
+            {chooseSeat.length == 0 && (
+              <div className="text-xl text-center">Silahkan Pilih Kursi</div>
+            )}
+            {chooseSeat.length > 0 && (
+              <>
+                {/* <div>
+                  {chooseSeat.length} Tiket{" "}
+                  {chooseSeat.length > 0 &&
+                    "(" +
+                      chooseSeat.reduce((accumulator, seat, index) => {
+                        if (index == 0) {
+                          return accumulator + seat.seat_number;
+                        } else {
+                          return accumulator + ", " + seat.seat_number;
+                        }
+                      }, "") +
+                      ")"}
+                </div>
+                <div className="font-bold">
+                  Total :{" "}
+                  {new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                  }).format(data.screening_data.price * chooseSeat.length)}
+                </div> */}
+                {/* <div className="flex items-start gap-2 justify-between w-full">
+                  <div className="bg-gray-600 text-[#f8f8f8] rounded p-4 w-full">
+                    <div className="text-center">Kursi</div>
+                    <div className="flex flex-wrap">
+                      <div
+                        title="A01"
+                        className="bg-amber-500 font-mono text-sm py-2 px-2 cursor-not-allowed rounded-sm"
+                      >
+                        A01
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-gray-600 text-center text-[#f8f8f8] rounded p-4 w-3/5">
+                    Total
+                  </div>
+                </div> */}
+                <div class="flex gap-2">
+                  <div class="flex-2 flex-col bg-gray-600 text-center text-[#f8f8f8] rounded px-6 pt-4 w-4/6">
+                    <div class="flex-1">
+                      <div className="text-center text-xl">Kursi</div>
+                      <div className="flex gap-2 flex-wrap">
+                        {chooseSeat.map((seat) => (
+                          <div
+                            title={seat.seat_number}
+                            className="bg-amber-500 font-mono text-sm py-2 px-2 cursor-default rounded-sm"
+                          >
+                            {seat.seat_number}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="flex-1 flex-col bg-gray-600 text-center text-[#f8f8f8] rounded p-4 w-2/6">
+                    <div class="flex-1">
+                      <div className="text-center text-xl">Total</div>
+                      <div className="text-2xl py-4">
+                        {new Intl.NumberFormat("id-ID", {
+                          style: "currency",
+                          currency: "IDR",
+                        }).format(
+                          data.screening_data.price * chooseSeat.length
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {chooseSeat.length > 0 && (
+                  <button
+                    className="biruCariTiket w-full mt-2 px-4 py-4 text-white rounded"
+                    onClick={() => {
+                      setBoolCekout(true);
+                      window.scrollTo(0, 0);
+                    }}
+                  >
+                    Lanjutkan ke Pembayaran
+                  </button>
+                )}
+              </>
+            )}
           </div>
         </div>
       )}
