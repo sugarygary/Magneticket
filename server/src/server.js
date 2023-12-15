@@ -12,7 +12,7 @@ const { errorHandler, notFound } = require("./middlewares/errorMiddlewares");
 
 server.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: `http://${HOSTNAME}:5173`,
     optionsSuccessStatus: 200,
     credentials: true,
   })
