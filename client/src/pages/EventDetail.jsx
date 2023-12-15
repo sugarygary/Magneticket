@@ -27,7 +27,12 @@ const EventDetail = () => {
               <td className="border-t border-b py-2 px-4">
                 {category.category_name}
               </td>
-              <td className="border-t border-b py-2 px-4">{category.price}</td>
+              <td className="border-t border-b py-2 px-4">
+                {new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR",
+              }).format(category.price)}
+              </td>
               <td className="border-t border-b py-2 px-4">
                 {category.ticketLeft > 0 && category.ticketLeft}
                 {category.ticketLeft <= 0 && "SOLD OUT"}

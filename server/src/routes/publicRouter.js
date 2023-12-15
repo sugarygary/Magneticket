@@ -10,6 +10,7 @@ const {
   getSingleEvent,
   getSingleEventCategory,
   getPresales,
+  getAllEvent,
 } = require("../controllers/publicController");
 const expressAsyncHandler = require("express-async-handler");
 const publicRouter = express.Router();
@@ -54,5 +55,6 @@ publicRouter.get(
   expressAsyncHandler(getMovieDetails)
 );
 publicRouter.get("/ongoing-event", expressAsyncHandler(getOngoingEvent));
+publicRouter.get("/all-event", expressAsyncHandler(getAllEvent))
 
 module.exports = publicRouter;

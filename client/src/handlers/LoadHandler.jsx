@@ -399,3 +399,14 @@ export const loadMovieReportDetail = async (data) => {
     return error;
   }
 };
+
+export const loadEvents = async (data) => {
+  try {
+    const response = await client.get(
+      `api/public/all-event`
+    );
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+};

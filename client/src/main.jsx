@@ -53,6 +53,7 @@ import {
   loadMovieReport,
   loadMovieReportDetail,
   loadStudioCreateScreening,
+  loadEvents,
 } from "./handlers/LoadHandler.jsx";
 import PendingEmail from "./pages/PendingEmail.jsx";
 import { LayoutUser } from "./pages/LayoutUser.jsx";
@@ -101,6 +102,7 @@ import PromotorJadwalEvent from "./pages/PromotorJadwalEvent.jsx";
 import PromotorDetailEvent from "./pages/PromotorDetailEvent.jsx";
 import HomeCineplex from "./pages/CineplexHome.jsx";
 import EventOrganizerHome from "./pages/EventOrganizerHome.jsx";
+import UserFindEvent from "./pages/UserFindEvent.jsx";
 import CheckoutEvent from "./pages/CheckoutEvent.jsx";
 import {
   acceptVerif,
@@ -254,6 +256,12 @@ const router = createBrowserRouter([
             errorElement: <ErrorElement />,
           },
         ],
+      },
+      {
+        path: "event",
+        element: <UserFindEvent />,
+        loader: loadEvents,
+        errorElement: <ErrorElement />,
       },
       {
         path: "event/:event_id",

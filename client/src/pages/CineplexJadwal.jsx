@@ -186,7 +186,11 @@ export default function CineplexJadwal() {
                   </tr>
                   <tr>
                     <td>Harga </td>
-                    <td>: Rp. {screening.price}</td>
+                    <td>: {new Intl.NumberFormat("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                          }).format(screening.price)}
+                    </td>
                   </tr>
                   <tr>
                     <td>ID Jadwal</td>

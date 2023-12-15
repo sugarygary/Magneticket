@@ -25,7 +25,7 @@ const CineplexTiketDetail = (props) => {
             alt=""
             className="w-48 rounded"
           />
-          <p className="text-left text-xl font-bold underline underline-offset-4">
+          <p className="text-left text-xl font-bold underline underline-offset-4 mt-24">
             Detail Transaksi
           </p>
         </div>
@@ -119,7 +119,12 @@ const CineplexTiketDetail = (props) => {
         </div>
         <div>
           <p>
-            Rp. {props.screening.price}{" "}
+            <span className="">
+                {new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                }).format(props.screening.price)}
+            </span>{" "}
             <span className="abu9CA3AF">x{props.seats.length}</span>
           </p>
           <p>
@@ -128,7 +133,12 @@ const CineplexTiketDetail = (props) => {
               : props.transaction.foods.map((item) => {
                   return (
                     <>
-                      Rp. {item.food_name}{" "}
+                      <span className="">
+                          {new Intl.NumberFormat("id-ID", {
+                              style: "currency",
+                              currency: "IDR",
+                          }).format(item.food_price)}
+                      </span>{" "}
                       <span className="abu9CA3AF"> x{item.quantity}</span>
                       <br />
                     </>
@@ -136,7 +146,7 @@ const CineplexTiketDetail = (props) => {
                 })}
           </p>
           <p>
-            Rp. 4.000 <span className="abu9CA3AF">x{props.seats.length}</span>
+            Rp 4.000 <span className="abu9CA3AF">x{props.seats.length}</span>
           </p>
         </div>
       </div>
@@ -147,7 +157,12 @@ const CineplexTiketDetail = (props) => {
       <div className="justify-between flex mt-5">
         <div></div>
         <p className="font-bold">
-          Total Tagihan : Rp.{props.transaction.amounts_paid}
+          Total Tagihan : <span className="font-bold">
+                            {new Intl.NumberFormat("id-ID", {
+                                style: "currency",
+                                currency: "IDR",
+                            }).format(props.transaction.amounts_paid)}
+                          </span>
         </p>
       </div>
       <div className="justify-between flex">

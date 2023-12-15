@@ -48,7 +48,13 @@ export default function CineplexConcession() {
                       {menu.item_description}
                     </p>
                     <p>
-                      Harga: <span className="font-bold">Rp. {menu.price}</span>
+                      Harga: 
+                      <span className="">
+                        {new Intl.NumberFormat("id-ID", {
+                          style: "currency",
+                          currency: "IDR",
+                        }).format(menu.price)}
+                      </span>
                     </p>
                     <div className="mt-9 flex justify-between">
                       <div></div>
