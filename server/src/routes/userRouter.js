@@ -11,7 +11,7 @@ const {
   getSingleEventCategory,
   createSnap,
   createReview,
-  getReviews,
+  getReview,
   getTickets,
   createSnapEvent,
   createTicketEvent,
@@ -35,7 +35,7 @@ userRouter.get(
   "/screening/:screening_id/menu",
   expressAsyncHandler(findMenuByScreening)
 );
-userRouter.get("/reviews", expressAsyncHandler(getReviews));
+userRouter.get("/reviews", expressAsyncHandler(getReview));
 userRouter.get(
   "/screening/:screening_id/promotion",
   expressAsyncHandler(findPromoByScreening)

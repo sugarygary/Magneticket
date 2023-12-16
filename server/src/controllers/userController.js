@@ -175,7 +175,10 @@ const createSnap = async (req, res) => {
   let amounts_paid = 0;
   if (discount_amount != 0) {
     amounts_paid =
-      findScreening.price * seats.length + foodTotal + 4000 - discount_amount;
+      findScreening.price * seats.length +
+      foodTotal +
+      4000 * findSeats.length -
+      discount_amount;
   } else {
     amounts_paid = findScreening.price * seats.length + foodTotal + 4000;
   }
@@ -374,6 +377,7 @@ const createTicket = async (req, res) => {
         status: "REFUND",
         midtrans_token: midtrans_token,
         price_per_seat: findScreening.price,
+        studio_type: findStudio.type,
         promo,
       });
       await newMovieTransaction.save();
@@ -413,6 +417,7 @@ const createTicket = async (req, res) => {
         status: "FAILED",
         midtrans_token: midtrans_token,
         price_per_seat: findScreening.price,
+        studio_type: findStudio.type,
         promo,
       });
       await newMovieTransaction.save();
@@ -441,6 +446,7 @@ const createTicket = async (req, res) => {
     status: status,
     midtrans_token: midtrans_token,
     price_per_seat: findScreening.price,
+    studio_type: findStudio.type,
     promo,
   });
   await newMovieTransaction.save();
@@ -469,7 +475,6 @@ const createTicketEvent = async (req, res) => {
     req.body;
   const findEventCategory = await EventCategory.findById(event_category);
   if (findEventCategory == null) {
-    console.log("saiundiuasn2");
     return res.status(404).send({ message: "Category not found" });
   }
   const findEvent = await Event.findOne({
@@ -588,7 +593,9 @@ const createTicketEvent = async (req, res) => {
 };
 
 const getHistory = async (req, res) => {
-  let findHistory = await MovieTransaction.find({ customer_id: req.userId });
+  let findHistory = await MovieTransaction.find({
+    customer_id: req.userId,
+  }).sort({ createdAt: -1 });
   return res.status(200).send(findHistory);
 };
 const getTickets = async (req, res) => {
@@ -698,9 +705,12 @@ const createReview = async (req, res) => {
     return res.status(500).send({ message: "Internal server error" });
   }
 };
-const getReviews = async (req, res) => {
-  let findReviews = await Review.find({ reviewer: req.userId });
-  return res.status(200).send(findReviews);
+const getReview = async (req, res) => {
+  let findReview = await Review.findOne({
+    reviewer: req.userId,
+    movie: req.query.movie_id,
+  });
+  return res.status(200).send(findReview);
 };
 
 module.exports = {
@@ -717,6 +727,6 @@ module.exports = {
   getSingleEvent,
   getSingleEventCategory,
   createReview,
-  getReviews,
+  getReview,
   getTickets,
 };

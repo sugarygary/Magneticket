@@ -188,7 +188,9 @@ export const loadDetailHistory = async (data) => {
     const responseHistory = await client.get(
       `api/user/history/${data.params.history_id}`
     );
-    const responseReview = await client.get(`api/user/reviews`);
+    const responseReview = await client.get(
+      `api/user/reviews?movie_id=${responseHistory.data.movie_id}`
+    );
     let response = {
       responseHistory: responseHistory.data,
       responseReview: responseReview.data,

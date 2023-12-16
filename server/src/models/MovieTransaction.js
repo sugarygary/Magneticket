@@ -50,6 +50,10 @@ const movieTransactionSchema = new Schema(
       type: Number,
       required: true,
     },
+    studio_type: {
+      type: String,
+      required: true,
+    },
     payment_method: {
       type: String,
       required: true,

@@ -194,25 +194,20 @@ export default function SeatingPage() {
           ...bayarTiket,
           status: "SUCCESS",
         });
-        console.log(checkout);
       },
       onPending: async function (result) {
         let checkout = await client.post("api/user/create-transaction", {
           ...bayarTiket,
           status: "PENDING",
         });
-        alert("wating your payment!");
       },
       onError: async function (result) {
         let checkout = await client.post("api/user/create-transaction", {
           ...bayarTiket,
           status: "FAILED",
         });
-        alert("payment failed!");
       },
-      onClose: async function () {
-        alert("you closed the popup without finishing the payment");
-      },
+      onClose: async function () {},
     });
   }
 
@@ -305,44 +300,8 @@ export default function SeatingPage() {
             )}
             {chooseSeat.length > 0 && (
               <>
-                {/* <div>
-                  {chooseSeat.length} Tiket{" "}
-                  {chooseSeat.length > 0 &&
-                    "(" +
-                      chooseSeat.reduce((accumulator, seat, index) => {
-                        if (index == 0) {
-                          return accumulator + seat.seat_number;
-                        } else {
-                          return accumulator + ", " + seat.seat_number;
-                        }
-                      }, "") +
-                      ")"}
-                </div>
-                <div className="font-bold">
-                  Total :{" "}
-                  {new Intl.NumberFormat("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                  }).format(data.screening_data.price * chooseSeat.length)}
-                </div> */}
-                {/* <div className="flex items-start gap-2 justify-between w-full">
-                  <div className="bg-gray-600 text-[#f8f8f8] rounded p-4 w-full">
-                    <div className="text-center">Kursi</div>
-                    <div className="flex flex-wrap">
-                      <div
-                        title="A01"
-                        className="bg-amber-500 font-mono text-sm py-2 px-2 cursor-not-allowed rounded-sm"
-                      >
-                        A01
-                      </div>
-                    </div>
-                  </div>
-                  <div className="bg-gray-600 text-center text-[#f8f8f8] rounded p-4 w-3/5">
-                    Total
-                  </div>
-                </div> */}
-                <div class="flex gap-2">
-                  <div class="flex-2 flex-col bg-gray-600 text-center text-[#f8f8f8] rounded px-6 pt-4 w-4/6">
+                <div class="hidden md:flex gap-2">
+                  <div class="flex-col bg-gray-600 text-center text-[#f8f8f8] rounded px-6 py-4 md:w-4/6">
                     <div class="flex-1">
                       <div className="text-center text-xl">Kursi</div>
                       <div className="flex gap-2 flex-wrap">
@@ -357,10 +316,10 @@ export default function SeatingPage() {
                       </div>
                     </div>
                   </div>
-                  <div class="flex-1 flex-col bg-gray-600 text-center text-[#f8f8f8] rounded p-4 w-2/6">
+                  <div class="flex-1 flex-col bg-gray-600 text-center text-[#f8f8f8] rounded p-4 md:w-2/6">
                     <div class="flex-1">
                       <div className="text-center text-xl">Total</div>
-                      <div className="text-2xl py-4">
+                      <div className="text-sm sm:text-lg md:text-2xl py-4">
                         {new Intl.NumberFormat("id-ID", {
                           style: "currency",
                           currency: "IDR",
@@ -368,6 +327,32 @@ export default function SeatingPage() {
                           data.screening_data.price * chooseSeat.length
                         )}
                       </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex md:hidden gap-2">
+                  <div class="w-2/3 bg-gray-600 text-[#f8f8f8] rounded px-2">
+                    <div className="text-center text-xl">Kursi</div>
+                    <div className="flex gap-2 flex-nowrap py-4 overflow-x-scroll">
+                      {chooseSeat.map((seat) => (
+                        <div
+                          title={seat.seat_number}
+                          className="bg-amber-500 font-mono text-sm py-2 px-2 cursor-default rounded-sm"
+                        >
+                          {seat.seat_number}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div class="w-1/3 bg-gray-600 text-[#f8f8f8] rounded px-2">
+                    <div className="text-center text-base md:text-xl">
+                      Total
+                    </div>
+                    <div className="text-xs whitespace-normal text-center sm:text-lg md:text-2xl py-4">
+                      {new Intl.NumberFormat("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                      }).format(data.screening_data.price * chooseSeat.length)}
                     </div>
                   </div>
                 </div>
