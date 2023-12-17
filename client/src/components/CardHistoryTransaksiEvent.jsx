@@ -2,12 +2,12 @@ import moment from "moment";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "moment/locale/id";
-const CardHistoryTransaksi = (props) => {
+const CardHistoryTransaksiEvent = (props) => {
   return (
     <div className="w-full mb-4">
       <div className="rounded-t md:rounded border-4 border border-[#1f2a37] flex shadow-lg text-[#f8f8f8] biruTua">
         <img
-          src={props.movie_img}
+          src={`${process.env.BACKEND_URL}/promotor/eventposter-${props.event_id}.jpg`}
           alt=""
           className="w-24 aspect-[2/3] h-full sm:w-28 md:w-36 rounded"
         />
@@ -26,7 +26,7 @@ const CardHistoryTransaksi = (props) => {
             {props.status}
           </div>
           <div className="font-extrabold text-base md:text-lg">
-            {props.movie_title}
+            {props.event_name} - {props.event_category_name}
           </div>
           <div className="font-bold mt-1 text-[.8rem] md:text-base">
             <div className="flex items-center gap-1">
@@ -42,7 +42,7 @@ const CardHistoryTransaksi = (props) => {
                   clipRule="evenodd"
                 />
               </svg>
-              <div className="">{props.branch_name}</div>
+              <div className="">{props.venue}</div>
             </div>
           </div>
           <div className="font-bold mt-1 text-[.8rem] md:text-base">
@@ -59,7 +59,7 @@ const CardHistoryTransaksi = (props) => {
                   clipRule="evenodd"
                 />
               </svg>
-              <div className="">{props.seats.length} Kursi</div>
+              <div className="">{props.quantity} Tiket</div>
             </div>
           </div>
           <div className="font-bold text-[.6rem] md:text-[.8rem] mt-2">
@@ -70,13 +70,13 @@ const CardHistoryTransaksi = (props) => {
           </div>
           <Link
             className="px-5 py-1 rounded biruMuda hidden sm:block text-[#f8f8f8] absolute bottom-2 right-2"
-            to={`/user/history/movie/${props._id}`}
+            to={`/user/history/event/${props._id}`}
           >
             Detail
           </Link>
         </div>
       </div>
-      <Link className="" to={`/user/history/movie/${props._id}`}>
+      <Link className="" to={`/user/history/event/${props._id}`}>
         <div className="px-5 sm:hidden py-1 w-full text-center rounded-b biruMuda text-sm text-white">
           Detail
         </div>
@@ -85,4 +85,4 @@ const CardHistoryTransaksi = (props) => {
   );
 };
 
-export default CardHistoryTransaksi;
+export default CardHistoryTransaksiEvent;

@@ -20,7 +20,7 @@ const Review = require("../models/Review");
 const { ObjectId } = require("mongodb");
 const EventTransaction = require("../models/EventTransaction");
 const Promotor = require("../models/Promotor");
-
+const moment = require("moment-timezone");
 const verifyUserCookie = async (req, res, next) => {
   try {
     const token = req.cookies.magneticket_token;
@@ -503,12 +503,16 @@ const createTicketEvent = async (req, res) => {
         promotor_brand: findPromotor.brand_name,
         event_name: findEvent.event_name,
         event_category_name: findEventCategory.category_name,
+        price_per_seat: findEventCategory.price,
         customer_email: customer.email,
         customer_id: customer._id,
         customer_name: customer.full_name,
         amounts_paid: amounts_paid,
         payment_method: "-",
         status: "REFUND",
+        quantity: quantity,
+        event_id: findEvent._id,
+        venue: findEvent.venue,
         midtrans_token: midtrans_token,
       });
       await newEventTransaction.save();
@@ -535,12 +539,16 @@ const createTicketEvent = async (req, res) => {
         promotor_brand: findPromotor.brand_name,
         event_name: findEvent.event_name,
         event_category_name: findEventCategory.category_name,
+        price_per_seat: findEventCategory.price,
         customer_email: customer.email,
         customer_id: customer._id,
         customer_name: customer.full_name,
         amounts_paid: amounts_paid,
         payment_method: "-",
         status: "FAILED",
+        quantity: quantity,
+        event_id: findEvent._id,
+        venue: findEvent.venue,
         midtrans_token: midtrans_token,
       });
       await newEventTransaction.save();
@@ -556,17 +564,20 @@ const createTicketEvent = async (req, res) => {
     promotor_brand: findPromotor.brand_name,
     event_name: findEvent.event_name,
     event_category_name: findEventCategory.category_name,
+    price_per_seat: findEventCategory.price,
     customer_email: customer.email,
     customer_id: customer._id,
     customer_name: customer.full_name,
     amounts_paid: amounts_paid,
     payment_method: "-",
     status: status,
+    quantity: quantity,
+    event_id: findEvent._id,
+    venue: findEvent.venue,
     midtrans_token: midtrans_token,
   });
   await newEventTransaction.save();
   if (status == "FAILED") {
-    console.log("saiundiuasn2");
     return res.status(201).send({
       message: "Created",
       order_id: newEventTransaction._id,
@@ -585,7 +596,6 @@ const createTicketEvent = async (req, res) => {
   }
   findEventCategory.slot -= quantity;
   await findEventCategory.save();
-  console.log("saiundiuasn");
   return res.status(201).send({
     message: "Created",
     order_id: newEventTransaction._id,
@@ -595,8 +605,25 @@ const createTicketEvent = async (req, res) => {
 const getHistory = async (req, res) => {
   let findHistory = await MovieTransaction.find({
     customer_id: req.userId,
-  }).sort({ createdAt: -1 });
-  return res.status(200).send(findHistory);
+  })
+    .sort({ createdAt: -1 })
+    .lean();
+  let findEventHistory = await EventTransaction.find({
+    customer_id: req.userId,
+  })
+    .sort({ createdAt: -1 })
+    .lean();
+  let allHistory = [];
+  findHistory.forEach((movie_history) => {
+    allHistory.push({ ...movie_history, history_type: "MOVIE" });
+  });
+  findEventHistory.forEach((event_history) => {
+    allHistory.push({ ...event_history, history_type: "EVENT" });
+  });
+  allHistory.sort(function (a, b) {
+    return a.createdAt < b.createdAt ? 1 : b.createdAt < a.createdAt ? -1 : 0;
+  });
+  return res.status(200).send(allHistory);
 };
 const getTickets = async (req, res) => {
   let findTickets = await MovieTicket.aggregate()
@@ -625,11 +652,73 @@ const getTickets = async (req, res) => {
     .unwind("$transaction")
     .unwind("$screening")
     .match({ "transaction.status": "SUCCESS" });
-  return res.status(200).send(findTickets);
+  let findTicketsEvent = await EventTicket.aggregate()
+    .match({
+      customer: new ObjectId(req.userId),
+      claimed: false,
+    })
+    .lookup({
+      from: "event_transactions",
+      localField: "transaction",
+      foreignField: "_id",
+      as: "transaction",
+    })
+    .lookup({
+      from: "events",
+      localField: "event",
+      foreignField: "_id",
+      as: "event",
+    })
+    .lookup({
+      from: "event_categories",
+      localField: "event_category",
+      foreignField: "_id",
+      as: "event_category",
+    })
+    .unwind("$transaction")
+    .unwind("$event")
+    .unwind("$event_category")
+    .match({ "transaction.status": "SUCCESS" });
+  let allTickets = [];
+  findTickets.forEach((ticket) => {
+    allTickets.push({ ...ticket, ticket_type: "MOVIE" });
+  });
+  let today = new Date().toISOString();
+  findTicketsEvent.forEach((ticket) => {
+    let hmin2 = moment(ticket.event.showtime)
+      .tz("Asia/Jakarta")
+      .subtract(2, "days")
+      .startOf("day")
+      .toISOString();
+    if (today > hmin2) {
+      allTickets.push({ ...ticket, ticket_type: "EVENT" });
+    }
+  });
+  const sortByShowtime = (a, b) => {
+    const showtimeA = new Date(
+      a.screening ? a.screening.showtime : a.event.showtime
+    );
+    const showtimeB = new Date(
+      b.screening ? b.screening.showtime : b.event.showtime
+    );
+    return showtimeA - showtimeB;
+  };
+  allTickets.sort(sortByShowtime);
+  return res.status(200).send(allTickets);
 };
 
 const getDetailHistory = async (req, res) => {
   let findHistory = await MovieTransaction.findById(req.params.history_id);
+  if (findHistory == null) {
+    return res.status(404).send({ message: "Not Found" });
+  }
+  if (findHistory.customer_id != req.userId) {
+    return res.status(403).send({ message: "Forbidden" });
+  }
+  return res.status(200).send(findHistory);
+};
+const getDetailHistoryEvent = async (req, res) => {
+  let findHistory = await EventTransaction.findById(req.params.history_id);
   if (findHistory == null) {
     return res.status(404).send({ message: "Not Found" });
   }
@@ -729,4 +818,5 @@ module.exports = {
   createReview,
   getReview,
   getTickets,
+  getDetailHistoryEvent,
 };

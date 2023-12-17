@@ -15,6 +15,7 @@ const {
   getTickets,
   createSnapEvent,
   createTicketEvent,
+  getDetailHistoryEvent,
 } = require("../controllers/userController");
 const expressAsyncHandler = require("express-async-handler");
 const userRouter = express.Router();
@@ -44,7 +45,14 @@ userRouter.get(
 userRouter.get("/history", expressAsyncHandler(getHistory));
 userRouter.get("/tickets", expressAsyncHandler(getTickets));
 
-userRouter.get("/history/:history_id", expressAsyncHandler(getDetailHistory));
+userRouter.get(
+  "/history/movie/:history_id",
+  expressAsyncHandler(getDetailHistory)
+);
+userRouter.get(
+  "/history/event/:history_id",
+  expressAsyncHandler(getDetailHistoryEvent)
+);
 userRouter.get("/event-details/:event_id", expressAsyncHandler(getSingleEvent));
 userRouter.get(
   "/event-category/:event_id",

@@ -189,7 +189,6 @@ export default function SeatingPage() {
     };
     window.snap.pay(snapData.data.token, {
       onSuccess: async function (result) {
-        // let ticket = await client.post("api/user/create-ticket", requestBody);
         let checkout = await client.post("api/user/create-transaction", {
           ...bayarTiket,
           status: "SUCCESS",

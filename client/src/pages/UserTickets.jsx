@@ -3,9 +3,11 @@ import CardViewTicket from "../components/CardViewTicket";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import client from "../util/client";
 import { useSelector } from "react-redux";
+import CardViewTicketEvent from "../components/CardViewTicketEvent";
 
 export const UserTickets = () => {
   const { tickets } = useLoaderData();
+  console.log(tickets);
   const [zoomPointer, setZoomPointer] = useState(null);
   const { current_user, status } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -67,16 +69,31 @@ export const UserTickets = () => {
         </>
       )}
       <div className="font-bold text-xl">Tiket Aktif</div>
-      {tickets.map((ticket) => (
-        <CardViewTicket
-          {...ticket}
-          setZoomPointer={() =>
-            setZoomPointer(
-              `https://api.qrserver.com/v1/create-qr-code/?data=${ticket._id}&amp;size=100x100`
-            )
-          }
-        ></CardViewTicket>
-      ))}
+      {tickets.map((ticket) => {
+        if (ticket.ticket_type == "MOVIE") {
+          return (
+            <CardViewTicket
+              {...ticket}
+              setZoomPointer={() =>
+                setZoomPointer(
+                  `https://api.qrserver.com/v1/create-qr-code/?data=${ticket._id}&amp;size=100x100`
+                )
+              }
+            ></CardViewTicket>
+          );
+        } else {
+          return (
+            <CardViewTicketEvent
+              {...ticket}
+              setZoomPointer={() =>
+                setZoomPointer(
+                  `https://api.qrserver.com/v1/create-qr-code/?data=${ticket._id}&amp;size=100x100`
+                )
+              }
+            ></CardViewTicketEvent>
+          );
+        }
+      })}
     </div>
   );
 };

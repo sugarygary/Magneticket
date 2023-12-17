@@ -129,12 +129,13 @@ import AdminLaporanPenjualan from "./pages/AdminLaporanPenjualan.jsx";
 import AdminLaporanPenjualanKonser from "./pages/AdminLaporanPenjualanKonser.jsx";
 import AdminLaporanFilm from "./pages/AdminLaporanFilm.jsx";
 import { UserTickets, loadTickets } from "./pages/UserTickets.jsx";
-import UserCreateReview from "./pages/UserCreateReview.jsx";
-import { createReview } from "./handlers/UserHandler.jsx";
 import AdminLaporanKeuntungan from "./pages/AdminLaporanKeuntungan.jsx";
 import AdminHistoryTransaksi from "./pages/AdminHistoryTransaksi.jsx";
 import AdminDetailHistoryTransaksi from "./pages/AdminDetailHistoryTransaksi.jsx";
 import { Redirector } from "./pages/Redirector.jsx";
+import DetailHistoryEvent, {
+  loadDetailHistoryEvent,
+} from "./pages/DetailHistoryEvent.jsx";
 
 async function coba() {
   let x = loadInTheater();
@@ -209,16 +210,15 @@ const router = createBrowserRouter([
         errorElement: <ErrorElement />,
       },
       {
-        path: "history/:history_id",
+        path: "history/movie/:history_id",
         element: <DetailHistory></DetailHistory>,
         loader: loadDetailHistory,
         errorElement: <ErrorElement />,
       },
       {
-        path: "history/:history_id/create-review/:movie_id",
-        element: <UserCreateReview />,
-        loader: loadDetailHistory,
-        action: createReview,
+        path: "history/event/:history_id",
+        element: <DetailHistoryEvent></DetailHistoryEvent>,
+        loader: loadDetailHistoryEvent,
         errorElement: <ErrorElement />,
       },
       {

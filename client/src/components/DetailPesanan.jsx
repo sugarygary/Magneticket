@@ -6,7 +6,6 @@ import { createReview } from "../handlers/UserHandler";
 
 const DetailPesanan = (props) => {
   const navigate = useNavigate();
-  console.log(props);
   const { current_user, status } = useSelector((state) => state.user);
   const [canReview, setCanReview] = useState(true);
   const [rating, setRating] = useState(null);
@@ -62,7 +61,6 @@ const DetailPesanan = (props) => {
     window.snap.pay(props.responseHistory.midtrans_token);
   }
   const handleStarClick = (selectedRating) => {
-    console.log("Star clicked:", selectedRating);
     setRating(selectedRating);
   };
   useEffect(() => {
@@ -134,7 +132,7 @@ const DetailPesanan = (props) => {
                   </td>
                 </tr>
                 <tr>
-                  <td>Waktu</td>
+                  <td>Waktu Transaksi</td>
                   <td> : </td>
                   <td>
                     <p className="">
@@ -289,8 +287,8 @@ const DetailPesanan = (props) => {
         {!canReview && props.responseHistory.status == "SUCCESS" && (
           <div className="w-full justify-center sm:justify-end flex">
             <div>
-              <div className="text-lg">Your Rating : </div>
-              <div className="flex text-2xl">
+              <div className="text-lg text-right">Rating Anda : </div>
+              <div className="justify-end flex text-2xl">
                 {[...Array(props.responseReview.rating)].map((star) => {
                   return (
                     <span

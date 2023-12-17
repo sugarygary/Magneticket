@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import CardHistoryTransaksi from "../components/CardHistoryTransaksi";
+import CardHistoryTransaksiEvent from "../components/CardHistoryTransaksiEvent";
 
 function HistoryPage() {
   const data = useLoaderData();
+  console.log(data);
   const navigate = useNavigate();
   const { current_user, status } = useSelector((state) => state.user);
   useEffect(() => {
@@ -27,12 +29,21 @@ function HistoryPage() {
       <div className="py-10 px-10 text-black">
         <div className="text-xl font-bold mb-2">Riwayat Transaksi</div>
         {data.map((history, index) => {
-          return (
-            <CardHistoryTransaksi
-              key={index}
-              {...history}
-            ></CardHistoryTransaksi>
-          );
+          if (history.history_type == "MOVIE") {
+            return (
+              <CardHistoryTransaksi
+                key={index}
+                {...history}
+              ></CardHistoryTransaksi>
+            );
+          } else {
+            return (
+              <CardHistoryTransaksiEvent
+                key={index}
+                {...history}
+              ></CardHistoryTransaksiEvent>
+            );
+          }
         })}
       </div>
     )
