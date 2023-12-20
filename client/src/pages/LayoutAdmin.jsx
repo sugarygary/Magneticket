@@ -20,7 +20,6 @@ export const LayoutAdmin = () => {
           <Outlet></Outlet>
         </div>
       </div>
-
       <Footer></Footer>
     </>
   );

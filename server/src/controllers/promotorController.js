@@ -68,7 +68,7 @@ let createEventMulter = upload_event.fields([
   { name: "surat", maxCount: 1 },
   { name: "banner", maxCount: 1 },
   { name: "poster", maxCount: 1 },
-  { name: "informasiKategori", maxCount: 1 }
+  { name: "informasiKategori", maxCount: 1 },
 ]);
 
 const createEvent = async (req, res) => {
@@ -77,9 +77,9 @@ const createEvent = async (req, res) => {
     return res.status(400).send({ errors: errors.array() });
   }
   let { nama, venue, tanggal, deskripsi, kategori, address, kota } = req.body;
-  let arrKategori = JSON.parse(kategori)
+  let arrKategori = JSON.parse(kategori);
 
-  if (!req.files?.surat ) {
+  if (!req.files?.surat) {
     fs.unlinkSync(
       path.join(
         __dirname,
@@ -98,7 +98,7 @@ const createEvent = async (req, res) => {
     return res.status(400).send({ errors: errors.array() });
   }
 
-  if (!req.files?.informasiKategori ) {
+  if (!req.files?.informasiKategori) {
     fs.unlinkSync(
       path.join(
         __dirname,
@@ -117,7 +117,7 @@ const createEvent = async (req, res) => {
     return res.status(400).send({ errors: errors.array() });
   }
 
-  if (!req.files?.poster ) {
+  if (!req.files?.poster) {
     fs.unlinkSync(
       path.join(
         __dirname,
@@ -136,7 +136,7 @@ const createEvent = async (req, res) => {
     return res.status(400).send({ errors: errors.array() });
   }
 
-  if (!req.files?.banner ) {
+  if (!req.files?.banner) {
     fs.unlinkSync(
       path.join(
         __dirname,
@@ -162,7 +162,7 @@ const createEvent = async (req, res) => {
     venue: venue,
     address: address,
     city: kota,
-    showtime: new Date(tanggal), 
+    showtime: new Date(tanggal),
     sale_end_date: new Date(tanggal),
   });
 
@@ -182,12 +182,9 @@ const createEvent = async (req, res) => {
       __dirname,
       `../../uploads/promotor/${req.files.informasiKategori[0].filename}`
     ),
-    path.join(
-      __dirname,
-      `../../uploads/promotor/eventzona-${newEvent._id}.jpg`
-    )
+    path.join(__dirname, `../../uploads/promotor/eventzona-${newEvent._id}.jpg`)
   );
- 
+
   fs.renameSync(
     path.join(
       __dirname,
@@ -217,10 +214,10 @@ const createEvent = async (req, res) => {
       event: newEvent._id,
       category_name: arrKategori[i].namaKategori,
       price: arrKategori[i].hargaTiket,
-      slot: arrKategori[i].slotTiket
-    })
+      slot: arrKategori[i].slotTiket,
+    });
 
-    await newKategori.save()
+    await newKategori.save();
   }
 
   // return res.status(201).send({
@@ -230,12 +227,15 @@ const createEvent = async (req, res) => {
 };
 const getEventTicket = async (req, res) => {
   const eventTickets = await EventTicket.find({ promotor: req.userId })
-  .populate("event")
-  .populate("event_category")
-  .populate("customer")
-  .populate("transaction")
-  
+    .populate("event")
+    .populate("event_category")
+    .populate("customer")
+    .populate("transaction");
+
   res.status(200).json({ eventTickets });
+};
+const getAPIKey = async (req, res) => {
+  return res.status(200).send({ api_key: req.userId });
 };
 const getSingleEventTicket = async (req, res) => {
   try {
@@ -262,15 +262,14 @@ const getAllEvents = async (req, res) => {
     const eventsByPromotor = await Event.find({ promotor: promotorId });
     res.status(200).json({ events: eventsByPromotor });
   } catch (error) {
-    console.error('Error fetching events:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error fetching events:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
 const getSingleEvent = async (req, res) => {
   try {
-    const eventTicket = await Event.findById(req.params.id)
-
+    const eventTicket = await Event.findById(req.params.id);
 
     if (!eventTicket) {
       return res.status(404).json({ error: "EventTicket not found" });
@@ -288,7 +287,9 @@ const getKategoriEvent = async (req, res) => {
     const kategoriTickets = await EventCategory.findByEvent(eventId);
 
     if (kategoriTickets.length === 0) {
-      return res.status(404).json({ error: "No categories found for the event" });
+      return res
+        .status(404)
+        .json({ error: "No categories found for the event" });
     }
 
     res.status(200).json({ kategoriTickets });
@@ -298,10 +299,16 @@ const getKategoriEvent = async (req, res) => {
   }
 };
 
-
 module.exports = { getEventTicket };
- 
 
 module.exports = {
-  verifyPromotorCookie, createEvent, createEventMulter, getEventTicket, getSingleEventTicket, getAllEvents, getSingleEvent, getKategoriEvent
+  verifyPromotorCookie,
+  createEvent,
+  createEventMulter,
+  getEventTicket,
+  getSingleEventTicket,
+  getAllEvents,
+  getSingleEvent,
+  getKategoriEvent,
+  getAPIKey,
 };

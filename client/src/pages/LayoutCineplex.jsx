@@ -23,9 +23,13 @@ export const LayoutCineplex = () => {
     <>
       <ScrollToTop />
       {shouldDisplayHeader && <CineplexHeader />}
-      <div className={`mt-12 pb-12 min-h-[100vh] min-w-[80vw] ${shouldDisplayHeader ? "ml-60" : ""} mx-auto relative`}>
+      <div
+        className={`mt-12 pb-12 min-h-[100vh] min-w-[80vw] ${
+          shouldDisplayHeader ? "ml-60" : ""
+        } mx-auto relative`}
+      >
         <Outlet></Outlet>
-        <Footer></Footer>
+        <Footer docs="/cineplex/docs"></Footer>
       </div>
     </>
   );

@@ -24,7 +24,6 @@ export const loadAllPromotor = async (data) => {
   }
 };
 export const loadSinglePromotor = async (data) => {
-  console.log(data);
   try {
     const response = await client.get(
       `api/admin/promotor/${data.params.promotorId}`
@@ -129,4 +128,3 @@ export const tolakVerifEvent = async (data, alasan, event_id) => {
     return error;
   }
 };
-

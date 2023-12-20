@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const movieTicketSchema = new Schema(
   {
     cineplex: { type: Schema.ObjectId, ref: "Cineplex", required: true },
-    customer: { type: Schema.ObjectId, ref: "User", required: true },
+    customer: { type: Schema.ObjectId, ref: "User" },
     screening: { type: Schema.ObjectId, ref: "Screening", required: true },
     seats: [{ type: Schema.ObjectId, ref: "Seat" }],
     foods: [

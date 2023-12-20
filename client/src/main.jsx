@@ -136,6 +136,8 @@ import { Redirector } from "./pages/Redirector.jsx";
 import DetailHistoryEvent, {
   loadDetailHistoryEvent,
 } from "./pages/DetailHistoryEvent.jsx";
+import { EODocs, loadAPIKeyPromotor } from "./pages/EODocs.jsx";
+import { CineplexDocs, loadAPIKeyCineplex } from "./pages/CineplexDocs.jsx";
 
 async function coba() {
   let x = loadInTheater();
@@ -307,9 +309,7 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <RegisterCineplex />,
-        // loader: loadUsers,
         action: registerCineplex,
-        // errorElement: <ErrorElement />,
       },
       {
         path: "login",
@@ -397,6 +397,12 @@ const router = createBrowserRouter([
         errorElement: <ErrorElement />,
       },
       {
+        path: "docs",
+        element: <CineplexDocs />,
+        loader: loadAPIKeyCineplex,
+        errorElement: <ErrorElement />,
+      },
+      {
         //create screening
         path: "jadwal/create-screening",
         element: <CineplexCreateScreening />,
@@ -437,10 +443,14 @@ const router = createBrowserRouter([
         errorElement: <ErrorElement />,
       },
       {
+        path: "docs",
+        element: <EODocs />,
+        loader: loadAPIKeyPromotor,
+        errorElement: <ErrorElement />,
+      },
+      {
         path: "login",
         element: <LoginEventOrganizer />,
-        // loader: loadUsers,
-        // action: loginEventOrganizer,
         errorElement: <ErrorElement />,
       },
       {
@@ -485,7 +495,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-  //
   {
     path: "/admin",
     element: <LayoutAdmin />,
@@ -573,27 +582,18 @@ const router = createBrowserRouter([
       },
     ],
   },
-
-  //ErrorElement page kalo server down
   {
     path: "/pending-email",
     element: <PendingEmail />,
-    // loader: loadUsers,
-    // action: registerUser,
-    // errorElement: <ErrorElement />,
   },
   {
     path: "/ErrorElement-page",
     element: <ErrorPage />,
-    // loader: loadUsers,
-    // action: registerUser,
-    // errorElement: <ErrorElement />,
   },
 
   {
     path: "/event-organizer/register",
     element: <RegisterEventOrganizer />,
-    // loader: loadUsers,
     action: registerEventOrganizer,
     errorElement: <ErrorElement />,
   },
@@ -601,7 +601,6 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    {/* <App /> */}
     <Provider store={userStore}>
       <RouterProvider router={router}></RouterProvider>
     </Provider>

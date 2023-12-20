@@ -1,5 +1,10 @@
 import React from "react";
-import { useParams, useLoaderData } from "react-router-dom";
+import {
+  useParams,
+  useLoaderData,
+  useSearchParams,
+  useNavigate,
+} from "react-router-dom";
 import openheimer from "../assets/openheimer.jpg";
 import { useState } from "react";
 import client from "../util/client";
@@ -7,12 +12,13 @@ import { useEffect } from "react";
 
 const CheckoutEvent = () => {
   const dataLoader = useLoaderData();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   let data = dataLoader.detailEvent;
   let data2 = dataLoader.categoryEvent;
   if (dataLoader.detailEvent == "Request failed with status code 401") {
     throw new Response("", { status: 401 });
   }
-
   const [selectedCategory, setSelectedCategory] = useState(data2[0]._id);
   const [quantity, setQuantity] = useState(1);
   const [tleft, setTleft] = useState(data2[0].ticketLeft);
@@ -42,6 +48,9 @@ const CheckoutEvent = () => {
     }
   };
   useEffect(() => {
+    if (searchParams.has("order_id")) {
+      navigate("/user/history");
+    }
     const midtransScriptUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
     let scriptTag = document.createElement("script");
     scriptTag.src = midtransScriptUrl;
@@ -175,11 +184,11 @@ const CheckoutEvent = () => {
             </div>
             <div className="mb-4">
               <h3 className="text-lg font-semibold text-right">
-                Total : 
-                  {new Intl.NumberFormat("id-ID", {
-                    style: "currency",
-                    currency: "IDR",
-                  }).format(total)}
+                Total :
+                {new Intl.NumberFormat("id-ID", {
+                  style: "currency",
+                  currency: "IDR",
+                }).format(total)}
               </h3>
             </div>
             <div className="flex justify-center">

@@ -628,6 +628,7 @@ const getHistory = async (req, res) => {
 const getTickets = async (req, res) => {
   let findTickets = await MovieTicket.aggregate()
     .match({
+      via: "MAGNETICKET",
       customer: new ObjectId(req.userId),
       claimed: false,
     })

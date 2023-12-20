@@ -7,7 +7,6 @@ import { createScreening } from "../handlers/CineplexHandler";
 export default function CineplexCreateScreening() {
   const data = useLoaderData();
   const navigate = useNavigate();
-  console.log(data);
   const [studioId, setStudioId] = useState(data.currentStudio);
   const [movieId, setMovieId] = useState(null);
   const [price, setPrice] = useState(null);

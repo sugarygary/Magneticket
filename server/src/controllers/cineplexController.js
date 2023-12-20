@@ -93,7 +93,7 @@ let registerMenuMulter = upload_cineplex.fields([
 ]);
 const createMenu = async (req, res) => {
   const errors = validationResult(req);
-  if (!req.files?.thumbnail ) {
+  if (!req.files?.thumbnail) {
     fs.unlinkSync(
       path.join(
         __dirname,
@@ -127,10 +127,7 @@ const createMenu = async (req, res) => {
       __dirname,
       `../../uploads/cineplex/${req.files.thumbnail[0].filename}`
     ),
-    path.join(
-      __dirname,
-      `../../uploads/cineplex/menu-${newMenu._id}.jpg`
-    )
+    path.join(__dirname, `../../uploads/cineplex/menu-${newMenu._id}.jpg`)
   );
   await newMenu.save();
 
@@ -189,7 +186,7 @@ const createStudio = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array() });
   }
-  
+
   let { branch_id, studio_name, type, row, seating_layout } = req.body;
   let findBranch = await Branch.findById(branch_id);
   if (findBranch == null) {
@@ -280,7 +277,7 @@ const validateCreateScreening = [
     .withMessage("Showtime must be a recognizable javascript date"),
 ];
 const createScreening = async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array() });
@@ -402,24 +399,30 @@ const getBranch = async (req, res) => {
   const branches = await Branch.find({ cineplex: req.userId });
   res.status(200).json({ branches });
 };
+const getAPIKey = async (req, res) => {
+  res.status(200).send({ api_key: req.userId });
+};
 const getScreening = async (req, res) => {
   const screenings = await Screening.find({ cineplex: req.userId });
   res.status(200).json({ screenings });
 };
-const getScreeningLengkap = async (req,res) =>{
-  const screenings = await Screening.find({ cineplex: req.userId }).populate("studio").populate("branch").populate("movie");
+const getScreeningLengkap = async (req, res) => {
+  const screenings = await Screening.find({ cineplex: req.userId })
+    .populate("studio")
+    .populate("branch")
+    .populate("movie");
   res.status(200).json({ screenings });
-}
+};
 const getPromo = async (req, res) => {
   const promos = await Promotion.find({ cineplex: req.userId });
   res.status(200).json({ promos });
 };
 const getMenu = async (req, res) => {
   const menus = await Menu.find({ cineplex: req.userId });
-  res.status(200).json({ menus });  
+  res.status(200).json({ menus });
 };
 const getStudioAll = async (req, res) => {
-  const studios = await Studio.find({cineplex: req.userId});
+  const studios = await Studio.find({ cineplex: req.userId });
   res.status(200).json({ studios });
 };
 const getStudio = async (req, res) => {
@@ -470,9 +473,9 @@ const editMenu = async (req, res) => {
   }
 
   const { item_name, item_description, price } = req.body;
-  console.log(item_name)
-  console.log(item_description)
-  console.log(price)
+  console.log(item_name);
+  console.log(item_description);
+  console.log(price);
   let updatedMenu = { ...menu }; // Create a copy of the menu
 
   if (item_name !== undefined) {
@@ -492,18 +495,17 @@ const editMenu = async (req, res) => {
         __dirname,
         `../../uploads/cineplex/${req.files.thumbnail[0].filename}`
       ),
-      path.join(
-        __dirname,
-        `../../uploads/cineplex/menu-${menu._id}.jpg`
-      )
+      path.join(__dirname, `../../uploads/cineplex/menu-${menu._id}.jpg`)
     );
     // Assuming your menu model has a property like 'thumbnail' to store the filename
     updatedMenu.thumbnail = `menu-${menu._id}.jpg`;
   }
-  console.log(menu._id)
+  console.log(menu._id);
   try {
     await Menu.updateOne({ _id: menu._id }, updatedMenu);
-    res.status(200).json({ message: "Menu updated successfully", menu: updatedMenu });
+    res
+      .status(200)
+      .json({ message: "Menu updated successfully", menu: updatedMenu });
   } catch (error) {
     console.error("Error updating menu:", error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -541,7 +543,7 @@ const editMenu = async (req, res) => {
 //   }
 //   const { item_name, item_description, price } = req.body;
 //   let temp=menu;
-  
+
 //   if(item_name!=null){
 //     temp.item_name = item_name;
 //   }
@@ -565,11 +567,22 @@ const editMenu = async (req, res) => {
 //   res.status(200).json({ temp });
 // };
 const getMovieTicket = async (req, res) => {
-  const movieTickets = await MovieTicket.find({ cineplex: req.userId }).populate("screening").populate("customer").populate("transaction").populate({path:"screening",populate:{path:"branch"}});
+  const movieTickets = await MovieTicket.find({ cineplex: req.userId })
+    .populate("screening")
+    .populate("customer")
+    .populate("transaction")
+    .populate({ path: "screening", populate: { path: "branch" } });
   res.status(200).json({ movieTickets });
 };
 const getSingleMovieTicket = async (req, res) => {
-  const movieTicket = await MovieTicket.findById(req.params.id).populate("screening").populate("customer").populate("transaction").populate({path:"screening",populate:{path:"branch"}}).populate({path:"screening",populate:{path:"movie"}}).populate({path:"screening",populate:{path:"studio"}}).populate({path:"transaction.foods",populate:{path:"menu"}});
+  const movieTicket = await MovieTicket.findById(req.params.id)
+    .populate("screening")
+    .populate("customer")
+    .populate("transaction")
+    .populate({ path: "screening", populate: { path: "branch" } })
+    .populate({ path: "screening", populate: { path: "movie" } })
+    .populate({ path: "screening", populate: { path: "studio" } })
+    .populate({ path: "transaction.foods", populate: { path: "menu" } });
   if (movieTicket == null) {
     return res.status(404).send({ message: "Movie ticket not found" });
   }
@@ -600,4 +613,5 @@ module.exports = {
   getMovieTicket,
   getSingleMovieTicket,
   getScreeningLengkap,
+  getAPIKey,
 };

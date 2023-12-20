@@ -29,10 +29,8 @@ const CineplexLoginForm = (props) => {
     }
 
     let retu = await loginCineplex(data);
-    console.log(retu);
     if (retu.response) {
       if (retu.response.status == 400) {
-        console.log("HAHALAOL");
         setErrorMsg(retu.response.data.message);
         return;
       }
