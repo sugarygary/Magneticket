@@ -179,10 +179,7 @@ const CineplexRegisterForm = (props) => {
               }}
             />
           </div>
-          <div>
-            {/* ini captcha */}
-            CAPTCHA
-          </div>
+          
           {/* checkbox */}
           <div className="mb-3 text-left items-center flex">
             <input
@@ -190,7 +187,7 @@ const CineplexRegisterForm = (props) => {
               name="kebijakanPrivasi"
               id=""
               onChange={(e) => {
-                setTnc(e.target.value);
+                setTnc(!tnc);
               }}
             />
             <p>Saya setuju dengan </p>
