@@ -69,9 +69,6 @@ const Homepage = () => {
               return (
                 <>
                   <CardHome key={movie.movie_id} {...movie}></CardHome>
-                  <CardHome key={movie.movie_id} {...movie}></CardHome>
-                  <CardHome key={movie.movie_id} {...movie}></CardHome>
-                  <CardHome key={movie.movie_id} {...movie}></CardHome>
                 </>
               );
             })}
@@ -104,11 +101,6 @@ const Homepage = () => {
               return event.events.map((event2) => {
                 return (
                   <>
-                    <CardHomeEvent {...event2}></CardHomeEvent>
-                    <CardHomeEvent {...event2}></CardHomeEvent>
-                    <CardHomeEvent {...event2}></CardHomeEvent>
-                    <CardHomeEvent {...event2}></CardHomeEvent>
-                    <CardHomeEvent {...event2}></CardHomeEvent>
                     <CardHomeEvent {...event2}></CardHomeEvent>
                   </>
                 );

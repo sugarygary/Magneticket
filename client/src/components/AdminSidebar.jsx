@@ -100,6 +100,11 @@ const AdminSidebar = (props) => {
             {boolLaporan && (
               <ul className="pl-4">
                 <li className="py-2 px-4 hover:bg-gray-700">
+                  <Link to={"/admin/history-transaksi"} className="block">
+                    History Transaksi
+                  </Link>
+                </li>
+                <li className="py-2 px-4 hover:bg-gray-700">
                   <Link to={"/admin/laporan-penjualan"} className="block">
                     Penjualan Bioskop
                   </Link>
