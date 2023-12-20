@@ -477,7 +477,7 @@ const createTicketEvent = async (req, res) => {
   });
   let customer = await User.findById(req.userId);
   let amounts_paid = 0;
-  amounts_paid = findEventCategory.price * quantity + 4000;
+  amounts_paid = findEventCategory.price * quantity + 10000;
   let findPromotor = await Promotor.findById(findEvent.promotor);
   if (findEventCategory.slot < quantity) {
     if (status == "SUCCESS") {
@@ -578,7 +578,7 @@ const createTicketEvent = async (req, res) => {
     });
     await newTicket.save();
   }
-  findEventCategory.slot -= quantity;
+  
   await findEventCategory.save();
   console.log("saiundiuasn");
   return res.status(201).send({
