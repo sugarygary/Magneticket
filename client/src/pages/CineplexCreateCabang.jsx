@@ -4,6 +4,7 @@ import upload from "../assets/upload.png";
 import { createCabang } from "../handlers/CineplexHandler";
 import logo1 from "../assets/logo1.png";
 import { useSelector } from "react-redux";
+import { kotaDanKabupaten } from "../util/kotaDanKabupaten";
 
 const CineplexCreateCabang = () => {
   const navigate = useNavigate();
@@ -85,7 +86,7 @@ const CineplexCreateCabang = () => {
             <div className="mb-3 text-left">
               <p>Kota/Kabupaten</p>
               {/* <input type="text" className="abuInput w-full rounded p-1 pl-2" placeholder="Enter your email" /> */}
-              <input
+              {/* <input
                 type="text"
                 name=""
                 id=""
@@ -94,7 +95,20 @@ const CineplexCreateCabang = () => {
                 onChange={(e) => {
                   setKotaKabupaten(e.target.value);
                 }}
-              />
+              /> */}
+              <select
+                className="w-full abuBgInput  px-2 py-1"
+                onChange={(e) => {
+                  setKotaKabupaten(e.target.value);
+                }}
+              >
+                <option value="">Masukkan Kota/Kabupaten</option>
+                {kotaDanKabupaten.map((item, index) => (
+                  <option key={index} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="mb-3 text-left">
               <p>Alamat</p>
