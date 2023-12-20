@@ -43,7 +43,7 @@ const EventRegisterForm = (props) => {
       return;
     }
     if (!email.includes("@") || !email.includes(".")) {
-      alert("email tidak valid");
+      setErrMsg("email tidak valid");
       return;
     }
     // let cineplexBaru = {

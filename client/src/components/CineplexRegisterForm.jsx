@@ -45,7 +45,7 @@ const CineplexRegisterForm = (props) => {
     //   brand_name: namaBisnis,
     // };
     if(!email.includes("@") || !email.includes(".")){
-      alert("email tidak valid");
+      setErrMsg("email tidak valid");
       return;
     }
     const formData = new FormData();
