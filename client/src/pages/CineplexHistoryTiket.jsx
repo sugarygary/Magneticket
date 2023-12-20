@@ -183,7 +183,10 @@ const CineplexHistoryTiket = () => {
                   {sale.seats.length}
                 </td>
                 <td className="border-t border-b py-2 px-4">
-                  {sale.transaction.amounts_paid}
+                {new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR",
+              }).format(sale.transaction.amounts_paid)}
                 </td>
                 <td className="border-t border-b py-2 px-4">
                   {sale.claimed == true ? "CLAIMED" : "UNCLAIMED"}

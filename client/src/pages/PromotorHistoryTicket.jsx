@@ -136,8 +136,13 @@ const PromotorHistoryTiket = () => {
                 <td className="border-t border-b py-2 px-4">
                   {sale.event_category.category_name}
                 </td>
-                <td className="border-t border-b py-2 px-4">
-                  {sale.transaction.amounts_paid}
+                <td className="border-t border-b py-2 px-4"> 
+                  <span className="">
+                      {new Intl.NumberFormat("id-ID", {
+                          style: "currency",
+                          currency: "IDR",
+                      }).format(sale.transaction.amounts_paid)}
+                  </span>
                 </td>
                 <td className="border-t border-b py-2 px-4">
                   {sale.claimed == true ? "CLAIMED" : "UNCLAIMED"}

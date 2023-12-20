@@ -39,6 +39,22 @@ const eventTransactionSchema = new Schema(
       required: true,
     },
     amounts_paid: {
+      type: Number,
+      required: true,
+    },
+    price_per_seat: {
+      type: Number,
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+    },
+    event_id: {
+      type: Schema.ObjectId,
+      required: true,
+    },
+    venue: {
       type: String,
       required: true,
     },

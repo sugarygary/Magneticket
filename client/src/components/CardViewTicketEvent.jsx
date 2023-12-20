@@ -1,6 +1,6 @@
 import moment from "moment-timezone";
 import { Link } from "react-router-dom";
-const CardViewTicket = (props) => {
+const CardViewTicketEvent = (props) => {
   const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
   const indonesianMonths = [
     "Januari",
@@ -21,10 +21,20 @@ const CardViewTicket = (props) => {
       <div className="flex items-center w-full pe-4 py-2">
         <div className="w-full md:ml-2 sm:ml-2 ml-2">
           <p className="font-bold mt-2 text-3xl">
-            {props.transaction.movie_title}
+            {props.transaction.event_name}
           </p>
           <table className="text-xl">
             <tbody>
+              <tr>
+                <td className="align-top">
+                  <p className="abu9CA3AF">Kategori</p>
+                </td>
+                <td>
+                  <p className="ml-3 sm:ml-8">
+                    {props.transaction.event_category_name}
+                  </p>
+                </td>
+              </tr>
               <tr>
                 <td className="align-top">
                   <p className="abu9CA3AF">Tanggal</p>
@@ -33,22 +43,18 @@ const CardViewTicket = (props) => {
                   <p className="ml-3 sm:ml-8">
                     {
                       days[
-                        moment(props.screening.showtime)
-                          .tz("Asia/Jakarta")
-                          .day()
+                        moment(props.event.showtime).tz("Asia/Jakarta").day()
                       ]
                     }
-                    {moment(props.screening.showtime)
+                    {moment(props.event.showtime)
                       .tz("Asia/Jakarta")
                       .format(", DD ")}
                     {
                       indonesianMonths[
-                        moment(props.screening.showtime)
-                          .tz("Asia/Jakarta")
-                          .month()
+                        moment(props.event.showtime).tz("Asia/Jakarta").month()
                       ]
                     }
-                    {moment(props.screening.showtime)
+                    {moment(props.event.showtime)
                       .tz("Asia/Jakarta")
                       .format(" YYYY")}
                   </p>
@@ -60,7 +66,7 @@ const CardViewTicket = (props) => {
                 </td>
                 <td>
                   <p className="ml-3 sm:ml-8">
-                    {moment(props.screening.showtime)
+                    {moment(props.event.showtime)
                       .tz("Asia/Jakarta")
                       .format("HH:mm")}
                   </p>
@@ -68,40 +74,27 @@ const CardViewTicket = (props) => {
               </tr>
               <tr>
                 <td className="align-top">
-                  <p className="abu9CA3AF">Bioskop</p>
+                  <p className="abu9CA3AF">Promotor</p>
                 </td>
                 <td>
                   <p className="ml-3 sm:ml-8">
-                    {props.transaction.branch_name}
+                    {props.transaction.promotor_brand}
                   </p>
                 </td>
               </tr>
               <tr>
                 <td className="align-top">
-                  <p className="abu9CA3AF">Studio</p>
+                  <p className="abu9CA3AF">Venue</p>
                 </td>
                 <td>
-                  <p className="ml-3 sm:ml-8">
-                    {props.transaction.studio_name}
-                  </p>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <p className="abu9CA3AF">Kursi</p>
-                </td>
-                <td>
-                  <p className="ml-3 sm:ml-8">
-                    {props.transaction.seats.join(",")} (
-                    {props.transaction.seats.length})
-                  </p>
+                  <p className="ml-3 sm:ml-8">{props.transaction.venue}</p>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
         <img
-          src={props.transaction.movie_img}
+          src={`${process.env.BACKEND_URL}/promotor/eventposter-${props.event._id}.jpg`}
           alt=""
           className="w-32 aspect-[2/3] hidden sm:block md:block h-auto rounded"
         />
@@ -116,7 +109,7 @@ const CardViewTicket = (props) => {
             onClick={props.setZoomPointer}
           />
         </div>
-        <Link to={`/user/history/movie/${props.transaction._id}`}>
+        <Link to={`/user/history/event/${props.transaction._id}`}>
           <button className="px-5 flex gap-2 items-center mx-auto mt-2 font-biasa py-2 rounded-md biruCariTiket text-white">
             <div>Lihat Detail</div>
           </button>
@@ -126,4 +119,4 @@ const CardViewTicket = (props) => {
   );
 };
 
-export default CardViewTicket;
+export default CardViewTicketEvent;

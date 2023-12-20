@@ -25,7 +25,7 @@ const PromotorTiketDetail = (props) => {
             alt=""
             className="w-48 rounded"
           />
-          <p className="text-left text-xl font-bold underline underline-offset-4">
+          <p className="text-left text-xl font-bold underline underline-offset-4 mt-24">
             Detail Transaksi
           </p>
         </div>
@@ -93,11 +93,17 @@ const PromotorTiketDetail = (props) => {
         </div>
         <div>
           <p>
-            Rp. {props.event_category.price} <span className="abu9CA3AF"></span>
+            <span className="">
+                  {new Intl.NumberFormat("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                  }).format(props.event_category.price)}
+              </span>
+            <span className="abu9CA3AF"></span>
           </p>
 
           <p>
-            Rp. 10.000 <span className="abu9CA3AF"></span>
+            Rp 10.000,00 <span className="abu9CA3AF"></span>
           </p>
         </div>
       </div>
@@ -108,7 +114,12 @@ const PromotorTiketDetail = (props) => {
       <div className="justify-between flex mt-5">
         <div></div>
         <p className="font-bold">
-          Total Tagihan : Rp.{props.event_category.price + 10000}
+          Total Tagihan : <span className="">
+                  {new Intl.NumberFormat("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                  }).format(props.event_category.price + 10000)}
+              </span>
         </p>
       </div>
       <div className="justify-between flex">

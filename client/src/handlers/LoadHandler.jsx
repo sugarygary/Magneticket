@@ -186,9 +186,11 @@ export const loadHistory = async (data) => {
 export const loadDetailHistory = async (data) => {
   try {
     const responseHistory = await client.get(
-      `api/user/history/${data.params.history_id}`
+      `api/user/history/movie/${data.params.history_id}`
     );
-    const responseReview = await client.get(`api/user/reviews`);
+    const responseReview = await client.get(
+      `api/user/reviews?movie_id=${responseHistory.data.movie_id}`
+    );
     let response = {
       responseHistory: responseHistory.data,
       responseReview: responseReview.data,
@@ -394,6 +396,15 @@ export const loadMovieReportDetail = async (data) => {
     const response = await client.get(
       `api/admin/movie-ticket/${data.params.history_id}`
     );
+    return response.data;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const loadEvents = async (data) => {
+  try {
+    const response = await client.get(`api/public/all-event`);
     return response.data;
   } catch (error) {
     return error;

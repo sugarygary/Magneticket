@@ -286,6 +286,16 @@ const getSingleEventCategory = async (req, res) => {
   }
 };
 
+const getAllEvent = async (req, res) => {
+  try {
+    let result = await Event.find();
+    return res.status(200).send(result);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   getNowShowingMovie,
   getMovieDetails,
@@ -297,4 +307,5 @@ module.exports = {
   getSingleEvent,
   getSingleEventCategory,
   getPresales,
+  getAllEvent,
 };

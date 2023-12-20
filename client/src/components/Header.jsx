@@ -157,12 +157,17 @@ const Header = (props) => {
               </NavLink>
             </li>
             <li>
-              <a
-                href="#"
-                className="block py-2 px-3 rounded md:p-0 text-[#f8f8f8] md:hover:text-blue-500 hover:bg-gray-700 hover:text-[#f8f8f8] md:hover:bg-transparent"
+            <NavLink
+                to="/user/event"
+                className={({ isActive }) =>
+                  isActive
+                    ? "block py-2 px-3 text-[#f8f8f8] bg-blue-700 rounded md:bg-transparent md:p-0 md:text-blue-500"
+                    : "block py-2 px-3 rounded md:p-0 text-[#f8f8f8] md:hover:text-blue-500 hover:bg-gray-700 hover:text-[#f8f8f8] md:hover:bg-transparent"
+                }
+                aria-current="page"
               >
                 Event
-              </a>
+              </NavLink>
             </li>
             <li>
               <NavLink

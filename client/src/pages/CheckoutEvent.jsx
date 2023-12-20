@@ -175,7 +175,11 @@ const CheckoutEvent = () => {
             </div>
             <div className="mb-4">
               <h3 className="text-lg font-semibold text-right">
-                Total : {total}
+                Total : 
+                  {new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                  }).format(total)}
               </h3>
             </div>
             <div className="flex justify-center">

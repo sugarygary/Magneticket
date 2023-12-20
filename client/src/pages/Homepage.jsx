@@ -68,10 +68,10 @@ const Homepage = () => {
             {loadMovie.map((movie) => {
               return (
                 <>
-                  <CardHome {...movie}></CardHome>
-                  <CardHome {...movie}></CardHome>
-                  <CardHome {...movie}></CardHome>
-                  <CardHome {...movie}></CardHome>
+                  <CardHome key={movie.movie_id} {...movie}></CardHome>
+                  <CardHome key={movie.movie_id} {...movie}></CardHome>
+                  <CardHome key={movie.movie_id} {...movie}></CardHome>
+                  <CardHome key={movie.movie_id} {...movie}></CardHome>
                 </>
               );
             })}
