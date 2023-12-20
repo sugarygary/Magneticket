@@ -3,7 +3,11 @@ import { useForm } from "react-hook-form";
 import Joi from "joi";
 import { joiResolver } from "@hookform/resolvers/joi";
 import logo1 from "../assets/logo1.png";
-import { registerCineplex, registerEventOrganizer, registerUser } from "../handlers/LoginHandler";
+import {
+  registerCineplex,
+  registerEventOrganizer,
+  registerUser,
+} from "../handlers/LoginHandler";
 import { Link, useNavigate } from "react-router-dom";
 
 const EventRegisterForm = (props) => {
@@ -36,6 +40,10 @@ const EventRegisterForm = (props) => {
     }
     if (password != conPass) {
       setErrMsg("Password dan confirm password tidak sama");
+      return;
+    }
+    if (!email.includes("@") || !email.includes(".")) {
+      alert("email tidak valid");
       return;
     }
     // let cineplexBaru = {
@@ -81,7 +89,7 @@ const EventRegisterForm = (props) => {
   };
   return (
     <div className=" w-3/4 mx-auto h-full flex justify-center items-center text-white my-10">
-    <div className="biruTua p-12 text-center rounded w-3/4 mx-auto ">
+      <div className="biruTua p-12 text-center rounded w-3/4 mx-auto ">
         <div className="justify-center">
           <img src={logo1} alt="" className="w-48 mx-auto" />
           <p className="font-magneticket text-6xl">MAGNETICKET</p>
@@ -204,7 +212,9 @@ const EventRegisterForm = (props) => {
         </form>
         <div className="flex">
           <div>Sudah memiliki akun?</div>
-          <Link to={"/event-organizer/login"} className="mx-2 text-blue-500">Login sekarang</Link>
+          <Link to={"/event-organizer/login"} className="mx-2 text-blue-500">
+            Login sekarang
+          </Link>
         </div>
       </div>
     </div>
