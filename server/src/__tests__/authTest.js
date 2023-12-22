@@ -52,3 +52,57 @@ describe("POST /api/auth/login-cineplex", () => {
     expect(login.statusCode).toBe(200);
   });
 });
+
+describe("POST /api/auth/login-cineplex", () => {
+  it("should fail login as cineplex, wrong password", async () => {
+    const logout = await request(server).get("/api/auth/logout");
+    const login = await request(server).post("/api/auth/login-cineplex").send({
+      email: "fwijaya918@gmail.com",
+      password: "12",
+    });
+    expect(login.statusCode).toBe(400);
+  });
+});
+describe("POST /api/auth/login-cineplex", () => {
+  it("should fail as cineplex, wrong email", async () => {
+    const logout = await request(server).get("/api/auth/logout");
+    const login = await request(server).post("/api/auth/login-cineplex").send({
+      email: "fwijaya91@gmail.com",
+      password: "123",
+    });
+    expect(login.statusCode).toBe(400);
+  });
+});
+
+describe("POST /api/auth/login-promotor", () => {
+  it("should login as promotor succesfully", async () => {
+    const logout = await request(server).get("/api/auth/logout");
+    const login = await request(server).post("/api/auth/login-promotor").send({
+      email: "fwijaya918@gmail.com",
+      password: "123",
+    });
+    expect(login.statusCode).toBe(200);
+  });
+});
+
+describe("POST /api/auth/login-promotor", () => {
+  it("should fail login as promotor, wrong password", async () => {
+    const logout = await request(server).get("/api/auth/logout");
+    const login = await request(server).post("/api/auth/login-promotor").send({
+      email: "fwijaya918@gmail.com",
+      password: "12",
+    });
+    expect(login.statusCode).toBe(401);
+  });
+});
+describe("POST /api/auth/login-promotor", () => {
+  it("should fail as promotor, wrong email", async () => {
+    const logout = await request(server).get("/api/auth/logout");
+    const login = await request(server).post("/api/auth/login-promotor").send({
+      email: "fwijaya91@gmail.com",
+      password: "123",
+    });
+    expect(login.statusCode).toBe(401);
+  });
+});
+
