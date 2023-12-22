@@ -22,10 +22,12 @@ afterAll(async () => {
 describe("POST /api/cineplex/create-branch", () => {
   it("should create branch succesfully", async () => {
     const login = await request(appServer)
-      .post("/api/auth/login-promotor")
+      .post("/api/cineplex/create-branch")
       .send({
-        email: "fwijaya918@gmail.com",
-        password: "123",
+        
+        branch_name: "Grand Indonesia",
+        address: "Jalan Peganggsaan Timur",
+        city: "JAKARTA BARAT"
       });
     const logout = await request(appServer).get("/api/auth/logout");
     expect(login.statusCode).toBe(200);

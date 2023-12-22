@@ -22,11 +22,13 @@ const verifyCineplexCookie = async (req, res, next) => {
   try {
     const token = req.cookies.magneticket_token;
     if (!token) return res.status(401).json({ message: "Unauthorized" });
+    console.log(token)
     const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
     if (verified.role != "CINEPLEX") {
       // res.clearCookie("magneticket_token");
       return res.status(403).json({ message: "Forbidden" });
     }
+    console.log(verified.userId)
     let findCineplex = Cineplex.findById(verified.userId);
     if (findCineplex == null) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -34,6 +36,7 @@ const verifyCineplexCookie = async (req, res, next) => {
     req.userId = verified.userId;
     next();
   } catch (err) {
+    console.log(err)
     return res.status(401).json({ message: "Unauthorized" });
   }
 };
@@ -140,6 +143,7 @@ const createMenu = async (req, res) => {
 };
 const createBranch = async (req, res) => {
   const errors = validationResult(req);
+  console.log(req.userId)
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array() });
   }
