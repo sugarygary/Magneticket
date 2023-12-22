@@ -29,11 +29,11 @@ server.get("/", (req, res) => {
   return res.status(200).send({ message: "Welcome to Magneticket Server!" });
 });
 
-init();
+// init();
 server.use(notFound);
 server.use(errorHandler);
-server.listen(PORT, async () => {
+let appServer = server.listen(PORT, async () => {
   console.log(`Server running on port http://${HOSTNAME}:${PORT}/`);
 });
 
-module.exports = server;
+module.exports = appServer;
