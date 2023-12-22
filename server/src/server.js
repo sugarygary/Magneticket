@@ -29,7 +29,7 @@ server.get("/", (req, res) => {
   return res.status(200).send({ message: "Welcome to Magneticket Server!" });
 });
 
-// init();
+init();
 server.use(notFound);
 server.use(errorHandler);
 server.listen(PORT, async () => {

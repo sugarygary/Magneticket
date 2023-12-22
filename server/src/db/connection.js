@@ -8,6 +8,9 @@ switch (process.env.NODE_ENV) {
   case "development":
     dbName = "development_magneticket";
     break;
+  case "test":
+    dbName = "test_magneticket";
+    break;
   default:
     dbName = "production_magneticket";
     break;

@@ -4,7 +4,7 @@ const server = require("../server");
 require("dotenv").config();
 beforeEach(async () => {
   await mongoose.connect(process.env.ATLAS_URI, {
-    dbName: "development_magneticket",
+    dbName: "test_magneticket",
   });
 });
 
@@ -23,7 +23,7 @@ describe("POST /api/auth/login-user", () => {
   });
 });
 describe("POST /api/auth/login-user", () => {
-  it("should fail login as user with invalid email or password", async () => {
+  it("should fail login as user with invalid password", async () => {
     const logout = await request(server).get("/api/auth/logout");
     const login = await request(server).post("/api/auth/login-user").send({
       email: "fwijaya918@gmail.com",
@@ -33,7 +33,7 @@ describe("POST /api/auth/login-user", () => {
   });
 });
 describe("POST /api/auth/login-user", () => {
-  it("should fail login as user with invalid email or password", async () => {
+  it("should fail login as user with invalid email", async () => {
     const logout = await request(server).get("/api/auth/logout");
     const login = await request(server).post("/api/auth/login-user").send({
       email: "fwijaya918123123@gmail.com",
