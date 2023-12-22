@@ -19,11 +19,7 @@ server.use(
 );
 server.use(express.urlencoded({ extended: true }));
 server.use(express.json());
-// server.use(formidable());
 server.use(cookieParser());
-// server.use(function (req, res, next) {
-//   setTimeout(next, 1000);
-// });
 server.use(express.static("uploads"));
 server.use("/api", router);
 
@@ -33,9 +29,11 @@ server.get("/", (req, res) => {
   return res.status(200).send({ message: "Welcome to Magneticket Server!" });
 });
 
-init();
+// init();
 server.use(notFound);
 server.use(errorHandler);
 server.listen(PORT, async () => {
   console.log(`Server running on port http://${HOSTNAME}:${PORT}/`);
 });
+
+module.exports = server;

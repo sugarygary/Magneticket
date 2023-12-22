@@ -142,14 +142,12 @@ const currentUser = async function (req, res) {
       .send({ userId: null, role: null, email: null, display_name: null });
   }
   const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
-  return res
-    .status(200)
-    .send({
-      userId: verified.userId,
-      role: verified.role,
-      email: verified.email,
-      display_name: verified.display_name,
-    });
+  return res.status(200).send({
+    userId: verified.userId,
+    role: verified.role,
+    email: verified.email,
+    display_name: verified.display_name,
+  });
 };
 
 const logout = async function (req, res) {
@@ -345,12 +343,12 @@ const loginCineplex = async function (req, res) {
   const { email, password } = req.body;
   const findCineplex = await Cineplex.findByEmail(email);
   if (findCineplex === null) {
-    res.status(401);
+    res.status(400);
     throw new Error("Invalid email or password");
   }
   let matchPassword = await findCineplex.comparePassword(password);
   if (!matchPassword) {
-    res.status(401);
+    res.status(400);
     throw new Error("Invalid email or password");
   }
   if (!findCineplex.activated) {
@@ -381,7 +379,6 @@ const loginCineplex = async function (req, res) {
 
 //#endregion
 
-
 //#region promotor
 let storage_promotor = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -409,7 +406,7 @@ let upload_promotor = multer({
 let registerPromotorMulter = upload_promotor.fields([
   { name: "npwp", maxCount: 1 },
   { name: "surat", maxCount: 1 },
-])
+]);
 const registerPromotor = async function (req, res) {
   const errors = validationResult(req);
   if (!req.files?.npwp || !req.files?.surat) {
