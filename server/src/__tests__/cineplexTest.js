@@ -6,10 +6,6 @@ beforeEach(async () => {
   await mongoose.connect(process.env.ATLAS_URI, {
     dbName: "test_magneticket",
   });
-  const login = await request(appServer).post("/api/auth/login-cineplex").send({
-    email: "fwijaya918@gmail.com",
-    password: "123",
-  });
 });
 
 afterEach(async () => {
@@ -22,14 +18,21 @@ afterAll(async () => {
 describe("POST /api/cineplex/create-branch", () => {
   it("should create branch succesfully", async () => {
     const login = await request(appServer)
+      .post("/api/auth/login-cineplex")
+      .send({
+        email: "fwijaya918@gmail.com",
+        password: "123",
+      });
+    const cookie = login.get("Set-Cookie");
+    const createBranch = await request(appServer)
       .post("/api/cineplex/create-branch")
       .send({
-        
         branch_name: "Grand Indonesia",
         address: "Jalan Peganggsaan Timur",
-        city: "JAKARTA BARAT"
-      });
+        city: "JAKARTA BARAT",
+      })
+      .set("Cookie", cookie);
     const logout = await request(appServer).get("/api/auth/logout");
-    expect(login.statusCode).toBe(200);
+    expect(createBranch.statusCode).toBe(201);
   });
 });
