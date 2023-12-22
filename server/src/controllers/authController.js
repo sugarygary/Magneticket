@@ -341,6 +341,8 @@ const loginCineplex = async function (req, res) {
     return res.status(400).send({ errors: errors.array() });
   }
   const { email, password } = req.body;
+  const temp = await Cineplex.find();
+  // console.log(temp);
   const findCineplex = await Cineplex.findByEmail(email);
   if (findCineplex === null) {
     res.status(400);

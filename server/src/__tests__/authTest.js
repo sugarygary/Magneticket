@@ -3,20 +3,51 @@ const request = require("supertest");
 const server = require("../server");
 require("dotenv").config();
 beforeEach(async () => {
-  await mongoose.connect(process.env.ATLAS_URI);
+  await mongoose.connect(process.env.ATLAS_URI, {
+    dbName: "development_magneticket",
+  });
 });
 
-/* Closing database connection after each test. */
 afterEach(async () => {
   await mongoose.connection.close();
 });
 
 describe("POST /api/auth/login-user", () => {
-  it("should login as user", async () => {
+  it("should login as user succesfully", async () => {
     const logout = await request(server).get("/api/auth/logout");
     const login = await request(server).post("/api/auth/login-user").send({
       email: "fwijaya918@gmail.com",
       password: "felix",
+    });
+    expect(login.statusCode).toBe(200);
+  });
+});
+describe("POST /api/auth/login-user", () => {
+  it("should fail login as user with invalid email or password", async () => {
+    const logout = await request(server).get("/api/auth/logout");
+    const login = await request(server).post("/api/auth/login-user").send({
+      email: "fwijaya918@gmail.com",
+      password: "abc",
+    });
+    expect(login.statusCode).toBe(400);
+  });
+});
+describe("POST /api/auth/login-user", () => {
+  it("should fail login as user with invalid email or password", async () => {
+    const logout = await request(server).get("/api/auth/logout");
+    const login = await request(server).post("/api/auth/login-user").send({
+      email: "fwijaya918123123@gmail.com",
+      password: "abc",
+    });
+    expect(login.statusCode).toBe(400);
+  });
+});
+describe("POST /api/auth/login-cineplex", () => {
+  it("should login as cineplex succesfully", async () => {
+    const logout = await request(server).get("/api/auth/logout");
+    const login = await request(server).post("/api/auth/login-cineplex").send({
+      email: "fwijaya918@gmail.com",
+      password: "123",
     });
     expect(login.statusCode).toBe(200);
   });
