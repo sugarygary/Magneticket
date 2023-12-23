@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const request = require("supertest");
 const appServer = require("../server");
 require("dotenv").config();
+const path = require("path");
 
 afterAll(async () => {
   appServer.close();
@@ -207,5 +208,25 @@ describe("GET /api/cineplex/screenings", () => {
       .set("Cookie", cookie);
     const logout = await request(appServer).get("/api/auth/logout");
     expect(getScreening.statusCode).toBe(200);
+  });
+});
+
+describe("POST /api/cineplex/create-menu", () => {
+  it("should create menu succesfully", async () => {
+    const login = await request(appServer)
+      .post("/api/auth/login-cineplex")
+      .send({
+        email: "fwijaya918@gmail.com",
+        password: "123",
+      });
+      const cookie = login.get("Set-Cookie");
+    const createMenu = await request(appServer)
+      .post("/api/cineplex/create-menu")
+      .field("item_name", "Nasi Padang")
+      .field("item_description", "Makanan khas Padang")
+      .field("price", 30000)
+      .attach("thumbnail", path.resolve(__dirname, "./assets/sao.jpg"))
+      .set("Cookie", cookie);
+    expect(createMenu.statusCode).toBe(201);
   });
 });
