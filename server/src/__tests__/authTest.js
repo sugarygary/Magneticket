@@ -2,15 +2,7 @@ const mongoose = require("mongoose");
 const request = require("supertest");
 const appServer = require("../server");
 require("dotenv").config();
-beforeEach(async () => {
-  await mongoose.connect(process.env.ATLAS_URI, {
-    dbName: "test_magneticket",
-  });
-});
 
-afterEach(async () => {
-  await mongoose.connection.close();
-});
 afterAll(async () => {
   appServer.close();
 });

@@ -29,9 +29,7 @@ const verifyPromotorCookie = async (req, res, next) => {
         .json({ message: "Unauthorized kalo tidak ada cookie aktif" });
     const verified = jwt.verify(token, process.env.JWT_SECRET_KEY);
     if (verified.role != "PROMOTOR") {
-      return res
-        .status(403)
-        .json({ message: "Forbidden BUKAN AKUN AKUN PROMOTOR HEHEH" });
+      return res.status(403).json({ message: "Forbidden" });
     }
     req.userId = verified.userId;
     next();
@@ -220,10 +218,10 @@ const createEvent = async (req, res) => {
     await newKategori.save();
   }
 
-  // return res.status(201).send({
-  //   message: "Event created",
-  //   newEvent: newEvent
-  // });
+  return res.status(201).send({
+    message: "Event created",
+    newEvent: newEvent,
+  });
 };
 const getEventTicket = async (req, res) => {
   const eventTickets = await EventTicket.find({ promotor: req.userId })
