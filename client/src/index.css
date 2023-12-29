@@ -102,3 +102,17 @@ footer {
   border-radius: 10px;
   filter: drop-shadow(0 0.1rem 0.1rem rgb(0 0 0 / 50%));
 }
+/* .modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  z-index: 100;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.2s ease-in-out, opacity 0.2s ease-in-out;
+} */

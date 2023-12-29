@@ -13,6 +13,7 @@ export default function CineplexCreateScreening() {
   const [showTime, setShowTime] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [errorStudio, setErrorStudio] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
   const { current_user, status } = useSelector((state) => state.user);
   useEffect(() => {
     if (
@@ -34,7 +35,7 @@ export default function CineplexCreateScreening() {
   //   return foundStudio;
   // };
   let foundStudio = null;
-  const submitForm = (e) => {
+  const submitForm = async (e) => {
     e.preventDefault();
     //harus ngecek apakah studio nya punya orang yang lagi login
     if (
@@ -65,10 +66,16 @@ export default function CineplexCreateScreening() {
       showtime: showTime,
     };
     try {
-      createScreening(data);
+      const berhasil = await createScreening(data);
+      if (berhasil) {
+        setOpenModal(true);
+      }
     } catch (error) {
       console.log(error);
     }
+  };
+  const closeModal = () => {
+    navigate(0);
   };
   return (
     <div className="p-2 text-white biruTua p-5 my-10 rounded w-3/4 mx-auto ">
@@ -130,6 +137,14 @@ export default function CineplexCreateScreening() {
           Tambahkan Screening
         </button>
       </form>
+      {openModal && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <p className="text-green-500">Loading completed!</p>
+            <button onClick={closeModal}>Refresh halaman</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import search from "../assets/search.png";
 import popcorn from "../assets/popcorn.jpg";
@@ -6,12 +6,15 @@ import popcorn from "../assets/popcorn.jpg";
 export default function CineplexConcession() {
   const navigate = useNavigate();
   const data = useLoaderData();
-  console.log("ini data", data);
-  if (data.response && data.response.status == 401) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const filteredMenus = data.menus.filter((menu) =>
+    menu.item_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  if (data.response && data.response.status === 401) {
     throw new Response("", { status: 401 });
-  } else {
   }
-  console.log(data.menus);
+
   return (
     <>
       <div className="px-10 py-5">
@@ -24,6 +27,8 @@ export default function CineplexConcession() {
               type="text"
               className="biruTua w-full rounded border-transparent focus:outline-none text-white px-2"
               placeholder="Search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           <div className="p-2 biruCariTiket  text-white rounded">
@@ -31,45 +36,39 @@ export default function CineplexConcession() {
           </div>
         </div>
         <div className="mt-10 rounded">
-          {data.menus.map((menu) => {
-            // {console.log(menu._id)}
-            return (
-              <div className="">
-                <div className="flex shadow-2xl mb-5">
-                  {/* http://localhost:3000/cineplex/npwp-6566e2382d4522b6ed7c227a.jpg */}
-                  <img
-                    src={`${process.env.BACKEND_URL}/cineplex/menu-${menu._id}.jpg`}
-                    alt=""
-                    className="w-48"
-                  />
-                  <div className="p-5  w-full">
-                    <p className="font-bold text-2xl">{menu.item_name}</p>
-                    <p className="my-3 abuDeskripsiMakanan">
-                      {menu.item_description}
-                    </p>
-                    <p>
-                      Harga: 
-                      <span className="">
-                        {new Intl.NumberFormat("id-ID", {
-                          style: "currency",
-                          currency: "IDR",
-                        }).format(menu.price)}
-                      </span>
-                    </p>
-                    <div className="mt-9 flex justify-between">
-                      <div></div>
-                      <Link
-                        className="biruCariTiket p-2 text-white rounded"
-                        to={`/cineplex/edit-menu/${menu._id}`}
-                      >
-                        Edit Menu
-                      </Link>
-                    </div>
-                  </div>
+          {filteredMenus.map((menu) => (
+            <div key={menu._id} className="flex shadow-2xl mb-5">
+              <img
+                src={`${process.env.BACKEND_URL}/cineplex/menu-${menu._id}.jpg`}
+                alt=""
+                className="w-48"
+              />
+              <div className="p-5  w-full">
+                <p className="font-bold text-2xl">{menu.item_name}</p>
+                <p className="my-3 abuDeskripsiMakanan">
+                  {menu.item_description}
+                </p>
+                <p>
+                  Harga:
+                  <span className="">
+                    {new Intl.NumberFormat("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                    }).format(menu.price)}
+                  </span>
+                </p>
+                <div className="mt-9 flex justify-between">
+                  <div></div>
+                  <Link
+                    className="biruCariTiket p-2 text-white rounded"
+                    to={`/cineplex/edit-menu/${menu._id}`}
+                  >
+                    Edit Menu
+                  </Link>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </div>
     </>

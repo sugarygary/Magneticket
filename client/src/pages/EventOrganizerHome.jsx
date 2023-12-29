@@ -11,20 +11,16 @@ const EventOrganizerHome = () => {
       (current_user.userId == null || current_user.role != "PROMOTOR") &&
       status == "succeeded"
     ) {
-      navigate("/", { replace: true });
+      navigate("/event-organizer/login", { replace: true });
     }
   }, []);
   if (
     (current_user.userId == null || current_user.role != "PROMOTOR") &&
     status == "succeeded"
   ) {
-    navigate("/", { replace: true });
+    navigate("/event-organizer/login", { replace: true });
   }
-  return (
-    <div className="px-10 py-5">
-       
-    </div>
-  );
-}
+  return <div className="px-10 py-5"></div>;
+};
 
-export default EventOrganizerHome
+export default EventOrganizerHome;

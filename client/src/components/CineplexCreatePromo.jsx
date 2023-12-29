@@ -13,6 +13,7 @@ const CineplexCreatePromo = (props) => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [minimumTransaksi, setMinimumTransaksi] = useState(null);
   const { current_user, status } = useSelector((state) => state.user);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     if (
@@ -31,12 +32,10 @@ const CineplexCreatePromo = (props) => {
   async function submitForm(e) {
     e.preventDefault();
     setErrorMsg(null);
-    if (
-      kodePromo == null ||
-      masaBerlaku == null ||
-      potongan == null ||
-      minimumTransaksi == null
-    ) {
+    if (minimumTransaksi == null) {
+      setMinimumTransaksi(0);
+    }
+    if (kodePromo == null || masaBerlaku == null || potongan == null) {
       setErrorMsg("All field must be filled");
       return;
     } else if (isNaN(potongan)) {
@@ -53,9 +52,16 @@ const CineplexCreatePromo = (props) => {
       minimum_transaksi: parseInt(minimumTransaksi),
     };
     // console.log(data);
-    createKodePromo(data);
-    navigate("/cineplex/kode-promo");
+
+    const berhasil = await createKodePromo(data);
+    if (berhasil) {
+      setOpenModal(true);
+    }
+    // navigate(0);
   }
+  const closeModal = () => {
+    navigate(0);
+  };
 
   return (
     <div className=" w-full h-full flex justify-center items-center text-white my-10">
@@ -86,7 +92,7 @@ const CineplexCreatePromo = (props) => {
               type="date"
               name=""
               id=""
-              className="w-full abuBgInput text-gray-500"
+              className="w-full abuBgInput "
               onChange={(e) => {
                 setMasaBerlaku(e.target.value);
               }}
@@ -103,7 +109,7 @@ const CineplexCreatePromo = (props) => {
               }}
             />
           </div>
-          <div className="mb-3 text-left">
+          {/* <div className="mb-3 text-left">
             <p>Minimum transaksi</p>
             <input
               type="text"
@@ -113,7 +119,7 @@ const CineplexCreatePromo = (props) => {
                 setMinimumTransaksi(e.target.value);
               }}
             />
-          </div>
+          </div> */}
           {errorMsg && <span className="text-red-500">{errorMsg}</span>}
           <div className="mb-3 text-left mt-5">
             <button className="biruMuda w-full rounded p-1 pl-2">
@@ -121,6 +127,14 @@ const CineplexCreatePromo = (props) => {
             </button>
           </div>
         </form>
+        {openModal && (
+          <div className="modal-overlay" onClick={closeModal}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <p className="text-green-500">Loading completed!</p>
+              <button onClick={closeModal}>Refresh halaman</button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

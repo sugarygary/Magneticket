@@ -8,18 +8,17 @@ const PromotorJadwalEvent = () => {
   const navigate = useNavigate();
   const data = useLoaderData();
 
-  console.log(data.events)
+  console.log(data.events);
 
   const [tanggal, setTanggal] = useState(null);
   const [kota, setKota] = useState(null);
-  const [filtered, setFiltered] = useState([])
+  const [filtered, setFiltered] = useState([]);
 
   const handleFilter = () => {
     const filtered = data.events.filter((event) => {
       if (
         tanggal &&
-        event.showtime.substring(0, 10).toLowerCase() !==
-          tanggal.toLowerCase()
+        event.showtime.substring(0, 10).toLowerCase() !== tanggal.toLowerCase()
       ) {
         return false;
       }
@@ -42,14 +41,14 @@ const PromotorJadwalEvent = () => {
       (current_user.userId == null || current_user.role != "PROMOTOR") &&
       status == "succeeded"
     ) {
-      navigate("/", { replace: true });
+      navigate("/event-organizer/login", { replace: true });
     }
   }, []);
   if (
     (current_user.userId == null || current_user.role != "PROMOTOR") &&
     status == "succeeded"
   ) {
-    navigate("/", { replace: true });
+    navigate("/event-organizer/login", { replace: true });
   }
 
   return (
@@ -93,14 +92,6 @@ const PromotorJadwalEvent = () => {
             </select>
           </div>
         </div>
-        <div className="mt-8">
-          <Link
-            to="/cineplex/jadwal/create-screening"
-            className="p-2 biruCariTiket  text-white rounded"
-          >
-            Tambah Screening
-          </Link>
-        </div>
       </div>
       {filtered.length === 0 && (
         <p>No screenings found based on the selected filters.</p>
@@ -109,7 +100,11 @@ const PromotorJadwalEvent = () => {
         return (
           <div className="" key={index}>
             <div className="flex shadow-2xl mb-5">
-              <img src={`${process.env.BACKEND_URL}/promotor/eventposter-${event._id}.jpg`} alt="" className="w-48" />
+              <img
+                src={`${process.env.BACKEND_URL}/promotor/eventposter-${event._id}.jpg`}
+                alt=""
+                className="w-48"
+              />
               <div className="p-5  w-full">
                 <p className="font-bold text-2xl ">{event.event_name}</p>
                 <br />
@@ -140,6 +135,6 @@ const PromotorJadwalEvent = () => {
       })}
     </div>
   );
-}
+};
 
-export default PromotorJadwalEvent
+export default PromotorJadwalEvent;

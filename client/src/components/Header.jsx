@@ -13,7 +13,8 @@ const Header = (props) => {
   const { current_user } = useSelector((state) => state.user);
   async function logout() {
     await client.get("api/auth/logout");
-    window.location.reload();
+    // window.location.reload();
+    navigate("/");
   }
   useEffect(() => {
     dispatch(fetchCurrentUser());
@@ -157,7 +158,7 @@ const Header = (props) => {
               </NavLink>
             </li>
             <li>
-            <NavLink
+              <NavLink
                 to="/user/event"
                 className={({ isActive }) =>
                   isActive

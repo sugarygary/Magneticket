@@ -10,7 +10,7 @@ export default function CineplexCreateMenu() {
     throw new Response("", { status: 401 });
   } else {
   }
-
+  const [openModal, setOpenModal] = useState(false);
   const [namaMenu, setNamaMenu] = useState(null);
   const [hargaMenu, setHargaMenu] = useState(null);
   const [deskripsiMenu, setDeskripsiMenu] = useState(null);
@@ -31,6 +31,9 @@ export default function CineplexCreateMenu() {
     } else if (typeof parseInt(hargaMenu) != "number") {
       setErrorMsg("Price field must be number");
       return;
+    } else if (parseInt(hargaMenu < 0)) {
+      setErrorMsg("Price field must be positive");
+      return;
     }
     // let data = {
     //   item_name: namaMenu,
@@ -43,9 +46,15 @@ export default function CineplexCreateMenu() {
     formData.append("item_description", deskripsiMenu);
     formData.append("price", hargaMenu);
     formData.append("thumbnail", thumbnail);
-    createMenu(formData, config);
-    navigate("/cineplex/concession");
+    const berhasil = await createMenu(formData, config);
+    if (berhasil) {
+      setOpenModal(true);
+    }
+    // navigate("/cineplex/concession");
   }
+  const closeModal = () => {
+    navigate(0);
+  };
   return (
     <>
       <div className="biruTua p-5 my-10 rounded w-3/4 mx-auto ">
@@ -84,12 +93,13 @@ export default function CineplexCreateMenu() {
             <div className="mb-5">
               <p>Harga Menu</p>
               <input
-                type="text"
+                type="number"
                 className="abuInput w-full rounded p-1 pl-2"
                 placeholder="Enter your price"
                 onChange={(e) => {
                   setHargaMenu(e.target.value);
                 }}
+                min={0}
               />
             </div>
             <div className="mb-5">
@@ -110,6 +120,17 @@ export default function CineplexCreateMenu() {
               Buat Menu
             </button>
           </form>
+          {openModal && (
+            <div className="modal-overlay" onClick={closeModal}>
+              <div
+                className="modal-content"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <p className="text-green-500">Loading completed!</p>
+                <button onClick={closeModal}>Refresh halaman</button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>

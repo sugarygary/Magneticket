@@ -13,6 +13,7 @@ const CineplexCreateCabang = () => {
   const [kotaKabupaten, setKotaKabupaten] = useState(null);
   const [alamat, setAlamat] = useState(null);
   const data = useLoaderData();
+  const [openModal, setOpenModal] = useState(false);
   if (data.response && data.response.status == 401) {
     throw new Response("", { status: 401 });
   }
@@ -45,9 +46,14 @@ const CineplexCreateCabang = () => {
       address: alamat,
     };
     // console.log(data);
-    createCabang(data);
-    navigate(0);
+    const berhasil = await createCabang(data);
+    if (berhasil) {
+      setOpenModal(true);
+    }
   }
+  const closeModal = () => {
+    navigate(0);
+  };
   return (
     <>
       <div className=" w-full h-full justify-center items-center text-white my-10">
@@ -128,6 +134,17 @@ const CineplexCreateCabang = () => {
               </button>
             </div>
           </form>
+          {openModal && (
+            <div className="modal-overlay" onClick={closeModal}>
+              <div
+                className="modal-content"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <p className="text-green-500">Loading completed!</p>
+                <button onClick={closeModal}>Refresh halaman</button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>

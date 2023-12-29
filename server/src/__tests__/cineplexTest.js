@@ -31,6 +31,27 @@ describe("POST /api/cineplex/create-branch", () => {
     expect(createBranch.statusCode).toBe(201);
   });
 });
+describe("POST /api/cineplex/create-branch", () => {
+  it("fail to create, duplicate branch name", async () => {
+    const login = await request(appServer)
+      .post("/api/auth/login-cineplex")
+      .send({
+        email: "fwijaya918@gmail.com",
+        password: "123",
+      });
+    const cookie = login.get("Set-Cookie");
+    const createBranch = await request(appServer)
+      .post("/api/cineplex/create-branch")
+      .send({
+        branch_name: "Grand Indonesia",
+        address: "Jalan Peganggsaan Timur",
+        city: "JAKARTA BARAT",
+      })
+      .set("Cookie", cookie);
+    const logout = await request(appServer).get("/api/auth/logout");
+    expect(createBranch.statusCode).toBe(409);
+  });
+});
 
 describe("POST /api/cineplex/create-promo", () => {
   it("should create promo succesfully", async () => {

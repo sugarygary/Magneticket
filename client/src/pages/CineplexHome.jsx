@@ -11,21 +11,17 @@ const CineplexHome = () => {
       (current_user.userId == null || current_user.role != "CINEPLEX") &&
       status == "succeeded"
     ) {
-      navigate("/", { replace: true });
+      navigate("/cineplex/login", { replace: true });
     }
   }, []);
   if (
     (current_user.userId == null || current_user.role != "CINEPLEX") &&
     status == "succeeded"
   ) {
-    navigate("/", { replace: true });
+    navigate("/cineplex/login", { replace: true });
   }
 
-  return (
-    <div className="px-10 py-5">
-        
-    </div>
-  );
-}
+  return <div className="px-10 py-5"></div>;
+};
 
-export default CineplexHome
+export default CineplexHome;

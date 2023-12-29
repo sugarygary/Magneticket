@@ -16,14 +16,14 @@ export default function CineplexJadwal() {
       (current_user.userId == null || current_user.role != "CINEPLEX") &&
       status == "succeeded"
     ) {
-      navigate("/", { replace: true });
+      navigate("/cineplex/login", { replace: true });
     }
   }, []);
   if (
     (current_user.userId == null || current_user.role != "CINEPLEX") &&
     status == "succeeded"
   ) {
-    navigate("/", { replace: true });
+    navigate("/cineplex/login", { replace: true });
   }
   //   const getMovie = async (movie_id) => {
   //     const movie = await client.get(`api/public/movie-details/${movie_id}`);
@@ -186,10 +186,12 @@ export default function CineplexJadwal() {
                   </tr>
                   <tr>
                     <td>Harga </td>
-                    <td>: {new Intl.NumberFormat("id-ID", {
-                            style: "currency",
-                            currency: "IDR",
-                          }).format(screening.price)}
+                    <td>
+                      :{" "}
+                      {new Intl.NumberFormat("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                      }).format(screening.price)}
                     </td>
                   </tr>
                   <tr>

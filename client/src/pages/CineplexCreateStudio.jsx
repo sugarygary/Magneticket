@@ -16,6 +16,7 @@ export default function CineplexCreateStudio() {
   const [kolomStudio, setKolomStudio] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [displayKursi, setDisplayKursi] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const matchingBranch = data.responseCabang.branches.find(
     (branch) => branch._id === data.currentCabang
   );
@@ -66,9 +67,15 @@ export default function CineplexCreateStudio() {
       seating_layout: kolomStudio,
     };
     // console.log(data);
-    createStudio(data);
-    navigate(0);
+    const berhasil = await createStudio(data);
+    if (berhasil) {
+      setOpenModal(true);
+    }
+    // navigate(0);
   }
+  const closeModal = () => {
+    navigate(0);
+  };
   return (
     <div className=" w-full h-full justify-center items-center text-white my-10">
       <div className="biruTua p-5 text-center rounded w-3/4 mx-auto mb-5">
@@ -107,12 +114,13 @@ export default function CineplexCreateStudio() {
           <div className="mb-3 text-left">
             <p>Baris</p>
             <input
-              type="text"
+              type="number"
               className="abuInput w-full rounded p-1 pl-2"
               placeholder="Masukkan Jumlah Baris"
               onChange={(e) => {
                 setBarisStudio(e.target.value);
               }}
+              min={1}
             />
           </div>
           <div className="mb-3 text-left">
@@ -130,6 +138,14 @@ export default function CineplexCreateStudio() {
           {errorMsg && <span className="text-red-500">{errorMsg}</span>}
           <button className="biruMuda w-full rounded p-1 pl-2">Tambah</button>
         </form>
+        {openModal && (
+          <div className="modal-overlay" onClick={closeModal}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <p className="text-green-500">Loading completed!</p>
+              <button onClick={closeModal}>Refresh halaman</button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -235,7 +235,7 @@ const createSnapEvent = async (req, res) => {
   }
   let customer = await User.findById(req.userId);
   let amounts_paid = 0;
-  amounts_paid = findEventCategory.price * quantity + 4000;
+  amounts_paid = findEventCategory.price * quantity + 10000*quantity;
   let order_id = generateTransactionIdEvent();
   let midtrans = await axios.post(
     "https://app.sandbox.midtrans.com/snap/v1/transactions",
