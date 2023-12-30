@@ -102,6 +102,7 @@ const Header = (props) => {
             <div className="flex items-center space-x-4 rtl:space-x-reverse">
               <Link
                 to={"/user/login"}
+                id={"loginHeader"}
                 className="text-sm text-[#f8f8f8] hover:text-[#1C64F2] hover:underline"
               >
                 Login
