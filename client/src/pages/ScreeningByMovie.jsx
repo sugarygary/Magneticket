@@ -95,6 +95,11 @@ export default function ScreeningByMovie() {
                         to={`/user/seating/${jadwal.screening_id}`}
                         key={jadwal.screening_id}
                         className="font-extrabold cursor-pointer select-none hover:bg-[#1c64f2] hover:text-white hover:border-[#1c64f2] bg-[#F8f8f8] text-black border border-black rounded-lg px-2 text-center py-1"
+                        id={`${screening.branch_name} - ${moment(
+                          jadwal.showtime
+                        )
+                          .tz("Asia/Jakarta")
+                          .format("HH:mm")}`}
                       >
                         {moment(jadwal.showtime)
                           .tz("Asia/Jakarta")

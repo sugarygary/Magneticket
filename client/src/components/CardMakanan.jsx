@@ -54,6 +54,7 @@ const CardMakanan = (props) => {
             onClick={() => {
               props.addKeranjang(props);
             }}
+            namaFood={`${props.item_name}`}
           >
             Tambah
           </button>

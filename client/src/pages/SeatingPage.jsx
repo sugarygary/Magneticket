@@ -622,7 +622,7 @@ export default function SeatingPage() {
                   currency: "IDR",
                 }).format(
                   data.screening_data.price * chooseSeat.length +
-                    4000 +
+                    4000*chooseSeat.length +
                     calculateTotalPrice() -
                     totalPromo()
                 )}
@@ -699,6 +699,7 @@ export default function SeatingPage() {
                     onClick={() => {
                       handlePromo(promo);
                     }}
+                    judulPromo={promo.promo_code}
                   >
                     <p className="font-semibold">{promo.promo_code}</p>
                     <p>Diskon : Rp.{promo.discount_amount}</p>
