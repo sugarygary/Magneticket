@@ -16,6 +16,7 @@ const CheckoutEvent = () => {
   const navigate = useNavigate();
   let data = dataLoader.detailEvent;
   let data2 = dataLoader.categoryEvent;
+  console.log(data2);
   if (dataLoader.detailEvent == "Request failed with status code 401") {
     throw new Response("", { status: 401 });
   }
@@ -105,6 +106,7 @@ const CheckoutEvent = () => {
         alert("you closed the popup without finishing the payment");
       },
     });
+    // navigate(0);
   }
   return (
     <div className="px-10 py-5">

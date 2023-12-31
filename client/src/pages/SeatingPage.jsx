@@ -9,6 +9,7 @@ export default function SeatingPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const data = useLoaderData();
+  
   const { current_user, status } = useSelector((state) => state.user);
   useEffect(() => {
     if (searchParams.has("order_id")) {
@@ -622,7 +623,7 @@ export default function SeatingPage() {
                   currency: "IDR",
                 }).format(
                   data.screening_data.price * chooseSeat.length +
-                    4000*chooseSeat.length +
+                    4000 * chooseSeat.length +
                     calculateTotalPrice() -
                     totalPromo()
                 )}

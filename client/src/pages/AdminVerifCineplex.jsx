@@ -12,7 +12,7 @@ function AdminVerifCineplex() {
   };
   return (
     <div className="px-5 py-10">
-      <p className="text-2xl font-bold mb-5">Verifikasi Event Organizer</p>
+      <p className="text-2xl font-bold mb-5">Verifikasi Cineplex</p>
 
       <table className="min-w-full text-white table-auto">
         <thead>

@@ -11,6 +11,23 @@ export default function VerifikasiPromotorPage() {
   const [alasan, setAlasan] = useState(null);
   console.log(process.env.BACKEND_URL);
   console.log(data);
+
+  async function acceptForm(e) {
+    e.preventDefault();
+
+    let retu = await acceptVerifPromotor(data.promotor.email);
+    if (retu) {
+      navigate(-1);
+    }
+  }
+  async function tolakForm(e) {
+    e.preventDefault();
+
+    let retu = await tolakVerifPromotor(data.promotor.email, alasan);
+    if (retu) {
+      navigate(-1);
+    }
+  }
   return (
     <div className="p-10 w-full ">
       <div className="flex justify-between">
@@ -55,9 +72,7 @@ export default function VerifikasiPromotorPage() {
           />
           <button
             className="px-3 py-1 biruTua text-white rounded"
-            onClick={() => {
-              tolakVerifPromotor(data.promotor.email, alasan);
-            }}
+            onClick={tolakForm}
           >
             Tolak
           </button>
@@ -66,9 +81,7 @@ export default function VerifikasiPromotorPage() {
           <div></div>
           <button
             className="px-3 py-1 biruMuda text-white rounded "
-            onClick={() => {
-              acceptVerifPromotor(data.promotor.email);
-            }}
+            onClick={acceptForm}
           >
             Terima
           </button>

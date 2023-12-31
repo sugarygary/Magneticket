@@ -217,6 +217,7 @@ const createSnap = async (req, res) => {
 const createSnapEvent = async (req, res) => {
   const { event_category, quantity } = req.body;
   const findEventCategory = await EventCategory.findById(event_category);
+  console.log("findEventCategory.event", findEventCategory.event);
   if (findEventCategory == null) {
     return res.status(404).send({ message: "Category not found" });
   }
@@ -224,6 +225,7 @@ const createSnapEvent = async (req, res) => {
     _id: findEventCategory.event,
     verified: true,
   });
+  console.log(findEvent);
   if (findEvent == null) {
     return res.status(404).send({ message: "Event not found" });
   }
@@ -235,7 +237,7 @@ const createSnapEvent = async (req, res) => {
   }
   let customer = await User.findById(req.userId);
   let amounts_paid = 0;
-  amounts_paid = findEventCategory.price * quantity + 10000*quantity;
+  amounts_paid = findEventCategory.price * quantity + 10000 * quantity;
   let order_id = generateTransactionIdEvent();
   let midtrans = await axios.post(
     "https://app.sandbox.midtrans.com/snap/v1/transactions",
@@ -594,7 +596,7 @@ const createTicketEvent = async (req, res) => {
     });
     await newTicket.save();
   }
-  
+
   await findEventCategory.save();
   return res.status(201).send({
     message: "Created",

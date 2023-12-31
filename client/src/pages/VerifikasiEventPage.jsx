@@ -8,6 +8,30 @@ export default function VerifikasiCineplexPage() {
   const [alasan, setAlasan] = useState(null);
   console.log(process.env.BACKEND_URL);
   console.log(data);
+
+  async function acceptForm(e) {
+    e.preventDefault();
+
+    let retu = await acceptVerifEvent(
+      data.event.promotor.email,
+      data.event._id
+    );
+    if (retu) {
+      navigate(-1);
+    }
+  }
+  async function tolakForm(e) {
+    e.preventDefault();
+
+    let retu = await tolakVerifEvent(
+      data.event.promotor.email,
+      alasan,
+      data.event._id
+    );
+    if (retu) {
+      navigate(-1);
+    }
+  }
   return (
     <div className="p-10 w-full ">
       <div className="flex justify-between">
@@ -41,9 +65,7 @@ export default function VerifikasiCineplexPage() {
           />
           <button
             className="px-3 py-1 biruTua text-white rounded"
-            onClick={() => {
-              tolakVerifEvent(data.event.promotor.email, alasan, data.event._id);
-            }}
+            onClick={tolakForm}
           >
             Tolak
           </button>
@@ -52,9 +74,7 @@ export default function VerifikasiCineplexPage() {
           <div></div>
           <button
             className="px-3 py-1 biruMuda text-white rounded "
-            onClick={() => {
-              acceptVerifEvent(data.event.promotor.email,data.event._id);
-            }}
+            onClick={acceptForm}
           >
             Terima
           </button>

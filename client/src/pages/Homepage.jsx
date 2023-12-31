@@ -8,7 +8,7 @@ const Homepage = () => {
   const data = useLoaderData();
   let loadMovie = data.inTheater;
   let loadEvent = data.ongoingEvent;
-
+  console.log(data);
   const [isScrolling, setIsScrolling] = useState(false);
   const [scrollStart, setScrollStart] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
