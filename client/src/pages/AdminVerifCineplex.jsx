@@ -36,6 +36,7 @@ function AdminVerifCineplex() {
                 <button
                   className="biruCariTiket p-2 text-white rounded"
                   onClick={() => toDetail(data._id)}
+                  id={data.company_name}
                   disabled={data.verified}
                 >
                   {data.verified == true ? "ACCEPTED" : "DETAIL"}

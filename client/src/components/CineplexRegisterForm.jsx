@@ -130,7 +130,7 @@ const CineplexRegisterForm = (props) => {
             <input
               type="file"
               className="block w-96 mb-5 text-md text-white border border-gray-600 bg-gray-600 rounded-lg cursor-pointer mt-2"
-              id=""
+              id="fotoNPWP"
               name=""
               onChange={(e) => {
                 // setNpwp(e.target.files[0])
@@ -147,7 +147,7 @@ const CineplexRegisterForm = (props) => {
             <input
               type="file"
               className="block w-96 mb-5 text-md text-white border border-gray-600 bg-gray-600 rounded-lg cursor-pointer mt-2"
-              id=""
+              id="fotoSurat"
               name=""
               onChange={(e) => {
                 handleSurat(e.target.files[0]);
@@ -185,7 +185,7 @@ const CineplexRegisterForm = (props) => {
             <input
               type="checkbox"
               name="kebijakanPrivasi"
-              id=""
+              id="kebijakanPrivasi"
               onChange={(e) => {
                 setTnc(!tnc);
               }}

@@ -5,7 +5,7 @@ async function delay(ms) {
     // return await for better async stack trace support in case of errors.
     return await new Promise(resolve => setTimeout(resolve, ms));
   }
-async function example() {
+async function loginUser() {
   let driver = await new Builder().forBrowser('chrome').build();
   try {
     await driver.get('http://localhost:5173/');
@@ -36,4 +36,4 @@ async function example() {
   }
 }
 
-example();
+loginUser();
