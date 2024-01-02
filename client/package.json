@@ -14,6 +14,7 @@
     "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.6.0",
     "flowbite": "^2.0.0",
+    "flowbite-react": "^0.7.2",
     "html2canvas": "^1.4.1",
     "joi": "^17.11.0",
     "jspdf": "^2.5.1",

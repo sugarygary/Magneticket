@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import openheimer from "../assets/openheimer.jpg";
+
 const CardDetailEvent = (props) => {
   console.log(props);
   const navigate = useNavigate();
@@ -8,11 +9,11 @@ const CardDetailEvent = (props) => {
     navigate(`/user/event/${props._id}/checkout`);
   };
   return (
-    <div className="my-5 rounded flex shadow-lg">
+    <div className="my-5 rounded flex flex-col sm:flex-row shadow-lg">
       <img
         src={`${process.env.BACKEND_URL}/promotor/eventposter-${props._id}.jpg`}
         alt=""
-        className="w-64"
+        className="max-w-full h-auto"
       />
       <div className="text-black pt-3 ml-5">
         <p className="font-bold text-lg">{props.event_name}</p>
@@ -31,7 +32,7 @@ const CardDetailEvent = (props) => {
           <p className="biruTuaText">{props.sale_end_date.substring(0, 10)}</p>
         </div>
         <button
-          className="biruTua rounded-full text-white p-2 mt-2"
+          className="biruTua rounded-full text-white p-2 mt-6 mb-4"
           onClick={keCheckout}
         >
           beli tiket
