@@ -66,6 +66,7 @@ const CineplexCreateCabang = () => {
                   <p className="">{branch.branch_name}</p>
                   <Link
                     to={`/cineplex/studios/${branch._id}`}
+                    id={branch._id + " - " + branch.branch_name}
                     className="bg-blue-700 rounded ml-auto px-2 py-1"
                   >
                     Detail Cabang

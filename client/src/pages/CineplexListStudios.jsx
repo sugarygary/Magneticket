@@ -62,6 +62,7 @@ export default function CineplexListStudios() {
                 <Link
                   to={`/cineplex/studios/${data.currentCabang}/create-screening/${studio._id}`}
                   className="bg-blue-900 rounded ml-auto px-2 py-1"
+                  id={studio._id + " - " + studio.studio_name}
                 >
                   {" "}
                   Create Screening

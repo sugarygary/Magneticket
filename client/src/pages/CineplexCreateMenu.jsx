@@ -68,7 +68,7 @@ export default function CineplexCreateMenu() {
             <input
               type="file"
               name=""
-              id=""
+              id="fotoMenu"
               className="ml-12 pl-12"
               onChange={(e) => {
                 setThumbnail(e.target.files[0]);
