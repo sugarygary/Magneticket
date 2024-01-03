@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 const PromotorTiketDetail = (props) => {
   console.log("ini props", props);
   return (
-    <div className="my-5 rounded  shadow-lg p-10 bgCardHistory border border-black">
+    <div className="my-5 rounded shadow-lg p-4 sm:p-10 bgCardHistory border border-black">
       <div className="flex items-center justify-between">
         <p className="font-bold text-2xl">Detail Tiket</p>
         <Link className="p-2 h-fit rounded bg-red-500 text-white" to={-1}>
@@ -18,20 +18,17 @@ const PromotorTiketDetail = (props) => {
         </Link>
       </div>
       <p className="text-lg font-bold mt-3">{props.event.event_name}</p>
-      <div className="w-full mt-3 flex ">
+      <div className="w-full mt-3 md:flex-row flex flex-col-reverse">
         <div>
           <img
             src={`${process.env.BACKEND_URL}/promotor/eventposter-${props.event._id}.jpg`}
             alt=""
-            className="w-48 rounded"
+            className="w-24 md:w-48 rounded"
           />
-          <p className="text-left text-xl font-bold underline underline-offset-4 mt-24">
-            Detail Transaksi
-          </p>
         </div>
-        <div className=" ml-5 flex w-full justify-between ">
+        <div className="ml-5 flex w-full justify-between flex-col md:flex-row">
           <div>
-            <table>
+            <table className="ml-6 sm:ml-12 text-xs sm:text-base">
               <tr>
                 <td>Customer</td>
                 <td> : </td>
@@ -47,13 +44,11 @@ const PromotorTiketDetail = (props) => {
                 <td> : </td>
                 <td>{props.event.city}</td>
               </tr>
-
               <tr>
                 <td>Kategori</td>
                 <td> : </td>
                 <td>{props.event_category.category_name}</td>
               </tr>
-
               <tr>
                 <td>Hari/Tanggal</td>
                 <td> : </td>
@@ -76,17 +71,20 @@ const PromotorTiketDetail = (props) => {
               </tr>
             </table>
           </div>
-          <div className="bg-white rounded-2xl p-2 h-fit border border-[3px] border-black">
+          <div className="bg-white ml-24 mr-36 sm:mr-0 rounded-2xl p-2 border border-[3px] border-black mt-5 md:mt-0">
             <img
-              src={`https://api.qrserver.com/v1/create-qr-code/?data=${props._id}a&amp;size=100x100`}
+              src={`https://api.qrserver.com/v1/create-qr-code/?data=${props._id}a&size=100x100`}
               alt=""
               title=""
-              className="w-48"
+              className="w-36 sm:w-48"
             />
           </div>
         </div>
       </div>
-      <div className="flex justify-between">
+      <p className="text-left text-xl font-bold underline underline-offset-4 mt-2">
+        Detail Transaksi
+      </p>
+      <div className="flex justify-between mt-2">
         <div className="">
           <p>{props.event_category.category_name}</p>
           <p>Biaya Layanan</p>
@@ -101,7 +99,6 @@ const PromotorTiketDetail = (props) => {
               </span>
             <span className="abu9CA3AF"></span>
           </p>
-
           <p>
             Rp 10.000,00 <span className="abu9CA3AF"></span>
           </p>

@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 const CineplexTiketDetail = (props) => {
   console.log("ini props", props);
   return (
-    <div className="my-5 rounded  shadow-lg p-10 bgCardHistory border border-black">
+    <div className="my-5 rounded shadow-lg p-4 sm:p-10 bgCardHistory border border-black">
       <div className="flex items-center justify-between">
         <p className="font-bold text-2xl">Detail Tiket</p>
         <Link className="p-2 h-fit rounded bg-red-500 text-white" to={-1}>
@@ -23,15 +23,12 @@ const CineplexTiketDetail = (props) => {
           <img
             src={props.screening.movie.img}
             alt=""
-            className="w-48 rounded"
+            className="w-24 sm:w-48 rounded"
           />
-          <p className="text-left text-xl font-bold underline underline-offset-4 mt-24">
-            Detail Transaksi
-          </p>
         </div>
-        <div className=" ml-5 flex w-full justify-between ">
-          <div>
-            <table>
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <div>
+            <table className="ml-6 sm:ml-12 text-xs sm:text-base">
               <tr>
                 <td>Customer</td>
                 <td> : </td>
@@ -90,16 +87,19 @@ const CineplexTiketDetail = (props) => {
               </tr>
             </table>
           </div>
-          <div className="bg-white rounded-2xl p-2 h-fit border border-[3px] border-black">
+          <div className="mt-5 bg-white rounded-2xl p-2 h-fit border border-[3px] border-black mr-24 ml-0 sm:ml-60 sm:mr-0">
             <img
               src="https://api.qrserver.com/v1/create-qr-code/?data=a&amp;size=100x100"
               alt=""
               title=""
-              className="w-48"
+              className="w-36 sm:w-48"
             />
           </div>
         </div>
       </div>
+        <p className="text-left text-xl font-bold underline underline-offset-4 mt-4">
+          Detail Transaksi
+        </p>
       <div className="flex justify-between">
         <div className="">
           <p>{props.screening.studio.type}</p>

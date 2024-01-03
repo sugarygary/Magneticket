@@ -109,8 +109,8 @@ const CheckoutEvent = () => {
     // navigate(0);
   }
   return (
-    <div className="px-10 py-5">
-      <div className="container mx-auto mt-8  text-white p-4">
+    <div className="px-2 sm:px-10 py-5">
+      <div className="container mx-auto mt-8 text-white p-2 sm:p-4">
         <div className="mx-auto bg-gray-800 rounded-lg overflow-hidden shadow-lg">
           <div className="p-6">
             <h2 className="text-2xl font-semibold mb-4">Checkout</h2>
@@ -119,7 +119,7 @@ const CheckoutEvent = () => {
                 <img
                   src={`${process.env.BACKEND_URL}/promotor/eventposter-${data._id}.jpg`}
                   alt=""
-                  className="w-64"
+                  className="w-36 sm:w-64"
                 />
               </div>
               <div className="">

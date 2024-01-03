@@ -21,8 +21,8 @@ export const LayoutEventOrganizer = () => {
       <ScrollToTop />
       {shouldDisplayHeader && <EventOrganizerHeader />}
       <div
-        className={`mt-12 pb-12 min-h-[100vh] min-w-[80vw] ${
-          shouldDisplayHeader ? "ml-60" : ""
+        className={`mt-2 sm:mt-12 pb-24 min-h-[95vh] min-w-[80vw] ${
+          shouldDisplayHeader ? "ml-0 sm:ml-60" : ""
         } mx-auto relative`}
       >
         <Outlet></Outlet>

@@ -88,11 +88,11 @@ const EventRegisterForm = (props) => {
     setSurat(file);
   };
   return (
-    <div className=" w-3/4 mx-auto h-full flex justify-center items-center text-white my-10">
-      <div className="biruTua p-12 text-center rounded w-3/4 mx-auto ">
+    <div className="w-full sm:w-3/4 mx-auto px-2 h-full flex justify-center items-center text-white my-20">
+      <div className="biruTua p-6 sm:p-12 text-center rounded w-full sm:w-3/4 mx-auto">
         <div className="justify-center">
-          <img src={logo1} alt="" className="w-48 mx-auto" />
-          <p className="font-magneticket text-6xl">MAGNETICKET</p>
+          <img src={logo1} alt="" className="w-36 sm:w-48 mx-auto" />
+          <p className="font-magneticket text-4xl sm:text-6xl">MAGNETICKET</p>
         </div>
         <form onSubmit={submitForm} className="mt-5">
           <div className="mb-3 text-left">
@@ -133,7 +133,7 @@ const EventRegisterForm = (props) => {
             <p>Unggah NPWP Badan</p>
             <input
               type="file"
-              className="block w-96 mb-5 text-md text-white border border-gray-600 bg-gray-600 rounded-lg cursor-pointer mt-2"
+              className="block w-full sm:w-96 mb-5 text-md text-white border border-gray-600 bg-gray-600 rounded-lg cursor-pointer mt-2"
               id=""
               name=""
               onChange={(e) => {
@@ -150,7 +150,7 @@ const EventRegisterForm = (props) => {
             <p>Unggah Surat Kerjasama</p>
             <input
               type="file"
-              className="block w-96 mb-5 text-md text-white border border-gray-600 bg-gray-600 rounded-lg cursor-pointer mt-2"
+              className="block w-full sm:w-96 mb-5 text-md text-white border border-gray-600 bg-gray-600 rounded-lg cursor-pointer mt-2"
               id=""
               name=""
               onChange={(e) => {

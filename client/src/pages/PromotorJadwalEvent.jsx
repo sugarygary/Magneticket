@@ -52,7 +52,7 @@ const PromotorJadwalEvent = () => {
   }
 
   return (
-    <div className="w-full px-12 py-5">
+    <div className="w-full px-4 sm:px-12 py-5">
       <p className="text-2xl font-bold mb-5">Filter Jadwal</p>
       <div className="flex justify-between gap-2 mb-5">
         <div className="flex gap-3">
@@ -103,12 +103,12 @@ const PromotorJadwalEvent = () => {
               <img
                 src={`${process.env.BACKEND_URL}/promotor/eventposter-${event._id}.jpg`}
                 alt=""
-                className="w-48"
+                className="w-36 h-auto sm:w-48 overflow-hidden object-cover"
               />
-              <div className="p-5  w-full">
-                <p className="font-bold text-2xl ">{event.event_name}</p>
+              <div className="p-5 w-full">
+                <p className="font-bold text-xl sm:text-2xl ">{event.event_name}</p>
                 <br />
-                <table>
+                <table className="text-xs sm:text-base">
                   <tr>
                     <td>Tanggal </td>
                     <td>:{event.showtime.substring(0, 10)}</td>
@@ -119,7 +119,7 @@ const PromotorJadwalEvent = () => {
                   </tr>
                 </table>
 
-                <div className="mt-9 flex justify-between">
+                <div className="mt-6 sm:mt-9 flex justify-between">
                   <div></div>
                   <Link
                     className="biruCariTiket p-2 text-white rounded"

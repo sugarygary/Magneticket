@@ -14,7 +14,7 @@ const PromotorDetailHistoryTiket = () => {
   }
   console.log("ini datanya ", data.eventTicket);
   return (
-    <div className="px-10 py-5">
+    <div className="px-2 sm:px-10 py-5">
       <PromotorTiketDetail {...data.eventTicket}></PromotorTiketDetail>
     </div>
   );

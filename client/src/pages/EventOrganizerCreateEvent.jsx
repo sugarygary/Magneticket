@@ -153,10 +153,10 @@ export default function EventOrganizerCreateEvent() {
   }
   return (
     <>
-      <form className="pb-24" onSubmit={submitForm}>
+      <form className="pb-12 sm:pb-24" onSubmit={submitForm}>
         <div>
-          <div className="flex px-12 w-full">
-            <div className="biruTua p-10 my-10 rounded w-3/12">
+          <div className="flex flex-col sm:flex-row px-4 sm:px-12">
+            <div className="biruTua p-4 sm:p-10 my-1 mt-4 sm:my-10 rounded w-full sm:w-3/12">
               <div className="text-center text-white">
                 <div className="flex justify-center my-2 items-center">
                   <img src={upload} alt="" className="w-10 invert" />
@@ -178,21 +178,21 @@ export default function EventOrganizerCreateEvent() {
                 </div>
               </div>
             </div>
-            <div className="biruTua p-10 my-10 rounded ml-12 w-9/12 flex items-center justify-center">
+            <div className="biruTua p-4 sm:p-10 my-4 sm:my-10 rounded ml-0 sm:ml-12 w-full sm:w-9/12 flex items-center justify-center">
               <div className="text-center text-white">
                 <div className="flex justify-center items-center my-2">
                   <img src={upload} alt="" className="w-10 invert" />
                 </div>
                 <p>Unggah Banner</p>
-                <p className="font-xs">
+                <p className="text-xs">
                   Direkomendasikan 595 x 842 px dan tidak lebih dari 30 MB
                 </p>
-                <div className="flex ml-48 w-5/12 bg-gray-900 my-2">
+                <div className="flex w-10/12 sm:w-full justify-center bg-gray-900 my-2 ml-8 sm:ml-0">
                   <input
                     type="file"
                     name=""
                     id=""
-                    className=""
+                    className="font-sm"
                     onChange={(e) => {
                       handleBanner(e.target.files[0]);
                     }}
@@ -201,8 +201,8 @@ export default function EventOrganizerCreateEvent() {
               </div>
             </div>
           </div>
-          <div className="px-10">
-            <div className="biruTua p-10 mb-10 rounded w-full text-white">
+          <div className="px-4 sm:px-10">
+            <div className="biruTua p-4 sm:p-10 mb-10 rounded w-full text-white">
               <p>Nama Event</p>
               <input
                 className="w-full px-2 py-2 abuInput outline-none mb-2 rounded"

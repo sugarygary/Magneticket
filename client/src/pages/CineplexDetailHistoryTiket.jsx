@@ -12,7 +12,7 @@ const CineplexDetailHistoryTiket = () => {
     }
     console.log("ini datanya",data.movieTicket)
     return (
-        <div className='px-10 py-5'>
+        <div className='px-2 sm:px-10 py-5'>
             
             <CineplexTiketDetail {...data.movieTicket}></CineplexTiketDetail>
         </div>

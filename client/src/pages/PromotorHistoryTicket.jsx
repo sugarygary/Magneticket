@@ -64,7 +64,7 @@ const PromotorHistoryTiket = () => {
   }, [tanggal, kota]);
 
   return (
-    <div className="px-8 py-4">
+    <div className="px-2 sm:px-8 py-4">
       <p className="text-2xl font-bold">Informasi Ticket Konser</p>
       <div className="flex gap-3 my-4">
         <div>
@@ -103,62 +103,64 @@ const PromotorHistoryTiket = () => {
           </select>
         </div>
       </div>
-      <table className="min-w-full text-white table-auto">
-        <thead>
-          <tr className="bg-gray-200 text-left bg-gray-700">
-            <th className="py-2 px-4">Customer</th>
-            <th className="py-2 px-4">Event</th>
-            <th className="py-2 px-4">ID Jadwal</th>
-            <th className="py-2 px-4">Date & Time</th>
-            <th className="py-2 px-4">Kategori</th>
+      <div className="overflow-x-scroll">
+        <table className="min-w-full text-white table-auto text-xs sm:text-base">
+          <thead>
+            <tr className="bg-gray-200 text-left bg-gray-700">
+              <th className="py-2 px-4">Customer</th>
+              <th className="py-2 px-4">Event</th>
+              <th className="py-2 px-4">ID Jadwal</th>
+              <th className="py-2 px-4">Date & Time</th>
+              <th className="py-2 px-4">Kategori</th>
 
-            <th className="py-2 px-4">Amount</th>
-            <th className="py-2 px-4">Status</th>
-            <th className="py-2 px-4">Action</th>
-          </tr>
-        </thead>
-        <tbody className="biruTua">
-          {filteredEvents.length > 0 &&
-            filteredEvents.map((sale) => (
-              <tr key={sale._id}>
-                <td className="border-t border-b py-2 px-4">
-                  {sale.customer.full_name}
-                </td>
-                <td className="border-t border-b py-2 px-4">
-                  {sale.event.event_name}
-                </td>
-                <td className="border-t border-b py-2 px-4">
-                  {sale.event._id}
-                </td>
-                <td className="border-t border-b py-2 px-4">
-                  {sale.createdAt.substring(0, 10)}
-                </td>
-                <td className="border-t border-b py-2 px-4">
-                  {sale.event_category.category_name}
-                </td>
-                <td className="border-t border-b py-2 px-4"> 
-                  <span className="">
-                      {new Intl.NumberFormat("id-ID", {
-                          style: "currency",
-                          currency: "IDR",
-                      }).format(sale.transaction.amounts_paid)}
-                  </span>
-                </td>
-                <td className="border-t border-b py-2 px-4">
-                  {sale.claimed == true ? "CLAIMED" : "UNCLAIMED"}
-                </td>
-                <td className="border-t border-b py-2 px-4">
-                  <button
-                    className="biruCariTiket p-2 text-white rounded"
-                    onClick={() => toDetail(sale._id)}
-                  >
-                    Detail
-                  </button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+              <th className="py-2 px-4">Amount</th>
+              <th className="py-2 px-4">Status</th>
+              <th className="py-2 px-4">Action</th>
+            </tr>
+          </thead>
+          <tbody className="biruTua">
+            {filteredEvents.length > 0 &&
+              filteredEvents.map((sale) => (
+                <tr key={sale._id}>
+                  <td className="border-t border-b py-2 px-4">
+                    {sale.customer.full_name}
+                  </td>
+                  <td className="border-t border-b py-2 px-4">
+                    {sale.event.event_name}
+                  </td>
+                  <td className="border-t border-b py-2 px-4">
+                    {sale.event._id}
+                  </td>
+                  <td className="border-t border-b py-2 px-4">
+                    {sale.createdAt.substring(0, 10)}
+                  </td>
+                  <td className="border-t border-b py-2 px-4">
+                    {sale.event_category.category_name}
+                  </td>
+                  <td className="border-t border-b py-2 px-4"> 
+                    <span className="">
+                        {new Intl.NumberFormat("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                        }).format(sale.transaction.amounts_paid)}
+                    </span>
+                  </td>
+                  <td className="border-t border-b py-2 px-4">
+                    {sale.claimed == true ? "CLAIMED" : "UNCLAIMED"}
+                  </td>
+                  <td className="border-t border-b py-2 px-4">
+                    <button
+                      className="biruCariTiket p-2 text-white rounded"
+                      onClick={() => toDetail(sale._id)}
+                    >
+                      Detail
+                    </button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
       {filteredEvents.length == 0 && (
         <>Tidak ada data yang tercatat sesuai dengan filter</>
       )}

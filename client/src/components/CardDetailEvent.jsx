@@ -13,7 +13,7 @@ const CardDetailEvent = (props) => {
       <img
         src={`${process.env.BACKEND_URL}/promotor/eventposter-${props._id}.jpg`}
         alt=""
-        className="max-w-full h-auto"
+        className="w-full sm:w-48 h-auto"
       />
       <div className="text-black pt-3 ml-5">
         <p className="font-bold text-lg">{props.event_name}</p>

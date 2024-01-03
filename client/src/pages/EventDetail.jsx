@@ -11,7 +11,7 @@ const EventDetail = () => {
   console.log(data2);
   // console.log("ini data loader",dataLoader)
   return (
-    <div className="px-10 py-5">
+    <div className="px-6 sm:px-10 py-5">
       <CardDetailEvent {...data}></CardDetailEvent>
       <table className="min-w-full text-white table-auto text-center">
         <thead>
