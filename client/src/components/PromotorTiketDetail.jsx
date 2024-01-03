@@ -18,7 +18,7 @@ const PromotorTiketDetail = (props) => {
         </Link>
       </div>
       <p className="text-lg font-bold mt-3">{props.event.event_name}</p>
-      <div className="w-full mt-3 md:flex-row flex flex-col-reverse">
+      <div className="w-full mt-3 flex ">
         <div>
           <img
             src={`${process.env.BACKEND_URL}/promotor/eventposter-${props.event._id}.jpg`}
@@ -26,7 +26,7 @@ const PromotorTiketDetail = (props) => {
             className="w-24 md:w-48 rounded"
           />
         </div>
-        <div className="ml-5 flex w-full justify-between flex-col md:flex-row">
+        <div className="flex flex-col md:flex-row items-center justify-between">
           <div>
             <table className="ml-6 sm:ml-12 text-xs sm:text-base">
               <tr>
@@ -71,7 +71,7 @@ const PromotorTiketDetail = (props) => {
               </tr>
             </table>
           </div>
-          <div className="bg-white ml-24 mr-36 sm:mr-0 rounded-2xl p-2 border border-[3px] border-black mt-5 md:mt-0">
+          <div className="bg-white sm:mr-0 ml-0 sm:ml-60 mr-24 rounded-2xl p-2 border border-[3px] border-black mt-5 md:mt-0">
             <img
               src={`https://api.qrserver.com/v1/create-qr-code/?data=${props._id}a&size=100x100`}
               alt=""
