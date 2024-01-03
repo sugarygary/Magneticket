@@ -66,11 +66,11 @@ const CineplexEditMenu = () => {
   return (
     <>
       <div className="">
-        <div className="flex shadow-2xl mb-5 mx-9">
+        <div className="flex shadow-2xl mb-5 mx-2 sm:mx-9 mt-4">
           <img
             src={`${process.env.BACKEND_URL}/cineplex/menu-${menu._id}.jpg`}
             alt=""
-            className="w-64"
+            className="w-36 sm:w-64"
           />
           <div className="p-5  w-full">
             <p className="font-bold text-2xl">{menu.item_name}</p>
@@ -90,19 +90,19 @@ const CineplexEditMenu = () => {
           </div>
         </div>
       </div>
-      <div className="biruTua p-5 my-10 rounded w-3/4 mx-auto ">
+      <div className="biruTua p-5 my-10 rounded w-11/12 sm:w-3/4 mx-auto ">
         <div className="text-center text-white">
           <div className="flex justify-center items-center">
-            <img src={upload} alt="" className="w-12" />
+            <img src={upload} alt="" className="w-12 invert" />
           </div>
           <p>Unggah Foto Produk</p>
           <p>Direkomendasikan 595 x 842 px dan tidak lebih dari 30 MB</p>
-          <div className="ml-12 ">
+          <div className="ml-12 sm:ml-36">
             <input
               type="file"
               name=""
               id=""
-              className="ml-12 pl-12"
+              className="mb-4"
               onChange={(e) => {
                 setThumbnail(e.target.files[0]);
               }}
@@ -110,7 +110,7 @@ const CineplexEditMenu = () => {
           </div>
         </div>
         <hr />
-        <div className="p-2 text-white">
+        <div className="p-0 sm:p-2 text-white">
           <form onSubmit={submitForm}>
             <div className="mb-5">
               <p>Nama Menu</p>
@@ -139,7 +139,7 @@ const CineplexEditMenu = () => {
               <textarea
                 name=""
                 id=""
-                className="bg-gray-700 md:w-full lg:w-full xl:w-full"
+                className="bg-gray-700 w-full sm:w-full"
                 rows="10"
                 placeholder="Enter your description"
                 onChange={(e) => {

@@ -64,8 +64,8 @@ const CineplexCreatePromo = (props) => {
   };
 
   return (
-    <div className=" w-full h-full flex justify-center items-center text-white my-10">
-      <div className="biruTua p-12 text-center rounded w-3/4 mx-auto ">
+    <div className=" w-full h-full flex justify-center items-center text-white my-10 px-2">
+      <div className="biruTua p-6 sm:p-12 text-center rounded w-full ms:w-3/4 mx-auto ">
         <div className="flex justify-between">
           <div></div>
           <Link to={-1} className="p-2 bg-red-500">

@@ -79,7 +79,7 @@ export default function CineplexJadwal() {
     handleFilter();
   }, [tanggal, kota, cabang]);
   return (
-    <div className="w-full px-12 py-5">
+    <div className="w-full px-4 sm:px-12 py-5">
       <p className="text-2xl font-bold mb-5">Filter Jadwal</p>
       <div className="flex justify-between gap-2 mb-5">
         <div className="flex gap-3">
@@ -161,13 +161,13 @@ export default function CineplexJadwal() {
           <div className="" key={index}>
             <div className="flex shadow-2xl mb-5">
               {/* http://localhost:3000/cineplex/npwp-6566e2382d4522b6ed7c227a.jpg */}
-              <img src={screening.movie.img} alt="" className="w-48" />
-              <div className="p-5  w-full">
-                <p className="font-bold text-2xl">
+              <img src={screening.movie.img} alt="" className="w-24 h-auto sm:w-48" />
+              <div className="p-5">
+                <p className="font-bold text-lg sm:text-2xl">
                   {screening.studio.studio_name}
                 </p>
-                <p className="font-bold text-xl">{screening.movie.title}</p>
-                <table>
+                <p className="font-bold text-md sm:text-xl">{screening.movie.title}</p>
+                <table className="text-xs sm:text-lg">
                   <tr>
                     <td>Tanggal </td>
                     <td>:{screening.showtime.substring(0, 10)}</td>

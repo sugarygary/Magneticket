@@ -78,73 +78,75 @@ export default function CineplexCreateScreening() {
     navigate(0);
   };
   return (
-    <div className="p-2 text-white biruTua p-5 my-10 rounded w-3/4 mx-auto ">
-      <div className="flex justify-between">
-        <p className="text-2xl font-bold mb-5">Tambah Jadwal Screening</p>
-        <Link className="p-2 h-fit rounded bg-red-500" to={-1}>
-          Kembali
-        </Link>
-      </div>
+    <div className=" w-full h-full justify-center items-center text-white my-10 px-2">
+      <div className="biruTua p-5 rounded w-full sm:w-3/4 mx-auto mb-5">
+        <div className="flex justify-between">
+          <p className="text-xl sm:text-2xl font-bold mb-5">Tambah Jadwal Screening</p>
+          <Link className="p-2 h-fit rounded bg-red-500" to={-1}>
+            Kembali
+          </Link>
+        </div>
 
-      <form onSubmit={submitForm}>
-        {/* <div className="mb-5">
-          <p>Studio Id</p>
-          <input
-            type="text"
-            className="abuInput w-full rounded p-1 pl-2"
-            placeholder="Enter your studio id"
-            onChange={(e) => {
-              setStudioId(e.target.value);
-            }}
-          />
-          {errorStudio && <span className="text-red-500">{errorStudio}</span>}
-        </div> */}
-        <div className="mb-5">
-          <p>Movie Id</p>
-          <input
-            type="text"
-            className="abuInput w-full rounded p-1 pl-2"
-            placeholder="Enter your movie id"
-            onChange={(e) => {
-              setMovieId(e.target.value);
-            }}
-          />
-        </div>
-        <div className="mb-5">
-          <p>Price</p>
-          <input
-            type="number"
-            className="abuInput w-full rounded p-1 pl-2"
-            placeholder="Enter your price"
-            onChange={(e) => {
-              setPrice(e.target.value);
-            }}
-          />
-        </div>
-        <div className="mb-5">
-          <p>Show Time</p>
-          <input
-            type="text"
-            className="abuInput w-full rounded p-1 pl-2"
-            placeholder="Enter your show time"
-            onChange={(e) => {
-              setShowTime(e.target.value);
-            }}
-          />
-        </div>
-        {errorMsg && <span className="text-red-500">{errorMsg}</span>}
-        <button className="biruCariTiket w-full p-2 rounded">
-          Tambahkan Screening
-        </button>
-      </form>
-      {openModal && (
-        <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <p className="text-green-500">Loading completed!</p>
-            <button onClick={closeModal}>Refresh halaman</button>
+        <form onSubmit={submitForm}>
+          {/* <div className="mb-5">
+            <p>Studio Id</p>
+            <input
+              type="text"
+              className="abuInput w-full rounded p-1 pl-2"
+              placeholder="Enter your studio id"
+              onChange={(e) => {
+                setStudioId(e.target.value);
+              }}
+            />
+            {errorStudio && <span className="text-red-500">{errorStudio}</span>}
+          </div> */}
+          <div className="mb-5">
+            <p>Movie Id</p>
+            <input
+              type="text"
+              className="abuInput w-full rounded p-1 pl-2"
+              placeholder="Enter your movie id"
+              onChange={(e) => {
+                setMovieId(e.target.value);
+              }}
+            />
           </div>
-        </div>
-      )}
+          <div className="mb-5">
+            <p>Price</p>
+            <input
+              type="number"
+              className="abuInput w-full rounded p-1 pl-2"
+              placeholder="Enter your price"
+              onChange={(e) => {
+                setPrice(e.target.value);
+              }}
+            />
+          </div>
+          <div className="mb-5">
+            <p>Show Time</p>
+            <input
+              type="text"
+              className="abuInput w-full rounded p-1 pl-2"
+              placeholder="Enter your show time"
+              onChange={(e) => {
+                setShowTime(e.target.value);
+              }}
+            />
+          </div>
+          {errorMsg && <span className="text-red-500">{errorMsg}</span>}
+          <button className="biruCariTiket w-full p-2 rounded">
+            Tambahkan Screening
+          </button>
+        </form>
+        {openModal && (
+          <div className="modal-overlay" onClick={closeModal}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <p className="text-green-500">Loading completed!</p>
+              <button onClick={closeModal}>Refresh halaman</button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -57,19 +57,19 @@ export default function CineplexCreateMenu() {
   };
   return (
     <>
-      <div className="biruTua p-5 my-10 rounded w-3/4 mx-auto ">
+      <div className="biruTua p-2 sm:p-5 my-10 rounded w-11/12 sm:w-3/4 mx-auto ">
         <div className="text-center text-white">
           <div className="flex justify-center items-center mt-4 pb-4">
             <img src={upload} alt="" className="w-12 invert" />
           </div>
           <p>Unggah Foto Produk</p>
           <p>Direkomendasikan 595 x 842 px dan tidak lebih dari 30 MB</p>
-          <div className="ml-12 pb-6">
+          <div className="ml-6 sm:ml-12 pb-6">
             <input
               type="file"
               name=""
               id="fotoMenu"
-              className="ml-12 pl-12"
+              className="pl-12"
               onChange={(e) => {
                 setThumbnail(e.target.files[0]);
               }}
@@ -107,7 +107,7 @@ export default function CineplexCreateMenu() {
               <textarea
                 name=""
                 id=""
-                className="bg-gray-700 md:w-full lg:w-full xl:w-full"
+                className="bg-gray-700 w-full sm:w-full"
                 rows="10"
                 placeholder="Enter your description"
                 onChange={(e) => {

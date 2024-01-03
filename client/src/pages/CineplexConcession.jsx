@@ -17,7 +17,7 @@ export default function CineplexConcession() {
 
   return (
     <>
-      <div className="px-10 py-5">
+      <div className="px-2 sm:px-10 py-5">
         <p className="text-2xl font-bold mb-5">Concession</p>
         <p className="mb-2">Nama Menu</p>
         <div className="justify-between flex">
@@ -41,11 +41,11 @@ export default function CineplexConcession() {
               <img
                 src={`${process.env.BACKEND_URL}/cineplex/menu-${menu._id}.jpg`}
                 alt=""
-                className="w-48"
+                className="w-36 h-auto sm:w-48 overflow-y-hidden"
               />
-              <div className="p-5  w-full">
-                <p className="font-bold text-2xl">{menu.item_name}</p>
-                <p className="my-3 abuDeskripsiMakanan">
+              <div className="p-2 sm:p-5 w-full">
+                <p className="font-bold text-xl sm:text-2xl">{menu.item_name}</p>
+                <p className="my-0 sm:my-3 abuDeskripsiMakanan">
                   {menu.item_description}
                 </p>
                 <p>
@@ -57,7 +57,7 @@ export default function CineplexConcession() {
                     }).format(menu.price)}
                   </span>
                 </p>
-                <div className="mt-9 flex justify-between">
+                <div className="mt-6 sm:mt-9 flex justify-between">
                   <div></div>
                   <Link
                     className="biruCariTiket p-2 text-white rounded"

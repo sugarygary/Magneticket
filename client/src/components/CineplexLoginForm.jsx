@@ -48,9 +48,9 @@ const CineplexLoginForm = (props) => {
   }
   return (
     <div className="flex items-center justify-center min-h-screen text-white px-4 sm:px-0">y
-      <div className="biruTua p-12 rounded w-full sm:w-5/12 mx-auto ">
+      <div className="biruTua p-6 sm:p-12 rounded w-full sm:w-5/12 mx-auto ">
         <div className="justify-center">
-          <img src={logo1} alt="" className="w-48 mx-auto" />
+          <img src={logo1} alt="" className="w-36 sm:w-48 mx-auto" />
           <p className="font-magneticket text-center text-4xl">MAGNETICKET</p>
         </div>
         <form onSubmit={submitForm} className="mt-5">

@@ -56,8 +56,8 @@ const CineplexCreateCabang = () => {
   };
   return (
     <>
-      <div className=" w-full h-full justify-center items-center text-white my-10">
-        <div className="biruTua p-5 text-center rounded w-3/4 mx-auto mb-5">
+      <div className=" w-full h-full justify-center items-center text-white my-10 px-2">
+        <div className="biruTua p-5 text-center rounded w-full sm:w-3/4 mx-auto mb-5">
           <p className="text-2xl font-bold text-left mb-5">Daftar Cabang </p>
           {data.branches.map((branch, index) => {
             return (
@@ -76,7 +76,7 @@ const CineplexCreateCabang = () => {
             );
           })}
         </div>
-        <div className="biruTua p-12 text-center rounded w-3/4 mx-auto ">
+        <div className="biruTua p-6 sm:p-12 text-center rounded w-full sm:w-3/4 mx-auto ">
           <p className="text-2xl font-bold text-left">Buat Cabang Baru</p>
           <form action="" className="mt-5" onSubmit={submitForm}>
             <div className="mb-3 text-left">
