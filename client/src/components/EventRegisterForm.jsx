@@ -134,7 +134,7 @@ const EventRegisterForm = (props) => {
             <input
               type="file"
               className="block w-full sm:w-96 mb-5 text-md text-white border border-gray-600 bg-gray-600 rounded-lg cursor-pointer mt-2"
-              id=""
+              id="fotoNPWP"
               name=""
               onChange={(e) => {
                 // setNpwp(e.target.files[0])
@@ -151,7 +151,7 @@ const EventRegisterForm = (props) => {
             <input
               type="file"
               className="block w-full sm:w-96 mb-5 text-md text-white border border-gray-600 bg-gray-600 rounded-lg cursor-pointer mt-2"
-              id=""
+              id="fotoSurat"
               name=""
               onChange={(e) => {
                 handleSurat(e.target.files[0]);

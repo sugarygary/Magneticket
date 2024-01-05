@@ -35,6 +35,7 @@ function AdminVerifpromotor() {
               <td className="border-t border-b py-2 px-4">
                 <button
                   className="biruCariTiket p-2 text-white rounded"
+                  id={index}
                   onClick={() => toDetail(data._id)}
                   disabled={data.verified}
                 >

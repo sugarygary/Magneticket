@@ -25,7 +25,7 @@ function AdminVerifEvent() {
         </thead>
         <tbody className="biruTua">
           {data.events.map((data, index) => (
-            <tr key={index}>
+            <tr key={index} >
               <td className="border-t border-b py-2 px-4">{data.event_name}</td>
               <td className="border-t border-b py-2 px-4">
                 {data.promotor.brand_name}
@@ -34,6 +34,7 @@ function AdminVerifEvent() {
               <td className="border-t border-b py-2 px-4">
                 <button
                   className="biruCariTiket p-2 text-white rounded"
+                  id={index}
                   onClick={() => toDetail(data._id)}
                   disabled={data.verified}
                 >
