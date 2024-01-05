@@ -64,8 +64,8 @@ const CineplexCreatePromo = (props) => {
   };
 
   return (
-    <div className=" w-full h-full flex justify-center items-center text-white my-10 px-2">
-      <div className="biruTua p-6 sm:p-12 text-center rounded w-full ms:w-3/4 mx-auto ">
+    <div className=" w-full h-full justify-center items-center text-white my-10 px-2">
+      <div className="biruTua p-6 sm:p-12 rounded w-full sm:w-3/4 mx-auto mb-5">
         <div className="flex justify-between">
           <div></div>
           <Link to={-1} className="p-2 bg-red-500">
@@ -80,6 +80,7 @@ const CineplexCreatePromo = (props) => {
               type="text"
               className="abuInput w-full rounded p-1 pl-2"
               placeholder="Masukkan Kode Promo"
+              id="kodePromo"
               onChange={(e) => {
                 setKodePromo(e.target.value);
               }}
@@ -91,7 +92,7 @@ const CineplexCreatePromo = (props) => {
             <input
               type="date"
               name=""
-              id=""
+              id="masaBerlaku"
               className="w-full abuBgInput "
               onChange={(e) => {
                 setMasaBerlaku(e.target.value);
@@ -102,6 +103,7 @@ const CineplexCreatePromo = (props) => {
             <p>Potongan</p>
             <input
               type="text"
+              id="potongan"
               className="abuInput w-full rounded p-1 pl-2"
               placeholder="Masukkan Potong"
               onChange={(e) => {

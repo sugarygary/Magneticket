@@ -169,7 +169,7 @@ export default function EventOrganizerCreateEvent() {
                   <input
                     type="file"
                     name=""
-                    id=""
+                    id="poster"
                     className="font-sm"
                     onChange={(e) => {
                       handlePoster(e.target.files[0]);
@@ -191,7 +191,7 @@ export default function EventOrganizerCreateEvent() {
                   <input
                     type="file"
                     name=""
-                    id=""
+                    id="banner"
                     className="font-sm"
                     onChange={(e) => {
                       handleBanner(e.target.files[0]);
@@ -207,6 +207,7 @@ export default function EventOrganizerCreateEvent() {
               <input
                 className="w-full px-2 py-2 abuInput outline-none mb-2 rounded"
                 type="text"
+                id="namaEvent"
                 placeholder="Masukkan nama event"
                 onChange={(e) => {
                   setNama(e.target.value);
@@ -216,6 +217,7 @@ export default function EventOrganizerCreateEvent() {
               <input
                 className="w-full px-2 py-2 abuInput outline-none mb-2 rounded"
                 type="text"
+                id="venue"
                 placeholder="Masukkan venue"
                 onChange={(e) => {
                   setVenue(e.target.value);
@@ -225,6 +227,7 @@ export default function EventOrganizerCreateEvent() {
               <input
                 className="w-full px-2 py-2 abuInput outline-none mb-2 rounded"
                 type="text"
+                id="address"
                 placeholder="Masukkan Address"
                 onChange={(e) => {
                   setAddress(e.target.value);
@@ -234,6 +237,7 @@ export default function EventOrganizerCreateEvent() {
               <input
                 className="w-full px-2 py-2 abuInput outline-none mb-2 rounded"
                 type="date"
+                id="tanggalEvent"
                 onChange={(e) => {
                   setTanggal(e.target.value);
                 }}
@@ -242,6 +246,7 @@ export default function EventOrganizerCreateEvent() {
               <input
                 className="px-2 py-2 mb-2"
                 type="file"
+                id="surat"
                 onChange={(e) => {
                   handleSurat(e.target.files[0]);
                 }}
@@ -250,6 +255,7 @@ export default function EventOrganizerCreateEvent() {
               <textarea
                 className="w-full md:w-full p-2 border resize-y abuInput outline-none mb-2 rounded"
                 placeholder="Massukkan deskripsi event"
+                id="deskripsi"
                 onChange={(e) => {
                   setDeskripsi(e.target.value);
                 }}
@@ -317,6 +323,7 @@ export default function EventOrganizerCreateEvent() {
               )}
               <div
                 className="cursor-pointer text-center w-full px-2 py-2 biruMuda outline-none mr-2 rounded mb-2"
+                id="buttonTambahKategori"
                 onClick={() => {
                   tambahKategori();
                 }}
@@ -327,6 +334,7 @@ export default function EventOrganizerCreateEvent() {
               <input
                 className="px-2 py-2 mb-2 mb-2"
                 type="file"
+                id="zona"
                 onChange={(e) => {
                   handleInformasiKategori(e.target.files[0]);
                 }}
@@ -350,7 +358,7 @@ export default function EventOrganizerCreateEvent() {
               {errorMessageMulter != null && (
                 <span className="text-red-500">{errorMessageMulter}</span>
               )}
-              <button className="biruMuda w-full py-2 rounded">
+              <button className="biruMuda w-full py-2 rounded" id="buatJadwalKonser">
                 Buat Jadwal Konser
               </button>
             </div>
